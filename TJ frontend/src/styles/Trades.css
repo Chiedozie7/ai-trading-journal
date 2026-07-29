@@ -1,0 +1,31 @@
+.calendar-filter-banner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    background: #eef6ff;
+    border: 1px solid #b8d8ff;
+}
+
+.calendar-filter-banner button {
+    cursor: pointer;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 6px;
+}
+.back-to-calendar-btn {
+    margin-bottom: 12px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 500;
+    color: #2563eb;
+    padding: 0;
+}
+
+.back-to-calendar-btn:hover {
+    text-decoration: underline;
+}

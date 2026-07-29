@@ -1,0 +1,56 @@
+:root{
+    --sidebar-width:240px;
+    --sidebar-collapsed-width:80px;
+    --topbar-height:70px;
+}
+
+/* ---------- Layout ---------- */
+
+.app-layout{
+    min-height:100vh;
+}
+
+.main-content{
+    margin-left:var(--sidebar-width);
+    min-height:100vh;
+
+    display:flex;
+    flex-direction:column;
+
+    transition:margin-left .25s ease;
+}
+
+.page-content{
+    flex:1;
+    padding:2rem;
+    overflow-y:auto;
+
+    border-top:1px solid #e5e7eb;
+}
+
+/* ---------- Tablet ---------- */
+
+@media (min-width:768px) and (max-width:1023px){
+
+    .main-content{
+        margin-left:var(--sidebar-collapsed-width);
+    }
+
+}
+
+/* ---------- Mobile ---------- */
+
+@media (max-width:767px){
+
+    .main-content{
+        margin-left:0;
+    }
+
+    .sidebar-overlay{
+        position:fixed;
+        inset:0;
+        background:rgba(0,0,0,.45);
+        z-index:998;
+    }
+
+}
