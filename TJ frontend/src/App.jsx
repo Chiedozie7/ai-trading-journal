@@ -14,7 +14,7 @@ import Analytics from './pages/Analytics';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
 import Layout from "./components/Layout";
-
+import Profile from './pages/Profile';
 
 function App() {
 
@@ -29,6 +29,7 @@ function App() {
       <Route element={<PersistLogin />}>
         <Route element={<ProtectedRoute />}>
           <Route element={<Layout />}>
+            <Route path="/profile" element={<Profile />} />
 
             <Route
               path="/dashboard"

@@ -7,6 +7,7 @@ import "../styles/topbar.css";
 import { FiMenu } from "react-icons/fi";
 import Avatar from "./Avatar";
 
+
 function Topbar({ isSidebarOpen, setIsSidebarOpen }) {
     const logout = useLogout();
     const navigate = useNavigate();
@@ -154,7 +155,10 @@ function Topbar({ isSidebarOpen, setIsSidebarOpen }) {
                                 <span>{auth.user.email}</span>
                             </div>
 
-                            <Link to="/profile">
+                            <Link
+                                to="/profile"
+                                onClick={() => setIsMenuOpen(false)}
+                            >
                                 Profile
                             </Link>
 
