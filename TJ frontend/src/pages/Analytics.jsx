@@ -139,87 +139,92 @@ const Analytics = () => {
 
                 </div>
 
-                <select
-                    value={strategy}
-                    onChange={(e) => setStrategy(e.target.value)}
-                >
-                    <option value="">All Strategies</option>
-                    <option value="ICT">ICT</option>
-                    <option value="SMC">SMC</option>
-                    <option value="Price Action">Price Action</option>
-                </select>
+                <div className="analytics-filters">
 
-                <select
-                    value={pair}
-                    onChange={(e) => setPair(e.target.value)}
-                >
-                    <option value="">All Pairs</option>
-                    <option value="BTCUSDT">BTCUSDT</option>
-                    <option value="ETHUSDT">ETHUSDT</option>
-                    <option value="RULEUSDT">RULEUSDT</option>
-                    <option value="ASDUSDT">ASDUSDT</option>
-                    <option value="MATEUSDT">MATEUSDT</option>
-                    <option value="YOUUSDT">YOUUSDT</option>
-                </select>
+                    <select
+                        value={strategy}
+                        onChange={(e) => setStrategy(e.target.value)}
+                    >
+                        <option value="">All Strategies</option>
+                        <option value="ICT">ICT</option>
+                        <option value="SMC">SMC</option>
+                        <option value="Price Action">Price Action</option>
+                    </select>
 
-                <select
-                    value={timeframe}
-                    onChange={(e) => setTimeframe(e.target.value)}
-                >
-                    <option value="">All Timeframes</option>
-                    <option value="5m">5m</option>
-                    <option value="15m">15m</option>
-                    <option value="45m">45m</option>
-                    <option value="1H">1H</option>
-                    <option value="4H">4H</option>
-                </select>
+                    <select
+                        value={pair}
+                        onChange={(e) => setPair(e.target.value)}
+                    >
+                        <option value="">All Pairs</option>
+                        <option value="BTCUSDT">BTCUSDT</option>
+                        <option value="ETHUSDT">ETHUSDT</option>
+                        <option value="RULEUSDT">RULEUSDT</option>
+                        <option value="ASDUSDT">ASDUSDT</option>
+                        <option value="MATEUSDT">MATEUSDT</option>
+                        <option value="YOUUSDT">YOUUSDT</option>
+                    </select>
 
-                <select
-                    value={direction}
-                    onChange={(e) => setDirection(e.target.value)}
-                >
-                    <option value="">All Positions</option>
-                    <option value="buy">Long</option>
-                    <option value="sell">Short</option>
-                </select>
+                    <select
+                        value={timeframe}
+                        onChange={(e) => setTimeframe(e.target.value)}
+                    >
+                        <option value="">All Timeframes</option>
+                        <option value="5m">5m</option>
+                        <option value="15m">15m</option>
+                        <option value="45m">45m</option>
+                        <option value="1H">1H</option>
+                        <option value="4H">4H</option>
+                    </select>
+
+                    <select
+                        value={direction}
+                        onChange={(e) => setDirection(e.target.value)}
+                    >
+                        <option value="">All Positions</option>
+                        <option value="buy">Long</option>
+                        <option value="sell">Short</option>
+                    </select>
 
 
-                <select
-                    value={range}
-                    onChange={(e) => setRange(e.target.value)}
-                >
-                    <option value="all">All Time</option>
-                    <option value="today">Today</option>
-                    <option value="yesterday">Yesterday</option>
-                    <option value="last7">Last 7 Days</option>
-                    <option value="last30">Last 30 Days</option>
-                    <option value="thisMonth">This Month</option>
-                    <option value="lastMonth">Last Month</option>
-                    <option value="thisYear">This Year</option>
-                    <option value="custom">Custom Range</option>
-                </select>
+                    <select
+                        value={range}
+                        onChange={(e) => setRange(e.target.value)}
+                    >
+                        <option value="all">All Time</option>
+                        <option value="today">Today</option>
+                        <option value="yesterday">Yesterday</option>
+                        <option value="last7">Last 7 Days</option>
+                        <option value="last30">Last 30 Days</option>
+                        <option value="thisMonth">This Month</option>
+                        <option value="lastMonth">Last Month</option>
+                        <option value="thisYear">This Year</option>
+                        <option value="custom">Custom Range</option>
+                    </select>
 
-                {range === "custom" && (
-                    <>
-                        <label>
-                            Start Date:
-                            <input
-                                type="date"
-                                value={startDate}
-                                onChange={(e) => setStartDate(e.target.value)}
-                            />
-                        </label>
+                    <div className="custom-date-filters">
+                        {range === "custom" && (
+                            <>
+                                <label>
+                                    Start Date:
+                                    <input
+                                        type="date"
+                                        value={startDate}
+                                        onChange={(e) => setStartDate(e.target.value)}
+                                    />
+                                </label>
 
-                        <label>
-                            End Date:
-                            <input
-                                type="date"
-                                value={endDate}
-                                onChange={(e) => setEndDate(e.target.value)}
-                            />
-                        </label>
-                    </>
-                )}
+                                <label>
+                                    End Date:
+                                    <input
+                                        type="date"
+                                        value={endDate}
+                                        onChange={(e) => setEndDate(e.target.value)}
+                                    />
+                                </label>
+                            </>
+                        )}
+                    </div>
+                </div>
 
 
                 {activeTab === "overview" && (
@@ -359,8 +364,8 @@ const Analytics = () => {
                                         <th>Pair</th>
                                         <th>Trades</th>
                                         <th>Wins</th>
-                                        <th>Losses</th>
                                         <th>Breakeven</th>
+                                        <th>Losses</th>
                                         <th>Win Rate</th>
                                         <th>Total PnL</th>
                                     </tr>
@@ -372,8 +377,8 @@ const Analytics = () => {
                                             <td>{pair.pair}</td>
                                             <td>{pair.totalTrades}</td>
                                             <td>{pair.wins}</td>
-                                            <td>{pair.losses}</td>
                                             <td>{pair.breakeven}</td>
+                                            <td>{pair.losses}</td>
                                             <td>{pair.winRate}%</td>
                                             <td>${pair.totalPnl}</td>
                                         </tr>
@@ -390,8 +395,8 @@ const Analytics = () => {
                                         <th>Timeframe</th>
                                         <th>Trades</th>
                                         <th>Wins</th>
-                                        <th>Losses</th>
                                         <th>Breakeven</th>
+                                        <th>Losses</th>
                                         <th>Win Rate</th>
                                         <th>Total PnL</th>
                                     </tr>
@@ -403,8 +408,8 @@ const Analytics = () => {
                                             <td>{timeframe.timeframe}</td>
                                             <td>{timeframe.totalTrades}</td>
                                             <td>{timeframe.wins}</td>
-                                            <td>{timeframe.losses}</td>
                                             <td>{timeframe.breakeven}</td>
+                                            <td>{timeframe.losses}</td>
                                             <td>{timeframe.winRate}%</td>
                                             <td>${timeframe.totalPnl}</td>
                                         </tr>

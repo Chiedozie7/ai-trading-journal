@@ -6,7 +6,7 @@ function TradeForm({
     handleChange,
     handleImageChange,
     handleRemoveImage,
-     handleRemoveExistingImage,
+    handleRemoveExistingImage,
     handleOpenPreview,
     handleClosePreview,
     previewImage,
@@ -16,109 +16,114 @@ function TradeForm({
 }) {
 
     return (
-        <form onSubmit={handleSubmit}>
-            <input
-                name="pair"
-                placeholder="Pair"
-                value={formData.pair ?? ""}
-                onChange={handleChange}
-            />
+        <form
+            className="trade-form"
+            onSubmit={handleSubmit}
+        >
+            <div className="trade-form-grid">
+                <input
+                    name="pair"
+                    placeholder="Pair"
+                    value={formData.pair ?? ""}
+                    onChange={handleChange}
+                />
 
-            <select
-                name="direction"
-                value={formData.direction}
-                onChange={handleChange}
-            >
-                <option value="buy">Buy</option>
-                <option value="sell">Sell</option>
-            </select>
+                <select
+                    name="direction"
+                    value={formData.direction}
+                    onChange={handleChange}
+                >
+                    <option value="buy">Buy</option>
+                    <option value="sell">Sell</option>
+                </select>
 
-            <input
-                name="strategy"
-                placeholder="Strategy"
-                value={formData.strategy ?? ""}
-                onChange={handleChange}
-            />
+                <input
+                    name="strategy"
+                    placeholder="Strategy"
+                    value={formData.strategy ?? ""}
+                    onChange={handleChange}
+                />
 
-            <input
-                name="timeframe"
-                placeholder="Timeframe"
-                value={formData.timeframe ?? ""}
-                onChange={handleChange}
-            />
+                <input
+                    name="timeframe"
+                    placeholder="Timeframe"
+                    value={formData.timeframe ?? ""}
+                    onChange={handleChange}
+                />
 
-            <input
-                type="number"
-                name="entryPrice"
-                placeholder="Entry Price"
-                value={formData.entryPrice ?? ""}
-                onChange={handleChange}
-            />
+                <input
+                    type="number"
+                    name="entryPrice"
+                    placeholder="Entry Price"
+                    value={formData.entryPrice ?? ""}
+                    onChange={handleChange}
+                />
 
-            <input
-                type="number"
-                name="exitPrice"
-                placeholder="Exit Price"
-                value={formData.exitPrice ?? ""}
-                onChange={handleChange}
-            />
+                <input
+                    type="number"
+                    name="exitPrice"
+                    placeholder="Exit Price"
+                    value={formData.exitPrice ?? ""}
+                    onChange={handleChange}
+                />
 
-            <input
-                type="number"
-                name="stopLoss"
-                placeholder="Stop Loss"
-                value={formData.stopLoss ?? ""}
-                onChange={handleChange}
-            />
+                <input
+                    type="number"
+                    name="stopLoss"
+                    placeholder="Stop Loss"
+                    value={formData.stopLoss ?? ""}
+                    onChange={handleChange}
+                />
 
-            <input
-                type="number"
-                name="takeProfit"
-                placeholder="Take Profit"
-                value={formData.takeProfit ?? ""}
-                onChange={handleChange}
-            />
+                <input
+                    type="number"
+                    name="takeProfit"
+                    placeholder="Take Profit"
+                    value={formData.takeProfit ?? ""}
+                    onChange={handleChange}
+                />
 
-            <input
-                type="number"
-                name="riskPercent"
-                placeholder="Risk %"
-                value={formData.riskPercent ?? ""}
-                onChange={handleChange}
-            />
+                <input
+                    type="number"
+                    name="riskPercent"
+                    placeholder="Risk %"
+                    value={formData.riskPercent ?? ""}
+                    onChange={handleChange}
+                />
 
-            <input
-                type="number"
-                name="lotSize"
-                placeholder="Position Size (optional)"
-                value={formData.lotSize ?? ""}
-                onChange={handleChange}
-            />
+                <input
+                    type="number"
+                    name="lotSize"
+                    placeholder="Position Size (optional)"
+                    value={formData.lotSize ?? ""}
+                    onChange={handleChange}
+                />
 
-            <input
-                type="number"
-                name="pnl"
-                placeholder="PnL"
-                value={formData.pnl ?? ""}
-                onChange={handleChange}
-            />
+                <input
+                    type="number"
+                    name="pnl"
+                    placeholder="PnL"
+                    value={formData.pnl ?? ""}
+                    onChange={handleChange}
+                />
 
-            <select
-                name="result"
-                value={formData.result ?? ""}
-                onChange={handleChange}
-            >
-                <option value="win">Win</option>
-                <option value="loss">Loss</option>
-                <option value="breakeven">Breakeven</option>
-            </select>
+                <select
+                    name="result"
+                    value={formData.result ?? ""}
+                    onChange={handleChange}
+                >
+                    <option value="win">Win</option>
+                    <option value="loss">Loss</option>
+                    <option value="breakeven">Breakeven</option>
+                </select>
 
-            <input
-                type="date"
-                name="tradeDate"
-                value={formData.tradeDate ?? ""}
-                onChange={handleChange}
-            />
+                <input
+                    type="date"
+                    name="tradeDate"
+                    value={formData.tradeDate ?? ""}
+                    onChange={handleChange}
+                />
+            </div>
 
             <input
                 name="tags"

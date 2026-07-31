@@ -1,0 +1,71 @@
+.settings-page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.settings-page h2 {
+    margin-bottom: 2rem;
+}
+
+.settings-section {
+    background: #fff;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+.settings-section h3 {
+    margin-top: 0;
+    margin-bottom: 1.25rem;
+}
+
+.setting-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+    padding: 0.75rem 0;
+}
+
+.setting-row input[type="number"] {
+    width: 100px;
+}
+
+.theme-options {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.theme-options label {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.setting-btn {
+    padding: 0.7rem 1rem;
+    cursor: pointer;
+}
+
+.danger-zone button {
+    cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+    .setting-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+
+    .theme-options {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .setting-row input[type="number"] {
+        width: 100%;
+    }
+}

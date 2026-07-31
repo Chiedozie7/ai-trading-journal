@@ -162,7 +162,10 @@ function Topbar({ isSidebarOpen, setIsSidebarOpen }) {
                                 Profile
                             </Link>
 
-                            <Link to="/settings">
+                            <Link
+                                to="/settings"
+                                onClick={() => setIsMenuOpen(false)}
+                            >
                                 Settings
                             </Link>
 

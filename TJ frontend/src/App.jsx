@@ -15,6 +15,7 @@ import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
 import Layout from "./components/Layout";
 import Profile from './pages/Profile';
+import Settings from './pages/Settings';
 
 function App() {
 
@@ -30,6 +31,7 @@ function App() {
         <Route element={<ProtectedRoute />}>
           <Route element={<Layout />}>
             <Route path="/profile" element={<Profile />} />
+            <Route path="/settings" element={<Settings />} />
 
             <Route
               path="/dashboard"

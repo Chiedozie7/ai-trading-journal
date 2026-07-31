@@ -1,31 +1,284 @@
-.calendar-filter-banner {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    padding: 12px 16px;
-    border-radius: 8px;
-    background: #eef6ff;
-    border: 1px solid #b8d8ff;
-}
 
-.calendar-filter-banner button {
-    cursor: pointer;
-    padding: 6px 12px;
-    border: none;
-    border-radius: 6px;
-}
+/* ==========================
+   Back to Calendar
+========================== */
+
 .back-to-calendar-btn {
-    margin-bottom: 12px;
+    margin-bottom: 1rem;
+
     background: none;
     border: none;
+
     cursor: pointer;
-    font-size: 15px;
-    font-weight: 500;
-    color: #2563eb;
+
     padding: 0;
+
+    font-size: .95rem;
+    font-weight: 500;
+
+    color: var(--primary-btn-bg);
 }
 
 .back-to-calendar-btn:hover {
     text-decoration: underline;
+}
+
+/* ==========================
+   Calendar Banner
+========================== */
+
+.calendar-filter-banner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    gap: 1rem;
+
+    margin-bottom: 1.5rem;
+
+    padding: 1rem 1.25rem;
+
+    border-radius: 10px;
+    border: 1px solid var(--info-border);
+
+    background: var(--info-bg);
+}
+
+.calendar-filter-banner span {
+    color: var(--text);
+}
+
+.calendar-filter-banner button {
+    cursor: pointer;
+
+    border: none;
+    border-radius: 6px;
+
+    padding: .5rem 1rem;
+
+    background: var(--primary-btn-bg);
+    color: var(--primary-btn-text);
+
+    transition: .2s ease;
+}
+
+.calendar-filter-banner button:hover {
+    background: var(--primary-btn-hover);
+}
+
+/* ==========================
+   Toolbar
+========================== */
+
+.trades-toolbar {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+
+    gap: 1rem;
+
+    margin-bottom: 2rem;
+}
+
+.trades-toolbar input,
+.trades-toolbar select {
+    width: 100%;
+
+    padding: .75rem 1rem;
+
+    border: 1px solid var(--input-border);
+    border-radius: 8px;
+
+    background: var(--input-bg);
+    color: var(--text);
+
+    transition: .2s ease;
+}
+
+.trades-toolbar input::placeholder {
+    color: var(--text-secondary);
+}
+
+.trades-toolbar input:focus,
+.trades-toolbar select:focus {
+    outline: none;
+    border-color: var(--input-focus);
+}
+
+/* ==========================
+   Table
+========================== */
+
+.trades-table-wrapper {
+    overflow-x: auto;
+
+    margin-bottom: 2rem;
+
+    border: 1px solid var(--border);
+    border-radius: 10px;
+
+    background: var(--card-bg);
+
+    box-shadow: var(--shadow);
+}
+
+.trades-table-wrapper table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.trades-table-wrapper thead {
+    background: var(--page-bg);
+}
+
+.trades-table-wrapper th,
+.trades-table-wrapper td {
+    padding: 1rem;
+
+    text-align: left;
+
+    border-bottom: 1px solid var(--border);
+}
+
+.trades-table-wrapper th {
+    font-size: .9rem;
+    font-weight: 600;
+
+    color: var(--text-secondary);
+}
+
+.trades-table-wrapper td {
+    color: var(--text);
+}
+
+.trades-table-wrapper tbody tr {
+    cursor: pointer;
+
+    transition: background .2s ease;
+}
+
+.trades-table-wrapper tbody tr:hover {
+    background: var(--page-bg);
+}
+
+.trades-table-wrapper tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* ==========================
+   Empty State
+========================== */
+
+.trades-empty {
+    padding: 3rem;
+
+    text-align: center;
+
+    border: 1px dashed var(--border);
+    border-radius: 10px;
+     margin-bottom: 1rem;
+
+    background: var(--card-bg);
+}
+
+.trades-empty h3 {
+    margin-bottom: .5rem;
+
+    color: var(--text);
+}
+
+.trades-empty p {
+    color: var(--text-secondary);
+}
+
+/* ==========================
+   Add Trade Button
+========================== */
+
+.trades-page .add-trade-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 2rem;
+
+    padding: .75rem 1.5rem;
+
+    border-radius: 8px;
+
+    background: var(--primary-btn-bg);
+    color: var(--primary-btn-text);
+
+    text-decoration: none;
+
+    transition: .2s ease;
+}
+
+.add-trade-btn:hover {
+    background: var(--primary-btn-hover);
+}
+
+/* ==========================
+   Pagination
+========================== */
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    gap: 1rem;
+
+    margin-top: 2rem;
+}
+
+.pagination button {
+    padding: .65rem 1.25rem;
+
+    border: 1px solid var(--border);
+    border-radius: 8px;
+
+    background: var(--card-bg);
+    color: var(--text);
+
+    cursor: pointer;
+
+    transition: .2s ease;
+}
+
+.pagination button:hover:not(:disabled) {
+    background: var(--page-bg);
+}
+
+.pagination button:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+}
+
+.pagination span {
+    color: var(--text-secondary);
+}
+
+/* ==========================
+   Responsive
+========================== */
+
+@media (max-width: 768px) {
+
+    .trades-page {
+        padding: 1rem;
+    }
+
+    .calendar-filter-banner {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .trades-toolbar {
+        grid-template-columns: 1fr;
+    }
+
+    .pagination {
+        flex-wrap: wrap;
+    }
+
 }

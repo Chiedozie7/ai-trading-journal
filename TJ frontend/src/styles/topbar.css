@@ -7,8 +7,8 @@
     position: sticky;
     top: 0;
     z-index: 100;
-    background-color: #fff;
-    border-bottom: 1px solid #e5e7eb;
+    background: var(--topbar-bg);
+    border-bottom: 1px solid var(--border);
 }
 
 .add-trade-btn {
@@ -16,12 +16,18 @@
 
     text-decoration: none;
 
-    background: #2563eb;
-    color: #fff;
+    background: var(--primary-btn-bg);
+    color: var(--primary-btn-text);
 
     border-radius: 8px;
 
     font-weight: 600;
+
+    transition: background .2s ease;
+}
+
+.add-trade-btn:hover {
+    background: var(--primary-btn-hover);
 }
 
 .menu-btn {
@@ -29,6 +35,8 @@
 
     border: none;
     background: none;
+
+    color: var(--text);
 
     cursor: pointer;
 
@@ -52,13 +60,15 @@
     margin: 0;
     font-size: 1.5rem;
     line-height: 1.2;
+    color: var(--text);
 }
 
 .page-subtitle {
     margin: .25rem 0 0;
     font-size: .9rem;
-    color: #6b7280;
+    color: var(--text-secondary);
 }
+
 .profile-menu {
     position: relative;
 }
@@ -67,8 +77,12 @@
     width: 42px;
     height: 42px;
 
+    padding: 0;
+
     border: none;
     border-radius: 50%;
+
+    background: transparent;
 
     cursor: pointer;
 
@@ -80,17 +94,26 @@
     justify-content: center;
 }
 
+.profile-btn:hover {
+    filter: brightness(.95);
+}
+
 .profile-dropdown {
     position: absolute;
     top: calc(100% + 0.75rem);
     right: 0;
+
     width: 240px;
-    background: #fff;
-    border: 1px solid #e5e7eb;
+
+    background: var(--dropdown-bg);
+    border: 1px solid var(--border);
     border-radius: 12px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+
+    box-shadow: var(--shadow);
+
     overflow: hidden;
 }
+
 .profile-info {
     padding: 1rem;
 
@@ -98,17 +121,19 @@
     flex-direction: column;
     gap: .25rem;
 
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom: 1px solid var(--border);
 }
 
 .profile-info strong {
     font-size: .95rem;
+    color: var(--text);
 }
 
 .profile-info span {
     font-size: .85rem;
-    color: #6b7280;
+    color: var(--text-secondary);
 }
+
 .profile-dropdown a,
 .profile-dropdown button {
     width: 100%;
@@ -122,27 +147,20 @@
     align-items: center;
 
     text-decoration: none;
-    color: inherit;
+    color: var(--text);
 
     cursor: pointer;
 
     font-size: .95rem;
+
+    transition: background .2s ease;
 }
 
 .profile-dropdown a:hover,
 .profile-dropdown button:hover {
-    background: #f3f4f6;
-}
-.profile-btn {
-    padding: 0;
-    border: none;
-    background: transparent;
-    cursor: pointer;
+    background: var(--page-bg);
 }
 
-.profile-btn:hover {
-    filter: brightness(.95);
-}
 .topbar-actions {
     display: flex;
     align-items: center;

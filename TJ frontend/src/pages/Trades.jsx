@@ -84,7 +84,7 @@ function Trades() {
     };
 
     return (
-        <div>
+        <div className="trades-page">
 
             {tradeDate && (
 
@@ -119,114 +119,126 @@ function Trades() {
                 )
             }
 
-            <input
-                type="text"
-                placeholder="Search trades"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-            />
+            <div className="trades-toolbar">
 
-            <select
-                value={strategy}
-                onChange={(e) => setStrategy(e.target.value)}
-            >
-                <option value="">All Strategies</option>
-                <option value="SMC">SMC</option>
-                <option value="ICT">ICT</option>
-                <option value="Price Action">Price Action</option>
-            </select>
+                <input
+                    type="text"
+                    placeholder="Search trades"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                />
 
-            <select
-                value={timeframe}
-                onChange={(e) => setTimeframe(e.target.value)}
-            >
-                <option value="">All Timeframes</option>
-                <option value="1m">1m</option>
-                <option value="5m">5m</option>
-                <option value="15m">15m</option>
-                <option value="45m">45m</option>
-                <option value="4H">4H</option>
-            </select>
+                <select
+                    value={strategy}
+                    onChange={(e) => setStrategy(e.target.value)}
+                >
+                    <option value="">All Strategies</option>
+                    <option value="SMC">SMC</option>
+                    <option value="ICT">ICT</option>
+                    <option value="Price Action">Price Action</option>
+                </select>
 
-            <select
-                value={result}
-                onChange={(e) => setResult(e.target.value)}
-            >
-                <option value="">All Results</option>
-                <option value="win">Win</option>
-                <option value="loss">Loss</option>
-                <option value="breakeven">Breakeven</option>
-            </select>
+                <select
+                    value={timeframe}
+                    onChange={(e) => setTimeframe(e.target.value)}
+                >
+                    <option value="">All Timeframes</option>
+                    <option value="1m">1m</option>
+                    <option value="5m">5m</option>
+                    <option value="15m">15m</option>
+                    <option value="45m">45m</option>
+                    <option value="4H">4H</option>
+                </select>
 
-            <select
-                value={sort}
-                onChange={(e) => setSort(e.target.value)}
-            >
-                <option value="newest">Newest First</option>
-                <option value="oldest">Oldest First</option>
-                <option value="profit">Highest PnL</option>
-                <option value="loss">Lowest PnL</option>
-            </select>
+                <select
+                    value={result}
+                    onChange={(e) => setResult(e.target.value)}
+                >
+                    <option value="">All Results</option>
+                    <option value="win">Win</option>
+                    <option value="loss">Loss</option>
+                    <option value="breakeven">Breakeven</option>
+                </select>
+
+                <select
+                    value={sort}
+                    onChange={(e) => setSort(e.target.value)}
+                >
+                    <option value="newest">Newest First</option>
+                    <option value="oldest">Oldest First</option>
+                    <option value="profit">Highest PnL</option>
+                    <option value="loss">Lowest PnL</option>
+                </select>
+            </div>
 
             {
                 trades.length === 0 ? (
-                    <p>No trades found.</p>
-                ) : (
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Pair</th>
-                                <th>Dir</th>
-                                <th>Strategy</th>
-                                <th>TF</th>
-                                <th>RR</th>
-                                <th>Result</th>
-                                <th>PnL</th>
-                            </tr>
-                        </thead>
+                    <div className="trades-empty">
+                        <h3>No trades found</h3>
 
-                        <tbody>
-                            {trades.map((trade) => (
-                                <tr
-                                    key={trade._id}
-                                    onClick={() => navigate(`/trades/${trade._id}`)}
-                                    style={{ cursor: "pointer" }}
-                                >
-                                    <td>{trade.pair}</td>
-                                    <td>{trade.direction}</td>
-                                    <td>{trade.strategy}</td>
-                                    <td>{trade.timeframe}</td>
-                                    <td>{trade.rr}</td>
-                                    <td>{trade.result}</td>
-                                    <td>{trade.pnl}</td>
+                        <p>Try adjusting your filters or add your first trade.</p>
+                    </div>
+                ) : (
+                    <div className="trades-table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Pair</th>
+                                    <th>Dir</th>
+                                    <th>Strategy</th>
+                                    <th>TF</th>
+                                    <th>RR</th>
+                                    <th>Result</th>
+                                    <th>PnL</th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                            </thead>
+
+                            <tbody>
+                                {trades.map((trade) => (
+                                    <tr
+                                        key={trade._id}
+                                        onClick={() => navigate(`/trades/${trade._id}`)}
+                                        style={{ cursor: "pointer" }}
+                                    >
+                                        <td>{trade.pair}</td>
+                                        <td>{trade.direction}</td>
+                                        <td>{trade.strategy}</td>
+                                        <td>{trade.timeframe}</td>
+                                        <td>{trade.rr}</td>
+                                        <td>{trade.result}</td>
+                                        <td>{trade.pnl}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                 )
             }
-            <button>
-                <Link to="/create-trade">
-                    Add Trade
-                </Link>
-            </button>
-            <button
-                disabled={page === 1}
-                onClick={() => setPage(page - 1)}
+            <Link
+                to="/create-trade"
+                className="primary-btn add-trade-btn"
             >
-                Previous
-            </button>
+                Add Trade
+            </Link>
+            <div className="pagination">
+                <button
+                    disabled={page === 1}
+                    onClick={() => setPage(page - 1)}
+                >
+                    Previous
+                </button>
 
-            <span>
-                Page {page} of {totalPages}
-            </span>
+                <span>
+                    Page {page} of {totalPages}
+                </span>
 
-            <button
-                disabled={page === totalPages}
-                onClick={() => setPage(page + 1)}
-            >
-                Next
-            </button>
+                <button
+                    disabled={page === totalPages}
+                    onClick={() => setPage(page + 1)}
+                >
+                    Next
+                </button>
+            </div>
         </div >
     );
 }
