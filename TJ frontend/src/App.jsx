@@ -16,6 +16,7 @@ import ResetPassword from './pages/ResetPassword';
 import Layout from "./components/Layout";
 import Profile from './pages/Profile';
 import Settings from './pages/Settings';
+import ChangePassword from './pages/ChangePassword';
 
 function App() {
 
@@ -32,6 +33,10 @@ function App() {
           <Route element={<Layout />}>
             <Route path="/profile" element={<Profile />} />
             <Route path="/settings" element={<Settings />} />
+            <Route
+              path="/change-password"
+              element={<ChangePassword />}
+            />
 
             <Route
               path="/dashboard"

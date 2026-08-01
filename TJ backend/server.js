@@ -32,6 +32,8 @@ app.use(verifyJWT);
 app.use('/trades', require('./routes/api/tradeRoutes'));
 app.use('/dashboard', require('./routes/api/dashboardRoutes'));
 app.use('/analytics', require('./routes/api/analyticsRoutes'));
+app.use('/change-password', require('./routes/changePassword'));
+
 
 
 

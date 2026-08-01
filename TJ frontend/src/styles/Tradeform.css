@@ -2,13 +2,19 @@
     display: flex;
     flex-direction: column;
     gap: 1rem;
-
     max-width: 700px;
 }
+
 .trade-form-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 1rem;
+}
+
+.form-field {
+    display: flex;
+    flex-direction: column;
+    gap: .45rem;
 }
 
 @media (max-width: 767px) {
@@ -21,17 +27,12 @@
 .trade-form select,
 .trade-form textarea {
     width: 100%;
-
     padding: .85rem 1rem;
-
     border: 1px solid var(--input-border);
     border-radius: 8px;
-
     background: var(--input-bg);
     color: var(--text);
-
     font-size: .95rem;
-
     transition:
         border-color .2s ease,
         box-shadow .2s ease,
@@ -47,9 +48,7 @@
 .trade-form select:focus,
 .trade-form textarea:focus {
     outline: none;
-
     border-color: var(--input-focus);
-
     box-shadow: 0 0 0 3px rgba(37, 99, 235, .15);
 }
 
@@ -60,7 +59,13 @@
 
 .trade-form label {
     color: var(--text);
+    font-size: .9rem;
     font-weight: 600;
+}
+
+.form-group > label {
+    display: block;
+    margin-bottom: .75rem;
 }
 
 .trade-form h4 {
@@ -70,19 +75,13 @@
 
 .trade-form button[type="submit"] {
     align-self: flex-start;
-
     padding: .85rem 1.5rem;
-
     border: none;
     border-radius: 8px;
-
     background: var(--primary-btn-bg);
     color: var(--primary-btn-text);
-
     cursor: pointer;
-
     font-weight: 600;
-
     transition: background .2s ease;
 }
 
@@ -113,7 +112,6 @@
     margin-top: 8px;
     font-size: .85rem;
     word-break: break-word;
-
     color: var(--text-secondary);
 }
 
@@ -121,15 +119,11 @@
     margin-top: 8px;
     width: 100%;
     padding: 6px;
-
     border: none;
     border-radius: 6px;
-
     background: var(--danger);
     color: #fff;
-
     cursor: pointer;
-
     transition:
         opacity .2s ease,
         background .2s ease;
@@ -151,13 +145,10 @@
 .image-modal-overlay {
     position: fixed;
     inset: 0;
-
     background: rgba(0, 0, 0, .8);
-
     display: flex;
     justify-content: center;
     align-items: center;
-
     z-index: 1000;
 }
 
@@ -177,21 +168,15 @@
     position: absolute;
     top: -15px;
     right: -15px;
-
     width: 35px;
     height: 35px;
-
     border: none;
     border-radius: 50%;
-
     background: var(--danger);
     color: #fff;
-
     cursor: pointer;
-
     font-size: 1.2rem;
     font-weight: bold;
-
     transition: opacity .2s ease;
 }
 

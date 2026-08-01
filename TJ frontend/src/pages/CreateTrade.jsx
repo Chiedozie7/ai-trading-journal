@@ -4,13 +4,18 @@ import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import useAuth from "../hooks/useAuth";
 import TradeForm from "../components/TradeForm";
 import TradeFormData from "../data/TradeFormData";
+import usePreferences from "../hooks/usePreferences";
 
 function CreateTrade() {
     const axiosPrivate = useAxiosPrivate();
     const navigate = useNavigate();
     const { auth } = useAuth();
+    const { preferences } = usePreferences();
 
-    const [formData, setFormData] = useState(TradeFormData);
+    const [formData, setFormData] = useState({
+        ...TradeFormData,
+        riskPercent: preferences.trading.defaultRisk,
+    });
     const [previewImage, setPreviewImage] = useState(null);
     const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 

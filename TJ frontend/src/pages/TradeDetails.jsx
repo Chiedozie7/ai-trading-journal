@@ -88,8 +88,8 @@ function TradeDetails() {
             </div>
 
 
-            <div className="details-card">
-                <div className="trade-info-grid">
+            
+                <div className="details-card">
                     <div className="trade-info-grid">
                         <div className="info-item">
                             <span className="label">Direction</span>
@@ -132,7 +132,7 @@ function TradeDetails() {
                         </div>
                     </div>
                 </div>
-            </div>
+            
 
             <div className="details-card">
                 <div className="info-item">

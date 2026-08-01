@@ -1,8 +1,10 @@
 import "../styles/settings.css";
 import usePreferences from "../hooks/usePreferences";
+import { useNavigate } from "react-router-dom";
 
 function Settings() {
     const { preferences, setPreferences } = usePreferences();
+    const navigate = useNavigate();
 
     const handleThemeChange = (theme) => {
         setPreferences((prev) => ({
@@ -22,7 +24,10 @@ function Settings() {
 
                 <h3>Account</h3>
 
-                <button className="setting-btn">
+                <button
+                    className="setting-btn"
+                    onClick={() => navigate("/change-password")}
+                >
                     Change Password
                 </button>
 
@@ -88,7 +93,17 @@ function Settings() {
                         id="risk"
                         type="number"
                         step="0.1"
-                        defaultValue={1}
+                        min="0"
+                        value={preferences.trading.defaultRisk}
+                        onChange={(e) =>
+                            setPreferences(prev => ({
+                                ...prev,
+                                trading: {
+                                    ...prev.trading,
+                                    defaultRisk: Number(e.target.value),
+                                },
+                            }))
+                        }
                     />
 
                 </div>

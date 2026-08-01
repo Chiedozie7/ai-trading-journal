@@ -32,10 +32,6 @@ function Profile() {
 
                 </div>
 
-                <button className="edit-profile-btn">
-                    Edit Profile
-                </button>
-
             </div>
         </div>
     );
