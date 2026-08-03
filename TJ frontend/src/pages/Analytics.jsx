@@ -4,6 +4,16 @@ import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import StatCard from "../components/StatCard";
 import "../styles/analytics.css"
 import TradingCalendar from "../components/TradingCalendar";
+import CustomSelect from "../components/CustomSelect";
+
+import {
+    strategyOptions,
+    pairOptions,
+    timeframeOptions,
+    directionOptions,
+    rangeOptions,
+} from "../data/analyticsFilterOptions";
+import ScrollableTable from "../components/ScrollableTable";
 
 const Analytics = () => {
     const [summary, setSummary] = useState(null);
@@ -141,65 +151,36 @@ const Analytics = () => {
 
                 <div className="analytics-filters">
 
-                    <select
+                    <CustomSelect
+                        options={strategyOptions}
                         value={strategy}
-                        onChange={(e) => setStrategy(e.target.value)}
-                    >
-                        <option value="">All Strategies</option>
-                        <option value="ICT">ICT</option>
-                        <option value="SMC">SMC</option>
-                        <option value="Price Action">Price Action</option>
-                    </select>
+                        onChange={setStrategy}
+                    />
 
-                    <select
+                    <CustomSelect
+                        options={pairOptions}
                         value={pair}
-                        onChange={(e) => setPair(e.target.value)}
-                    >
-                        <option value="">All Pairs</option>
-                        <option value="BTCUSDT">BTCUSDT</option>
-                        <option value="ETHUSDT">ETHUSDT</option>
-                        <option value="RULEUSDT">RULEUSDT</option>
-                        <option value="ASDUSDT">ASDUSDT</option>
-                        <option value="MATEUSDT">MATEUSDT</option>
-                        <option value="YOUUSDT">YOUUSDT</option>
-                    </select>
+                        onChange={setPair}
+                    />
 
-                    <select
+                    <CustomSelect
+                        options={timeframeOptions}
                         value={timeframe}
-                        onChange={(e) => setTimeframe(e.target.value)}
-                    >
-                        <option value="">All Timeframes</option>
-                        <option value="5m">5m</option>
-                        <option value="15m">15m</option>
-                        <option value="45m">45m</option>
-                        <option value="1H">1H</option>
-                        <option value="4H">4H</option>
-                    </select>
+                        onChange={setTimeframe}
+                    />
 
-                    <select
+                    <CustomSelect
+                        options={directionOptions}
                         value={direction}
-                        onChange={(e) => setDirection(e.target.value)}
-                    >
-                        <option value="">All Positions</option>
-                        <option value="buy">Long</option>
-                        <option value="sell">Short</option>
-                    </select>
+                        onChange={setDirection}
+                    />
 
 
-                    <select
+                    <CustomSelect
+                        options={rangeOptions}
                         value={range}
-                        onChange={(e) => setRange(e.target.value)}
-                    >
-                        <option value="all">All Time</option>
-                        <option value="today">Today</option>
-                        <option value="yesterday">Yesterday</option>
-                        <option value="last7">Last 7 Days</option>
-                        <option value="last30">Last 30 Days</option>
-                        <option value="thisMonth">This Month</option>
-                        <option value="lastMonth">Last Month</option>
-                        <option value="thisYear">This Year</option>
-                        <option value="custom">Custom Range</option>
-                    </select>
+                        onChange={setRange}
+                    />
 
                     <div className="custom-date-filters">
                         {range === "custom" && (
@@ -323,100 +304,103 @@ const Analytics = () => {
                 {activeTab === "breakdown" && (
                     <>
                         <h2>Strategy Performance</h2>
-
-                        <div className="analytics-table-container">
-                            <table className="analytics-table">
-                                <thead>
-                                    <tr>
-                                        <th>Strategy</th>
-                                        <th>Trades</th>
-                                        <th>Wins</th>
-                                        <th>Breakeven</th>
-                                        <th>Losses</th>
-                                        <th>Win Rate</th>
-                                        <th>Total PnL</th>
-                                    </tr>
-                                </thead>
-
-                                <tbody>
-                                    {strategyPerformance.map((strategy) => (
-                                        <tr key={strategy.strategy}>
-                                            <td>{strategy.strategy}</td>
-                                            <td>{strategy.totalTrades}</td>
-                                            <td>{strategy.wins}</td>
-                                            <td>{strategy.breakeven}</td>
-                                            <td>{strategy.losses}</td>
-                                            <td>{strategy.winRate}%</td>
-                                            <td>${strategy.totalPnl}</td>
+                        <ScrollableTable>
+                            <div className="analytics-table-container">
+                                <table className="analytics-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Strategy</th>
+                                            <th>Trades</th>
+                                            <th>Wins</th>
+                                            <th>Breakeven</th>
+                                            <th>Losses</th>
+                                            <th>Win Rate</th>
+                                            <th>Total PnL</th>
                                         </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
+                                    </thead>
+
+                                    <tbody>
+                                        {strategyPerformance.map((strategy) => (
+                                            <tr key={strategy.strategy}>
+                                                <td>{strategy.strategy}</td>
+                                                <td>{strategy.totalTrades}</td>
+                                                <td>{strategy.wins}</td>
+                                                <td>{strategy.breakeven}</td>
+                                                <td>{strategy.losses}</td>
+                                                <td>{strategy.winRate}%</td>
+                                                <td>${strategy.totalPnl}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </ScrollableTable>
 
 
                         <h2>Pair Performance</h2>
-
-                        <div className="analytics-table-container">
-                            <table className="analytics-table">
-                                <thead>
-                                    <tr>
-                                        <th>Pair</th>
-                                        <th>Trades</th>
-                                        <th>Wins</th>
-                                        <th>Breakeven</th>
-                                        <th>Losses</th>
-                                        <th>Win Rate</th>
-                                        <th>Total PnL</th>
-                                    </tr>
-                                </thead>
-
-                                <tbody>
-                                    {pairPerformance.map((pair) => (
-                                        <tr key={pair.pair}>
-                                            <td>{pair.pair}</td>
-                                            <td>{pair.totalTrades}</td>
-                                            <td>{pair.wins}</td>
-                                            <td>{pair.breakeven}</td>
-                                            <td>{pair.losses}</td>
-                                            <td>{pair.winRate}%</td>
-                                            <td>${pair.totalPnl}</td>
+                        <ScrollableTable>
+                            <div className="analytics-table-container">
+                                <table className="analytics-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Pair</th>
+                                            <th>Trades</th>
+                                            <th>Wins</th>
+                                            <th>Breakeven</th>
+                                            <th>Losses</th>
+                                            <th>Win Rate</th>
+                                            <th>Total PnL</th>
                                         </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
+                                    </thead>
+
+                                    <tbody>
+                                        {pairPerformance.map((pair) => (
+                                            <tr key={pair.pair}>
+                                                <td>{pair.pair}</td>
+                                                <td>{pair.totalTrades}</td>
+                                                <td>{pair.wins}</td>
+                                                <td>{pair.breakeven}</td>
+                                                <td>{pair.losses}</td>
+                                                <td>{pair.winRate}%</td>
+                                                <td>${pair.totalPnl}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </ScrollableTable>
                         <h2>Timeframe Performance</h2>
-
-                        <div className="analytics-table-container">
-                            <table className="analytics-table">
-                                <thead>
-                                    <tr>
-                                        <th>Timeframe</th>
-                                        <th>Trades</th>
-                                        <th>Wins</th>
-                                        <th>Breakeven</th>
-                                        <th>Losses</th>
-                                        <th>Win Rate</th>
-                                        <th>Total PnL</th>
-                                    </tr>
-                                </thead>
-
-                                <tbody>
-                                    {timeframePerformance.map((timeframe) => (
-                                        <tr key={timeframe.timeframe}>
-                                            <td>{timeframe.timeframe}</td>
-                                            <td>{timeframe.totalTrades}</td>
-                                            <td>{timeframe.wins}</td>
-                                            <td>{timeframe.breakeven}</td>
-                                            <td>{timeframe.losses}</td>
-                                            <td>{timeframe.winRate}%</td>
-                                            <td>${timeframe.totalPnl}</td>
+                        <ScrollableTable>
+                            <div className="analytics-table-container">
+                                <table className="analytics-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Timeframe</th>
+                                            <th>Trades</th>
+                                            <th>Wins</th>
+                                            <th>Breakeven</th>
+                                            <th>Losses</th>
+                                            <th>Win Rate</th>
+                                            <th>Total PnL</th>
                                         </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
+                                    </thead>
+
+                                    <tbody>
+                                        {timeframePerformance.map((timeframe) => (
+                                            <tr key={timeframe.timeframe}>
+                                                <td>{timeframe.timeframe}</td>
+                                                <td>{timeframe.totalTrades}</td>
+                                                <td>{timeframe.wins}</td>
+                                                <td>{timeframe.breakeven}</td>
+                                                <td>{timeframe.losses}</td>
+                                                <td>{timeframe.winRate}%</td>
+                                                <td>${timeframe.totalPnl}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </ScrollableTable>
                     </>
                 )}
 

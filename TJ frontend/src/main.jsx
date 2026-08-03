@@ -5,6 +5,9 @@ import { AuthProvider } from './context/AuthContext.jsx'
 import { PreferencesProvider } from "./context/PreferencesProvider";
 import App from './App.jsx'
 import "./styles/global.css";
+import "./styles/forms.css";
+import "./styles/buttons.css";
+import "./styles/auth.css";
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

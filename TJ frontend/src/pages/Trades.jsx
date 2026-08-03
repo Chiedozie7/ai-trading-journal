@@ -6,6 +6,14 @@ import axios from "../api/axios";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import '../styles/Trades.css';
+import CustomSelect from "../components/CustomSelect";
+import {
+    strategyOptions,
+    timeframeOptions,
+    resultOptions,
+    sortOptions,
+} from "../data/tradeFilterOptions";
+import ScrollableTable from "../components/ScrollableTable";
 
 function Trades() {
     const axiosPrivate = useAxiosPrivate();
@@ -83,6 +91,7 @@ function Trades() {
         }
     };
 
+
     return (
         <div className="trades-page">
 
@@ -128,47 +137,32 @@ function Trades() {
                     onChange={(e) => setSearch(e.target.value)}
                 />
 
-                <select
+                <CustomSelect
+                    options={strategyOptions}
                     value={strategy}
-                    onChange={(e) => setStrategy(e.target.value)}
-                >
-                    <option value="">All Strategies</option>
-                    <option value="SMC">SMC</option>
-                    <option value="ICT">ICT</option>
-                    <option value="Price Action">Price Action</option>
-                </select>
-
-                <select
+                    onChange={setStrategy}
+                    className="filter"
+                />
+                <CustomSelect
+                    options={timeframeOptions}
                     value={timeframe}
-                    onChange={(e) => setTimeframe(e.target.value)}
-                >
-                    <option value="">All Timeframes</option>
-                    <option value="1m">1m</option>
-                    <option value="5m">5m</option>
-                    <option value="15m">15m</option>
-                    <option value="45m">45m</option>
-                    <option value="4H">4H</option>
-                </select>
+                    onChange={setTimeframe}
+                    className="filter"
+                />
 
-                <select
+                <CustomSelect
+                    options={resultOptions}
                     value={result}
-                    onChange={(e) => setResult(e.target.value)}
-                >
-                    <option value="">All Results</option>
-                    <option value="win">Win</option>
-                    <option value="loss">Loss</option>
-                    <option value="breakeven">Breakeven</option>
-                </select>
+                    onChange={setResult}
+                    className="filter"
+                />
 
-                <select
+                <CustomSelect
+                    options={sortOptions}
                     value={sort}
-                    onChange={(e) => setSort(e.target.value)}
-                >
-                    <option value="newest">Newest First</option>
-                    <option value="oldest">Oldest First</option>
-                    <option value="profit">Highest PnL</option>
-                    <option value="loss">Lowest PnL</option>
-                </select>
+                    onChange={setSort}
+                    className="filter"
+                />
             </div>
 
             {
@@ -179,39 +173,41 @@ function Trades() {
                         <p>Try adjusting your filters or add your first trade.</p>
                     </div>
                 ) : (
-                    <div className="trades-table-wrapper">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Pair</th>
-                                    <th>Dir</th>
-                                    <th>Strategy</th>
-                                    <th>TF</th>
-                                    <th>RR</th>
-                                    <th>Result</th>
-                                    <th>PnL</th>
-                                </tr>
-                            </thead>
-
-                            <tbody>
-                                {trades.map((trade) => (
-                                    <tr
-                                        key={trade._id}
-                                        onClick={() => navigate(`/trades/${trade._id}`)}
-                                        style={{ cursor: "pointer" }}
-                                    >
-                                        <td>{trade.pair}</td>
-                                        <td>{trade.direction}</td>
-                                        <td>{trade.strategy}</td>
-                                        <td>{trade.timeframe}</td>
-                                        <td>{trade.rr}</td>
-                                        <td>{trade.result}</td>
-                                        <td>{trade.pnl}</td>
+                    <ScrollableTable>
+                        <div className="trades-table-wrapper">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Pair</th>
+                                        <th>Dir</th>
+                                        <th>Strategy</th>
+                                        <th>TF</th>
+                                        <th>RR</th>
+                                        <th>Result</th>
+                                        <th>PnL</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
+                                </thead>
+
+                                <tbody>
+                                    {trades.map((trade) => (
+                                        <tr
+                                            key={trade._id}
+                                            onClick={() => navigate(`/trades/${trade._id}`)}
+                                            style={{ cursor: "pointer" }}
+                                        >
+                                            <td>{trade.pair}</td>
+                                            <td>{trade.direction}</td>
+                                            <td>{trade.strategy}</td>
+                                            <td>{trade.timeframe}</td>
+                                            <td>{trade.rr}</td>
+                                            <td>{trade.result}</td>
+                                            <td>{trade.pnl}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    </ScrollableTable>
                 )
             }
             <Link

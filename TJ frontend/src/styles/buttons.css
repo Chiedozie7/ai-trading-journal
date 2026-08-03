@@ -1,0 +1,61 @@
+.primary-btn{
+    width:100%;
+    padding:.95rem 1.25rem;
+
+    border:none;
+    border-radius:10px;
+
+    background:var(--primary-btn-bg);
+    color:var(--primary-btn-text);
+
+    font-size:.95rem;
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:
+        background .2s ease,
+        transform .2s ease,
+        box-shadow .2s ease;
+}
+
+.primary-btn:hover:not(:disabled){
+    background:var(--primary-btn-hover);
+    transform:translateY(-1px);
+}
+
+.primary-btn:active:not(:disabled){
+    transform:translateY(0);
+}
+
+.primary-btn:focus-visible{
+    outline:none;
+    box-shadow:0 0 0 3px rgba(37,99,235,.2);
+}
+
+.primary-btn:disabled{
+    opacity:.6;
+    cursor:not-allowed;
+}
+
+.secondary-btn{
+    padding:.9rem 1.25rem;
+
+    border:1px solid var(--border);
+    border-radius:10px;
+
+    background:var(--surface);
+    color:var(--text);
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:
+        background .2s ease,
+        border-color .2s ease;
+}
+
+.secondary-btn:hover{
+    background:var(--bg);
+}

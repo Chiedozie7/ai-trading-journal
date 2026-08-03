@@ -50,13 +50,6 @@ const handleChangePassword = async (req, res) => {
     await foundUser.save();
     const updatedUser = await User.findById(foundUser._id);
 
-    console.log("Saved refresh token:", updatedUser.refreshToken);
-    console.log("Generated refresh token:", refreshToken);
-    console.log(
-        "Tokens match:",
-        updatedUser.refreshToken === refreshToken
-    );
-
     res.cookie("jwt", refreshToken, {
         httpOnly: true,
         sameSite: "Lax",

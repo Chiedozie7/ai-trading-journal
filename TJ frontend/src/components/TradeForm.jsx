@@ -1,5 +1,11 @@
 import "../styles/Tradeform.css";
 import { API_URL } from "../api/axios";
+import CustomSelect from "./CustomSelect";
+
+import {
+    directionOptions,
+    resultOptions,
+} from "../data/tradeFormOptions";
 
 function TradeForm({
     formData,
@@ -35,15 +41,18 @@ function TradeForm({
 
                 <div className="form-field">
                     <label htmlFor="direction">Direction</label>
-                    <select
-                        id="direction"
-                        name="direction"
+                    <CustomSelect
+                        options={directionOptions}
                         value={formData.direction}
-                        onChange={handleChange}
-                    >
-                        <option value="buy">Buy</option>
-                        <option value="sell">Sell</option>
-                    </select>
+                        onChange={(value) =>
+                            handleChange({
+                                target: {
+                                    name: "direction",
+                                    value,
+                                },
+                            })
+                        }
+                    />
                 </div>
 
                 <div className="form-field">
@@ -153,16 +162,18 @@ function TradeForm({
 
                 <div className="form-field">
                     <label htmlFor="result">Result</label>
-                    <select
-                        id="result"
-                        name="result"
-                        value={formData.result ?? ""}
-                        onChange={handleChange}
-                    >
-                        <option value="win">Win</option>
-                        <option value="loss">Loss</option>
-                        <option value="breakeven">Breakeven</option>
-                    </select>
+                    <CustomSelect
+                        options={resultOptions}
+                        value={formData.result}
+                        onChange={(value) =>
+                            handleChange({
+                                target: {
+                                    name: "result",
+                                    value,
+                                },
+                            })
+                        }
+                    />
                 </div>
 
                 <div className="form-field">

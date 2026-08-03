@@ -14,6 +14,7 @@
     --input-bg: #ffffff;
     --input-border: #d1d5db;
     --input-focus: #2563eb;
+    --table-fade: #ffffff;
 
     /* Text */
     --text: #111827;
@@ -56,6 +57,7 @@
     --input-bg: #111827;
     --input-border: #4b5563;
     --input-focus: #3b82f6;
+    --table-fade: #1f2937;
 
     /* Text */
     --text: #f9fafb;

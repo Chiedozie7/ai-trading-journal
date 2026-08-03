@@ -102,83 +102,94 @@ function Topbar({ isSidebarOpen, setIsSidebarOpen }) {
     return (
         <header className="topbar">
 
-            <button
-                className="menu-btn"
-                onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-            >
-                <FiMenu />
-            </button>
+            <div className="topbar-main">
 
-            <div className="topbar-heading">
-
-                <h2 className="page-title">
-                    {page.title}
-                </h2>
-
-                {page.subtitle && (
-                    <p className="page-subtitle">
-                        {page.subtitle}
-                    </p>
-                )}
-
-            </div>
-
-            <div className="topbar-actions">
-
-                <Link
-                    to="/create-trade"
-                    className="add-trade-btn"
+                <button
+                    className="menu-btn"
+                    onClick={() => setIsSidebarOpen(!isSidebarOpen)}
                 >
-                    + Add Trade
-                </Link>
+                    <FiMenu />
+                </button>
 
-                <div
-                    className="profile-menu"
-                    ref={menuRef}
-                >
+                <div className="topbar-heading">
 
-                    <button
-                        className="profile-btn"
-                        onClick={() => setIsMenuOpen(prev => !prev)}
-                    >
-                        <Avatar
-                            username={username}
-                            size="md"
-                        />
-                    </button>
+                    <h2 className="page-title">
+                        {page.title}
+                    </h2>
 
-                    {isMenuOpen && (
-                        <div className="profile-dropdown">
-
-                            <div className="profile-info">
-                                <strong>{username}</strong>
-                                <span>{auth.user.email}</span>
-                            </div>
-
-                            <Link
-                                to="/profile"
-                                onClick={() => setIsMenuOpen(false)}
-                            >
-                                Profile
-                            </Link>
-
-                            <Link
-                                to="/settings"
-                                onClick={() => setIsMenuOpen(false)}
-                            >
-                                Settings
-                            </Link>
-
-                            <button onClick={handleLogout}>
-                                Logout
-                            </button>
-
-                        </div>
+                    {page.subtitle && (
+                        <p className="page-subtitle">
+                            {page.subtitle}
+                        </p>
                     )}
 
                 </div>
 
+                <div className="topbar-actions">
+
+                    <Link
+                        to="/create-trade"
+                        className="add-trade-btn desktop-add-btn"
+                    >
+                        + Add Trade
+                    </Link>
+
+                    <div
+                        className="profile-menu"
+                        ref={menuRef}
+                    >
+
+                        <button
+                            className="profile-btn"
+                            onClick={() => setIsMenuOpen(prev => !prev)}
+                        >
+                            <Avatar
+                                username={username}
+                                size="md"
+                            />
+                        </button>
+
+                        {isMenuOpen && (
+                            <div className="profile-dropdown">
+
+                                <div className="profile-info">
+                                    <strong>{username}</strong>
+                                    <span>{auth.user.email}</span>
+                                </div>
+
+                                <Link
+                                    to="/profile"
+                                    onClick={() => setIsMenuOpen(false)}
+                                >
+                                    Profile
+                                </Link>
+
+                                <Link
+                                    to="/settings"
+                                    onClick={() => setIsMenuOpen(false)}
+                                >
+                                    Settings
+                                </Link>
+
+                                <button onClick={handleLogout}>
+                                    Logout
+                                </button>
+
+                            </div>
+                        )}
+
+                    </div>
+
+                </div>
+
             </div>
+
+            <Link
+                to="/create-trade"
+                className="add-trade-btn mobile-add-btn"
+            >
+                + Add Trade
+            </Link>
 
         </header>
     );

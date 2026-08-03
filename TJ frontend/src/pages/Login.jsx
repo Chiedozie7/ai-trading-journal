@@ -1,24 +1,29 @@
 import { useState } from "react";
 import axios from "../api/axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import { FiTrendingUp } from "react-icons/fi";
 import useAuth from "../hooks/useAuth";
-import { Link } from "react-router-dom";
+import "../styles/Login.css";
+
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
   const { setAuth } = useAuth();
   const navigate = useNavigate();
-  const [error, setError] = useState("")
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
       const response = await axios.post(
-        "/login", {
-        email,
-        password
-      },
+        "/login",
+        {
+          email,
+          password,
+        },
         {
           withCredentials: true,
         }
@@ -28,9 +33,6 @@ function Login() {
         user: response.data.user,
         accessToken: response.data.accessToken,
       });
-      const payload = JSON.parse(atob(response.data.accessToken.split(".")[1]));
-
-      console.log(payload);
 
       setEmail("");
       setPassword("");
@@ -38,35 +40,122 @@ function Login() {
 
       navigate("/dashboard");
     } catch (err) {
-      setError(err.response?.data?.message || "login failed");
+      setError(
+        err.response?.data?.message || "Login failed."
+      );
     }
-  }
-  
-
+  };
 
   return (
-    <div>
-      <h1>Login</h1>
-      {error && <p>{error}</p>}
-      <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button type="submit">Login</button>
-      </form>
-      <Link to="/forgot-password">
-        Forgot Password?
-      </Link>
+
+    <div className="auth-page">
+
+      <section className="auth-showcase">
+
+        <div className="auth-brand">
+
+          <div className="brand-icon">
+            <FiTrendingUp />
+          </div>
+
+          <h1>Trade Journal</h1>
+
+          <p>Review. Refine. Repeat.</p>
+
+        </div>
+
+        <div className="auth-principle">
+
+
+          <p>
+            Trade the plan.
+            <br />
+            Journal the outcome.
+          </p>
+
+        </div>
+
+      </section>
+
+      <section className="auth-panel">
+
+        <div className="auth-card">
+
+          <h2>Welcome Back</h2>
+
+          <p className="auth-subtitle">
+            Sign in to continue.
+          </p>
+
+          {error && (
+            <p className="auth-error">
+              {error}
+            </p>
+          )}
+
+          <form
+            className="auth-form"
+            onSubmit={handleSubmit}
+          >
+
+            <div className="auth-field">
+
+              <label>Email</label>
+
+              <input
+                type="email"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+
+            </div>
+
+            <div className="auth-field">
+
+              <label>Password</label>
+
+              <input
+                type="password"
+                placeholder="Enter your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+
+            </div>
+
+            <button
+              type="submit"
+              className="primary-btn"
+            >
+              Sign In
+            </button>
+
+          </form>
+
+          <Link
+            to="/forgot-password"
+            className="forgot-password-link"
+          >
+            Forgot Password?
+          </Link>
+
+          <p className="auth-footer">
+
+            Don't have an account?{" "}
+
+            <Link to="/register">
+              Create one
+            </Link>
+
+          </p>
+
+        </div>
+
+      </section>
+
     </div>
+
   );
 }
 

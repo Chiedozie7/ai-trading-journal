@@ -1,0 +1,17 @@
+.scrollable-table {
+    position: relative;
+}
+
+.scroll-fade {
+    position: absolute;
+    top: 1px;
+    right: 1px;
+    bottom: 1px;
+    width: 64px;
+    pointer-events: none;
+    background: linear-gradient(to left,
+            var(--table-fade),
+            transparent);
+    z-index: 20;
+    transition:opacity .25s ease;
+}

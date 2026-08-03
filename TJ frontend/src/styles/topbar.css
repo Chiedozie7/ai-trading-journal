@@ -166,3 +166,43 @@
     align-items: center;
     gap: 1rem;
 }
+.topbar-main{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    width:100%;
+}
+
+.mobile-add-btn{
+    display:none;
+}
+
+@media(max-width:767px){
+
+    .topbar{
+        height:auto;
+        padding:1rem;
+        align-items:stretch;
+        flex-direction:column;
+        gap:1rem;
+    }
+
+    .topbar-main{
+        align-items:flex-start;
+    }
+
+    .topbar-heading{
+        padding-left:.75rem;
+    }
+
+    .desktop-add-btn{
+        display:none;
+    }
+
+    .mobile-add-btn{
+        display:inline-flex;
+        align-self:flex-start;
+        margin-left: 2.75rem;
+    }
+
+}
