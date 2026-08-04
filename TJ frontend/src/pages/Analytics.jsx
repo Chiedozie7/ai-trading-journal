@@ -121,7 +121,10 @@ const Analytics = () => {
     if (!summary) return <h2>Loading...</h2>;
 
     return (
-        <div className="analytics-page">
+        <div
+            className={`analytics-page ${activeTab === "calendar" ? "calendar-view" : ""
+                }`}
+        >
             <>
 
                 <div className="analytics-tabs">
@@ -170,16 +173,15 @@ const Analytics = () => {
                     />
 
                     <CustomSelect
-                        options={directionOptions}
-                        value={direction}
-                        onChange={setDirection}
-                    />
-
-
-                    <CustomSelect
                         options={rangeOptions}
                         value={range}
                         onChange={setRange}
+                    />
+                    
+                    <CustomSelect
+                        options={directionOptions}
+                        value={direction}
+                        onChange={setDirection}
                     />
 
                     <div className="custom-date-filters">

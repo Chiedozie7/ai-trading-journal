@@ -42,35 +42,35 @@ function Topbar({ isSidebarOpen, setIsSidebarOpen }) {
     else if (location.pathname === "/trades") {
         page = {
             title: "Trades",
-            subtitle: "Manage and review your recorded trades.",
+            subtitle: "Review and manage trades.",
         };
     }
 
     else if (location.pathname.startsWith("/trades/")) {
         page = {
             title: "Trade Details",
-            subtitle: "Review every aspect of this trade.",
+            subtitle: "Full trade breakdown.",
         };
     }
 
     else if (location.pathname === "/analytics") {
         page = {
             title: "Analytics",
-            subtitle: "Track your trading performance.",
+            subtitle: "Analyze your performance.",
         };
     }
 
     else if (location.pathname === "/create-trade") {
         page = {
             title: "New Trade",
-            subtitle: "Record a new trade in your journal.",
+            subtitle: "Record a new trade.",
         };
     }
 
     else if (location.pathname.startsWith("/edit-trade/")) {
         page = {
             title: "Edit Trade",
-            subtitle: "Update the details of this trade.",
+            subtitle: "Update your trade.",
         };
     }
 

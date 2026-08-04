@@ -103,6 +103,11 @@
     transition: transform .15s ease;
 }
 
+.trading-calendar{
+    width:100%;
+    box-sizing:border-box;
+}
+
 .day-number {
     margin-bottom: 6px;
 
@@ -147,26 +152,85 @@
     transform: scale(1.03);
 }
 
-@media (max-width:768px){
+.calendar-month-pnl{
+    display:inline-flex;
+    align-items:center;
+    gap:.6rem;
+
+    margin-bottom:1rem;
+
+    padding:.45rem .9rem;
+
+    border-radius:999px;
+
+    font-size:.88rem;
+    font-weight:600;
+}
+
+.month-pnl-label{
+    opacity:.9;
+}
+
+.calendar-month-pnl.profit{
+    background:var(--month-profit-bg);
+    color:var(--month-profit-text);
+}
+
+.calendar-month-pnl.loss{
+    background:var(--month-loss-bg);
+    color:var(--month-loss-text);
+}
+
+.calendar-month-pnl.breakeven{
+    background:var(--month-breakeven-bg);
+    color:var(--month-breakeven-text);
+}
+
+@media (max-width:767px){
+
+    .trading-calendar{
+        padding:12px;
+    }
 
     .calendar-grid{
-        gap:4px;
+        gap:2px;
+    }
+    .calendar-header {
+        font-size: .75rem;
     }
 
     .calendar-day{
         min-height:70px;
-        padding:6px;
+        padding:4px;
     }
 
-    .day-pl{
-        font-size:.8rem;
+    .day-number{
+        margin-bottom:10px;
+        font-size: .77rem;
+    }
+
+    .day-pl {
+        font-size: .68rem;
     }
 
     .day-trades{
-        font-size:.7rem;
+        font-size:.60rem;
+        line-height:1.1;
+    }
+     .legend-item {
+        font-size: .8rem;
     }
 
-}
+    .legend-color {
+        width: 12px;
+        height: 12px;
+    }
+     .calendar-month-pnl{
+        font-size:.80rem;
+        margin-bottom:12px;
+    }
+
+
 .profit-day .day-number,
 .profit-day .day-pl,
 .profit-day .day-trades {
@@ -183,4 +247,13 @@
 .breakeven-day .day-pl,
 .breakeven-day .day-trades {
     color: #854d0e;
+}
+
+ .analytics-page{
+        padding:1rem;
+    }
+
+    .calendar-view{
+        padding:0rem;
+    }
 }

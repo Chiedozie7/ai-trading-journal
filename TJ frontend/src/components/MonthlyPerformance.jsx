@@ -9,6 +9,7 @@ import {
 } from "recharts";
 
 function MonthlyPerformance({ data }) {
+    const isMobile = window.innerWidth < 768;
 
     if (data.length === 0) {
         return (
@@ -35,13 +36,22 @@ function MonthlyPerformance({ data }) {
         <div className="chart-container">
             <h2>Monthly Performance</h2>
 
-            <ResponsiveContainer width="100%" height={350}>
-                <BarChart data={chartData}>
+            <ResponsiveContainer width="100%" height="100%">
+                <BarChart
+                    data={chartData}
+                    margin={{
+                        top: 5,
+                        right: 10,
+                        left: -20,
+                        bottom: 30,
+                    }}
+                >
                     <CartesianGrid strokeDasharray="3 3" />
 
-                    <XAxis dataKey="month" />
+                    <XAxis dataKey="month"
+                        tick={{ fontSize: 12 }} />
 
-                    <YAxis />
+                    <YAxis tick={{ fontSize: 12 }} />
 
                     <Tooltip />
 

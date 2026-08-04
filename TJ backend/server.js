@@ -12,7 +12,13 @@ dns.setServers(['1.1.1.1', '8.8.8.8']);
 connectDB();
 
 app.use(
-    cors({origin:'http://localhost:5173', credentials: true})
+    cors({
+        origin: [
+            "http://192.168.223.142:5173",
+            "http://localhost:5173",
+        ],
+        credentials: true,
+    })
 );
 
 

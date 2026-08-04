@@ -30,11 +30,24 @@ function TradingCalendar({
 
         return new Date();
     });
-   
+
     const navigate = useNavigate();
 
     const monthStart = startOfMonth(currentDate);
     const monthEnd = endOfMonth(currentDate);
+    const currentMonth = currentDate.getMonth();
+    const currentYear = currentDate.getFullYear();
+
+    const monthlyPnL = calendarData
+        .filter((day) => {
+            const date = new Date(day.date);
+
+            return (
+                date.getMonth() === currentMonth &&
+                date.getFullYear() === currentYear
+            );
+        })
+        .reduce((total, day) => total + day.netPL, 0);
 
     const calendarStart = startOfWeek(monthStart);
     const calendarEnd = endOfWeek(monthEnd);
@@ -79,6 +92,24 @@ function TradingCalendar({
                     →
                 </button>
             </div>
+            <div
+                className={`calendar-month-pnl ${monthlyPnL > 0
+                        ? "profit"
+                        : monthlyPnL < 0
+                            ? "loss"
+                            : "breakeven"
+                    }`}
+            >
+                <span className="month-pnl-label">
+                     P/L:
+                </span>
+
+                <span className="month-pnl-value">
+                    {monthlyPnL > 0 ? "+" : ""}
+                    ${monthlyPnL.toFixed(2)}
+                </span>
+            </div>
+
             <div className="calendar-legend">
                 <div className="legend-item">
                     <span className="legend-color profit"></span>
@@ -113,7 +144,7 @@ function TradingCalendar({
 
                     return (
                         <div
-                        key={formattedDate}
+                            key={formattedDate}
                             className={`calendar-day
         ${!isCurrentMonth ? "other-month" : ""}
         ${tradeDay?.netPL > 0 ? "profit-day" : ""}

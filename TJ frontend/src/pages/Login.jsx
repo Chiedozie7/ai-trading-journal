@@ -16,6 +16,8 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("API URL:", import.meta.env.VITE_API_URL);
+    console.log("Sending login request...");
 
     try {
       const response = await axios.post(
@@ -40,9 +42,15 @@ function Login() {
 
       navigate("/dashboard");
     } catch (err) {
-      setError(
-        err.response?.data?.message || "Login failed."
-      );
+      console.log(err);
+      console.log(err.response);
+      console.log(err.message);
+
+      if (err.response) {
+        setError(`${err.response.status} - ${err.response.data?.message || "Request failed"}`);
+      } else {
+        setError(err.message);
+      }
     }
   };
 
@@ -92,6 +100,8 @@ function Login() {
               {error}
             </p>
           )}
+
+      
 
           <form
             className="auth-form"

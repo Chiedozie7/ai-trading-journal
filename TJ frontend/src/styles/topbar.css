@@ -58,14 +58,14 @@
 
 .page-title {
     margin: 0;
-    font-size: 1.5rem;
+    font-size: 1.35rem;
     line-height: 1.2;
     color: var(--text);
 }
 
 .page-subtitle {
     margin: .25rem 0 0;
-    font-size: .9rem;
+    font-size: .82rem;
     color: var(--text-secondary);
 }
 
@@ -74,21 +74,15 @@
 }
 
 .profile-btn {
-    width: 42px;
-    height: 42px;
-
+    width: 40px;
+    height: 38px;
     padding: 0;
-
     border: none;
     border-radius: 50%;
-
     background: transparent;
-
     cursor: pointer;
-
     font-size: 1rem;
     font-weight: 600;
-
     display: flex;
     align-items: center;
     justify-content: center;
@@ -166,43 +160,50 @@
     align-items: center;
     gap: 1rem;
 }
-.topbar-main{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    width:100%;
+
+.topbar-main {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
 }
 
-.mobile-add-btn{
-    display:none;
+.mobile-add-btn {
+    display: none;
 }
 
-@media(max-width:767px){
+@media(max-width:767px) {
 
-    .topbar{
-        height:auto;
-        padding:1rem;
-        align-items:stretch;
-        flex-direction:column;
-        gap:1rem;
+    .topbar {
+        height: auto;
+        padding: 1rem;
+        align-items: stretch;
+        flex-direction: column;
+        gap: 1rem;
     }
 
-    .topbar-main{
-        align-items:flex-start;
+    .topbar-main {
+        align-items: flex-start;
     }
 
-    .topbar-heading{
-        padding-left:.75rem;
+    .topbar-heading {
+        padding-left: .75rem;
     }
 
-    .desktop-add-btn{
-        display:none;
+    .desktop-add-btn {
+        display: none;
     }
 
-    .mobile-add-btn{
-        display:inline-flex;
-        align-self:flex-start;
+    .mobile-add-btn {
+        display: inline-flex;
+        align-self: flex-start;
         margin-left: 2.75rem;
+
+    }
+
+    .add-trade-btn {
+        padding: .6rem 1rem;
+        font-size: .92rem;
     }
 
 }

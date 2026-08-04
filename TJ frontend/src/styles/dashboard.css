@@ -40,12 +40,9 @@
 .dashboard-card {
     margin-top: 2rem;
     padding: 1.5rem;
-
     border: 1px solid var(--border);
     border-radius: 10px;
-
     background: var(--card-bg);
-
     box-shadow: var(--shadow);
 }
 
@@ -82,14 +79,10 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-
     gap: .5rem;
-
     text-align: center;
-
     border: 1px dashed var(--border);
     border-radius: 8px;
-
     background: var(--card-bg);
 }
 
@@ -100,4 +93,18 @@
 
 .chart-empty-state p:last-child {
     color: var(--text-secondary);
+}
+.chart-container{
+    height:350px;
+}
+
+@media (max-width:767px) {
+    .dashboard-card {
+        padding: 12px;
+    }
+.chart-container{
+        height:260px;
+    }
+
+
 }

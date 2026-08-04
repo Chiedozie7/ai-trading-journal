@@ -15,6 +15,15 @@
     --input-border: #d1d5db;
     --input-focus: #2563eb;
     --table-fade: #ffffff;
+    --month-profit-bg:#dcfce7;
+    --month-profit-text:#166534;
+
+    --month-loss-bg:#fee2e2;
+    --month-loss-text:#991b1b;
+
+    --month-breakeven-bg:#fef3c7;
+    --month-breakeven-text:#92400e;
+
 
     /* Text */
     --text: #111827;
@@ -104,8 +113,97 @@ body {
 *::after {
     box-sizing: border-box;
 }
+
 input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button{
-    -webkit-appearance:none;
-    margin:0;
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* ==========================
+   Mobile Typography
+========================== */
+
+@media (max-width:767px) {
+
+    /* Topbar */
+
+    .page-title {
+        font-size: 1.25rem;
+    }
+
+    .page-subtitle {
+        font-size: .8rem;
+    }
+
+    /* Section headings */
+
+    .dashboard-card h2,
+    .analytics-page h2,
+    .chart-container h2,
+    .trading-calendar h2 {
+        font-size: 1rem;
+    }
+
+    /* Card headings */
+
+    .stat-card h3,
+    .analytics-stat-card h3,
+    .best-worst-card h3,
+    .best-worst-card h4 {
+        font-size: .9rem;
+    }
+
+    .analytics-page h2{
+    margin:2rem 0 1rem;
+}
+
+.analytics-grid{
+    gap:1rem;
+}
+
+    /* Table */
+
+    th {
+        font-size: .82rem;
+    }
+
+    td {
+        font-size: .88rem;
+    }
+
+    /* Forms */
+
+    label {
+        font-size: .88rem;
+    }
+
+    input,
+    textarea {
+        font-size: .92rem;
+    }
+
+    /* Buttons */
+
+    button,
+    .primary-btn {
+        font-size: .9rem;
+    }
+
+    .add-trade-btn {
+        font-size: .7rem;
+    }
+
+    /* Empty states */
+
+    .chart-empty-state p:first-child,
+    .trades-empty h3 {
+        font-size: 1rem;
+    }
+
+    .chart-empty-state p:last-child,
+    .trades-empty p {
+        font-size: .88rem;
+    }
+
 }

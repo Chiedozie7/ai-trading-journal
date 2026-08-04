@@ -139,7 +139,7 @@
 
     .select-trigger{
         padding:.7rem .9rem;
-        font-size:.9rem;
+        font-size:.75rem;
     }
 
     .select-option{
@@ -152,7 +152,7 @@
 @media(min-width:400px) and (max-width:767px){
 
     .select-trigger{
-        font-size:.93rem;
+        font-size:.9rem;
     }
 
 }

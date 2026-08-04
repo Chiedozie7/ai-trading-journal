@@ -9,6 +9,7 @@ import {
 } from "recharts";
 
 function EquityCurve({ data }) {
+    const isMobile = window.innerWidth < 768;
 
     if (data.length === 0) {
         return (
@@ -26,18 +27,33 @@ function EquityCurve({ data }) {
         <div className="chart-container">
             <h2>Equity Curve</h2>
 
-            <ResponsiveContainer width="100%" height={350}>
-                <LineChart data={data}>
+            <ResponsiveContainer width="100%" height="100%">
+                <LineChart
+                    data={data}
+                    margin={{
+                        top: 5,
+                        right: 10,
+                        left: -20,
+                        bottom: 30,
+                    }}
+                >
                     <CartesianGrid strokeDasharray="3 3" />
 
                     <XAxis
                         dataKey="tradeDate"
+                        interval="preserveStartEnd"
+                        minTickGap={30}
+                        tick={{ fontSize: 12 }}
                         tickFormatter={(date) =>
-                            new Date(date).toLocaleDateString()
+                            new Date(date).toLocaleDateString("en-US", {
+                                month: "short",
+                                day: "numeric",
+                            })
                         }
                     />
 
-                    <YAxis />
+                    <YAxis 
+                    tick={{ fontSize: 12 }}/>
 
                     <Tooltip
                         labelFormatter={(date) =>
