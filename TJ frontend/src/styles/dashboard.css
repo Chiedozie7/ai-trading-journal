@@ -51,20 +51,176 @@
     color: var(--text);
 }
 
-.recent-trades-empty {
-    padding: 2rem 0;
-    text-align: left;
+.recent-trades-list {
+    display: flex;
+    flex-direction: column;
 }
 
-.recent-trades-empty p:first-child {
-    font-weight: 600;
-    margin-bottom: .5rem;
+.recent-trade-item {
+
+    padding: 1rem 0;
+
+    border-bottom: 1px solid var(--border);
+
+    cursor: pointer;
+
+    transition: .2s ease;
+
+}
+
+.recent-trade-item:last-child {
+
+    border-bottom: none;
+
+}
+
+.recent-trade-item:hover {
+
+    background: var(--page-bg);
+
+}
+
+.recent-trade-header {
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: .6rem;
+
+}
+
+.recent-trade-header h3 {
+
+    margin: 0;
+
+    font-size: 1rem;
 
     color: var(--text);
+
 }
 
-.recent-trades-empty p:last-child {
+.recent-trade-meta {
+
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+
+    gap: .45rem;
+
+}
+
+.trade-badge {
+
+    padding: .25rem .55rem;
+
+    border-radius: 999px;
+
+    font-size: .78rem;
+    font-weight: 600;
+
+}
+
+.trade-badge.buy {
+
+    background: #dcfce7;
+    color: #166534;
+
+}
+
+.trade-badge.sell {
+
+    background: #fee2e2;
+    color: #991b1b;
+
+}
+
+.trade-badge.info {
+
+    background: rgba(37, 99, 235, .12);
+
+    color: #2563eb;
+
+}
+
+.trade-badge.neutral {
+
+    background: var(--page-bg);
     color: var(--text-secondary);
+
+}
+
+.trade-badge.timeframe {
+
+    background: var(--dropdown-bg);
+    color: var(--text-secondary);
+
+}
+
+.recent-trade-rr {
+
+    font-weight: 700;
+
+}
+
+.recent-trade-rr.profit {
+
+    color: #16a34a;
+
+}
+
+.recent-trade-rr.loss {
+
+    color: #dc2626;
+
+}
+
+.recent-trades-footer {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.recent-trades-footer a {
+    text-decoration: none;
+}
+
+.recent-trades-footer .primary-btn {
+    width: auto;
+    display: inline-flex;
+}
+
+.chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.chart-year-nav {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+}
+
+.chart-year-nav button {
+    width: 32px;
+    height: 32px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--card-bg);
+    cursor: pointer;
+}
+
+.chart-year-nav button:disabled {
+    opacity: .4;
+    cursor: not-allowed;
+}
+
+.chart-year-nav span {
+    min-width: 48px;
+    text-align: center;
+    font-weight: 600;
 }
 
 .add-first-trade-btn {
@@ -73,7 +229,7 @@
 }
 
 .chart-empty-state {
-    height: 350px;
+    height: 300px;
 
     display: flex;
     flex-direction: column;
@@ -94,17 +250,82 @@
 .chart-empty-state p:last-child {
     color: var(--text-secondary);
 }
-.chart-container{
-    height:350px;
+
+.chart-container {
+    height: 350px;
+}
+
+.add-first-trade-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-top: 1rem;
+
+    padding: .75rem 1.4rem;
+
+    border-radius: 8px;
+
+    background: var(--primary-btn-bg);
+    color: var(--primary-btn-text);
+
+    text-decoration: none;
+
+    transition: .2s ease;
+}
+
+.add-first-trade-btn:hover {
+    background: var(--primary-btn-hover);
 }
 
 @media (max-width:767px) {
     .dashboard-card {
         padding: 12px;
     }
-.chart-container{
-        height:260px;
+
+    .chart-container {
+        height: 260px;
     }
 
+    .recent-trade-header h3 {
+        font-size: .95rem;
+    }
+
+    .recent-trade-rr {
+        font-size: .9rem;
+    }
+
+    .trade-badge {
+        font-size: .72rem;
+        padding: .2rem .45rem;
+    }
+
+    .recent-trade-date {
+        font-size: .72rem;
+    }
+
+    .recent-trades-footer .primary-btn {
+        padding: .5rem 1.2rem;
+        width: 140px;
+        display: inline-flex;
+        font-size: .8rem;
+    }
+
+    .chart-header {
+        margin-bottom: .75rem;
+    }
+
+    .chart-year-nav button {
+        width: 28px;
+        height: 28px;
+    }
+
+    .chart-empty-state {
+        height: 220px;
+    }
+    .add-first-trade-btn {
+        padding: .6rem 1.2rem;
+        font-size: .85rem;
+    }
 
 }
