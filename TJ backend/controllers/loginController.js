@@ -4,17 +4,17 @@ const jwt = require('jsonwebtoken');
 
 
 const handleLogin = async (req, res) => {
-    const {email, password} = req.body;
+    const { email, password } = req.body;
     const normalizedEmail = email.toLowerCase();
 
 
-    if(!email || !password) return res.status(400).json({'message':'Email and password are required'});
+    if (!email || !password) return res.status(400).json({ 'message': 'Email and password are required' });
     const foundUser = await User.findOne({ email: normalizedEmail }).exec();
-    if(!foundUser) return res.status(401).json({'message': 'Invalid email'}); //Unauthorized
+    if (!foundUser) return res.status(401).json({ 'message': 'Invalid email' }); //Unauthorized
     // evaluate password
     const match = await bcrypt.compare(password, foundUser.password);
 
-    if(match){ 
+    if (match) {
         //create JWTs
         const accessToken = jwt.sign(
             {
@@ -24,18 +24,23 @@ const handleLogin = async (req, res) => {
                 }
             },
             process.env.ACCESS_TOKEN_SECRET,
-            {expiresIn: '1h'}
+            { expiresIn: '1h' }
         );
         const refreshToken = jwt.sign(
-            {"email": foundUser.email},
+            { "email": foundUser.email },
             process.env.REFRESH_TOKEN_SECRET,
-            {expiresIn: '1D'}
+            { expiresIn: '1D' }
         );
-        // Saving refreshToken with current user
-        foundUser.refreshToken = refreshToken;
-        const result = await foundUser.save();
 
-        res.cookie('jwt', refreshToken, {httpOnly: true, sameSite: 'Lax', maxAge: 24*60*60*1000}); //for testing purposes with ThunderClient, comment out "secure:true." Add it back when working with Chrome
+        // Migrate old users to the new refreshTokens array
+        if (!Array.isArray(foundUser.refreshTokens)) {
+            foundUser.refreshTokens = [];
+        }
+        // Saving refreshToken with current user
+        foundUser.refreshTokens.push(refreshToken);
+        await foundUser.save();
+
+        res.cookie('jwt', refreshToken, { httpOnly: true, sameSite: 'Lax', maxAge: 24 * 60 * 60 * 1000 }); //for testing purposes with ThunderClient, comment out "secure:true." Add it back when working with Chrome
         res.json({
             accessToken,
             user: {
@@ -43,10 +48,10 @@ const handleLogin = async (req, res) => {
                 username: foundUser.name,
                 email: foundUser.email
             }
-        })    
+        })
     } else {
-         res.sendStatus(401);;
+        res.sendStatus(401);;
     }
 }
 
-module.exports = {handleLogin};
+module.exports = { handleLogin };

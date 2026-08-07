@@ -135,6 +135,9 @@ input[type="number"]::-webkit-outer-spin-button {
     .page-subtitle {
         font-size: .8rem;
     }
+     .page-content{
+        padding-bottom:6rem;
+    }
 
     /* Section headings */
 
@@ -147,11 +150,11 @@ input[type="number"]::-webkit-outer-spin-button {
 
     /* Card headings */
 
-    .stat-card h3,
+    
+     
     .analytics-stat-card h3,
-    .best-worst-card h3,
-    .best-worst-card h4 {
-        font-size: .9rem;
+    .stat-card h3{
+        font-size: .8rem;
     }
 
     .analytics-page h2{

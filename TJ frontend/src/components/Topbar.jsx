@@ -59,6 +59,12 @@ function Topbar({ isSidebarOpen, setIsSidebarOpen }) {
             subtitle: "Analyze your performance.",
         };
     }
+    else if (location.pathname === "/calendar") {
+        page = {
+            title: "Calendar",
+            subtitle: "View your trading calendar.",
+        };
+    }
 
     else if (location.pathname === "/create-trade") {
         page = {

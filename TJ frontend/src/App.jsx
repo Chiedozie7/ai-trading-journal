@@ -11,6 +11,7 @@ import CreateTrade from './pages/CreateTrade'
 import EditTrade from "./pages/EditTrade";
 import TradeDetails from './pages/TradeDetails'
 import Analytics from './pages/Analytics';
+import Calendar from './pages/Calendar';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
 import Layout from "./components/Layout";
@@ -46,6 +47,10 @@ function App() {
             <Route
               path="/analytics"
               element={<Analytics />}
+            />
+            <Route
+              path="/calendar"
+              element={<Calendar />}
             />
 
             <Route

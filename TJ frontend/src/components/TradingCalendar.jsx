@@ -18,6 +18,7 @@ function TradingCalendar({
     calendarData,
     searchParams,
     setSearchParams,
+    from = "/calendar",
 }) {
     const monthParam = searchParams.get("month");
     const yearParam = searchParams.get("year");
@@ -94,14 +95,14 @@ function TradingCalendar({
             </div>
             <div
                 className={`calendar-month-pnl ${monthlyPnL > 0
-                        ? "profit"
-                        : monthlyPnL < 0
-                            ? "loss"
-                            : "breakeven"
+                    ? "profit"
+                    : monthlyPnL < 0
+                        ? "loss"
+                        : "breakeven"
                     }`}
             >
                 <span className="month-pnl-label">
-                     P/L:
+                    P/L:
                 </span>
 
                 <span className="month-pnl-value">
@@ -158,6 +159,7 @@ function TradingCalendar({
                                 navigate("/trades", {
                                     state: {
                                         selectedDate: formattedDate,
+                                        from,
                                     },
                                 });
                             }}

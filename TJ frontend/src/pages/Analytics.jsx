@@ -269,7 +269,7 @@ const Analytics = () => {
                             <StatCard
                                 className="analytics-stat-card"
                                 title="Current Streak"
-                                value={`${summary.currentStreak.count} ${summary.currentStreak.type}`}
+                                value={`${summary.currentStreak.count} ${summary.currentStreak.type}s`}
                             />
 
                             <StatCard
@@ -413,6 +413,7 @@ const Analytics = () => {
                                 calendarData={calendarData}
                                 searchParams={searchParams}
                                 setSearchParams={setSearchParams}
+                                from="/analytics?tab=calendar"
                             />
                         )}
                     </>

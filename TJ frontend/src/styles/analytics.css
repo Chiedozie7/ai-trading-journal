@@ -306,6 +306,26 @@
 
 }
 @media (max-width:767px){
+    .analytics-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:.75rem;
+}
+
+.analytics-stat-card{
+    padding:1rem;
+}
+
+.analytics-stat-card h3{
+    font-size:.8rem;
+}
+
+.analytics-stat-card p{
+    font-size:1rem;
+}
+
+.analytics-stat-card small{
+    font-size:.75rem;
+}
 
     .analytics-tabs{
         display:grid;

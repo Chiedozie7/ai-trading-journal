@@ -5,14 +5,14 @@ const jwt = require('jsonwebtoken');
 const handleRefreshToken = async (req, res) => {
     const cookies = req.cookies;
     console.log("Cookies:", cookies);
-    if (!cookies?.jwt) { 
+    if (!cookies?.jwt) {
         return res.sendStatus(401);
     }
     const refreshToken = cookies.jwt;
-   
+
 
     //find refreshToken in database
-    const foundUser = await User.findOne({ refreshToken }).exec();
+    const foundUser = await User.findOne({refreshTokens: refreshToken}).exec();
     if (!foundUser) {
         return res.sendStatus(403)
     }; //forbidden
@@ -21,7 +21,7 @@ const handleRefreshToken = async (req, res) => {
         refreshToken,
         process.env.REFRESH_TOKEN_SECRET,
         (err, decoded) => {
-           if (err || foundUser.email !== decoded.email) {
+            if (err || foundUser.email !== decoded.email) {
                 return res.sendStatus(403);
             }
 

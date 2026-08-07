@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import Topbar from "./Topbar";
+import MobileBottomNav from "./MobileBottomNav";
 import "../styles/layout.css";
 
 function Layout() {
@@ -34,6 +35,7 @@ function Layout() {
                 </div>
 
             </main>
+            <MobileBottomNav />
 
         </div>
     );

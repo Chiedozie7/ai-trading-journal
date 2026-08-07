@@ -100,10 +100,15 @@ function Trades() {
 
                 <button
                     className="back-to-calendar-btn"
-                    onClick={() => navigate(
-                        `/analytics?tab=calendar&month=${tradeDateObj.getMonth() + 1}&year=${tradeDateObj.getFullYear()}`
-                    )
-                    }
+                    onClick={() => {
+
+                        const from = location.state?.from || "/analytics?tab=calendar";
+                        const [pathname, query = ""] = from.split("?");
+                        const params = new URLSearchParams(query);
+                        params.set("month", tradeDateObj.getMonth() + 1);
+                        params.set("year", tradeDateObj.getFullYear());
+                        navigate(`${pathname}?${params.toString()}`);
+                    }}
                 >
                     ← Back to Calendar
                 </button>

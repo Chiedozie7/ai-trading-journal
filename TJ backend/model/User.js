@@ -17,8 +17,10 @@ const userSchema = new Schema({
         required: true,
         minlength: 4
     },
-    refreshToken: String,
-
+    refreshTokens:{
+    type:[String],
+    default:[],
+},
      passwordResetToken: String,
     passwordResetExpires: Date,
 

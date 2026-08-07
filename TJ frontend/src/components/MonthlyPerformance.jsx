@@ -126,7 +126,7 @@ function MonthlyPerformance({ data }) {
                         tick={{ fontSize: 12 }}
                     />
 
-                    <Tooltip />
+                    <Tooltip/>
 
                     <Bar
                         dataKey="pnl"

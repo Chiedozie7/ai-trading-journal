@@ -164,8 +164,7 @@
 @media (max-width:767px) {
 
     .sidebar {
-        left: -240px;
-        z-index: 999;
+        display: none;
     }
 
     .sidebar.sidebar-open {
