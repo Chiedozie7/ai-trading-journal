@@ -66,19 +66,25 @@ function Login() {
             <FiTrendingUp />
           </div>
 
-          <h1>Trade Journal</h1>
+          <h1 className="brand-title">
+            Trade<span>Ledger</span>
+          </h1>
 
-          <p>Review. Refine. Repeat.</p>
+          <p className="brand-tagline">
+            Review. Refine. Repeat.
+          </p>
 
         </div>
 
+
         <div className="auth-principle">
 
+          <div className="principle-bar"></div>
 
           <p>
-            Trade the plan.
+            The best traders don't trust memory.
             <br />
-            Journal the outcome.
+            They trust data.
           </p>
 
         </div>
@@ -149,6 +155,10 @@ function Login() {
           >
             Forgot Password?
           </Link>
+
+          <div className="auth-divider">
+            <span>or</span>
+          </div>
 
           <p className="auth-footer">
 
