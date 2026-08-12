@@ -5,8 +5,22 @@ import "../styles/dashboard.css";
 import EquityCurve from "../components/EquityCurve";
 import MonthlyPerformance from "../components/MonthlyPerformance";
 import RecentTrades from "../components/RecentTrades";
+import useAuth from "../hooks/useAuth";
 
 function Dashboard() {
+
+    const { auth } = useAuth();
+
+    const username = auth?.user?.username || "Trader";
+
+    const hour = new Date().getHours();
+    let greeting = "Good evening";
+
+    if (hour < 12) {
+        greeting = "Good morning";
+    } else if (hour < 18) {
+        greeting = "Good afternoon";
+    }
     const axiosPrivate = useAxiosPrivate();
 
     const [stats, setStats] = useState({
@@ -21,6 +35,17 @@ function Dashboard() {
     const [equityCurve, setEquityCurve] = useState([]);
     const [monthlyStats, setMonthlyStats] = useState([]);
     const [recentTrades, setRecentTrades] = useState([])
+    const currentDate = new Date();
+
+    const currentMonthStats = monthlyStats.find(
+        item =>
+            item.year === currentDate.getFullYear() &&
+            item.month === currentDate.getMonth() + 1
+    );
+
+    const monthlyPnl = currentMonthStats?.totalPnl || 0;
+    const isProfit = monthlyPnl > 0;
+    const isLoss = monthlyPnl < 0;
 
     useEffect(() => {
         const getDashboard = async () => {
@@ -51,6 +76,7 @@ function Dashboard() {
                     winRate: 0,
                     totalPnl: 0,
                     averagePnl: 0,
+                    averageRR: 0,
                 });
                 setEquityCurve(curveResponse.data);
                 setMonthlyStats(monthlyResponse.data);
@@ -67,6 +93,45 @@ function Dashboard() {
         <div>
 
             <>
+                <section className="dashboard-hero">
+
+                    <div className="dashboard-hero-content">
+
+                        <h1>
+                            {greeting}, <span>{username}</span> 👋
+                        </h1>
+
+                        <p
+                            className={`dashboard-hero-performance ${isProfit ? "profit" : isLoss ? "loss" : "breakeven"
+                                }`}
+                        >
+                            {isProfit && "You're up "}
+                            {isLoss && "You're down "}
+                            {!isProfit && !isLoss && "You're at break even at "}
+
+                            <strong>
+                                ${Math.abs(Number(monthlyPnl)).toFixed(2)}
+                            </strong>
+
+                            {" "}this month.
+                        </p>
+
+                        <p className="dashboard-hero-message">
+                            {isProfit
+                                ? "Keep executing your plan."
+                                : isLoss
+                                    ? "Review your trades and refine your plan."
+                                    : "Stay patient and wait for your setups."
+                            }
+                        </p>
+
+                    </div>
+
+                    <a href="/create-trade" className="dashboard-hero-btn">
+                        + Log Trade
+                    </a>
+
+                </section>
                 <div className="stats-grid">
 
                     <StatCard
@@ -98,6 +163,13 @@ function Dashboard() {
                         title="Total PnL"
                         value={stats.totalPnl}
                     />
+                    <StatCard
+                        title="Average RR"
+                        value={stats.averageRR != null
+                            ? `${Number(stats.averageRR).toFixed(2)}R`
+                            : "—"
+                        }
+                    />
 
                     <StatCard
                         title="Average PnL"
@@ -105,14 +177,20 @@ function Dashboard() {
                     />
 
                 </div>
-                <div className="dashboard-card">
-                    <RecentTrades trades={recentTrades} />
+
+                <div className="dashboard-bottom-grid">
+
+                    <div className="dashboard-card">
+                        <RecentTrades trades={recentTrades} />
+                    </div>
+
+                    <div className="dashboard-card">
+                        <MonthlyPerformance data={monthlyStats} />
+                    </div>
+
                 </div>
                 <div className="dashboard-card">
                     <EquityCurve data={equityCurve} />
-                </div>
-                <div className="dashboard-card">
-                    <MonthlyPerformance data={monthlyStats} />
                 </div>
 
             </>

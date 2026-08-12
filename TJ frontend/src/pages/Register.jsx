@@ -9,23 +9,23 @@ function Register() {
 
     const navigate = useNavigate();
 
-    const [name,setName]=useState("");
-    const [email,setEmail]=useState("");
-    const [password,setPassword]=useState("");
-    const [confirmPassword,setConfirmPassword]=useState("");
-    const [error,setError]=useState("");
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+    const [error, setError] = useState("");
 
-    const handleSubmit=async(e)=>{
+    const handleSubmit = async (e) => {
 
         e.preventDefault();
 
-        if(password!==confirmPassword){
+        if (password !== confirmPassword) {
             return setError("Passwords do not match.");
         }
 
-        try{
+        try {
 
-            await axios.post("/register",{
+            await axios.post("/register", {
                 name,
                 email,
                 password,
@@ -33,11 +33,11 @@ function Register() {
 
             navigate("/login");
 
-        }catch(err){
+        } catch (err) {
 
-            if(err.response){
-                setError(err.response.data?.message||"Registration failed.");
-            }else{
+            if (err.response) {
+                setError(err.response.data?.message || "Registration failed.");
+            } else {
                 setError("Unable to connect to server.");
             }
 
@@ -45,19 +45,21 @@ function Register() {
 
     };
 
-    return(
+    return (
 
-        <div className="auth-page">
+        <div className="auth-page register-page">
 
             <section className="auth-showcase">
 
                 <div className="auth-brand">
 
                     <div className="brand-icon">
-                        <FiTrendingUp/>
+                        <FiTrendingUp />
                     </div>
 
-                    <h1>Trade Journal</h1>
+                    <h1 className="brand-title">
+                        Trade<span>Ledger</span>
+                    </h1>
 
                     <p>Review. Refine. Repeat.</p>
 
@@ -67,7 +69,7 @@ function Register() {
 
                     <p>
                         Trade the plan.
-                        <br/>
+                        <br />
                         Journal the outcome.
                     </p>
 
@@ -85,7 +87,7 @@ function Register() {
                         Start building better trading habits today.
                     </p>
 
-                    {error&&(
+                    {error && (
                         <p className="auth-error">
                             {error}
                         </p>
@@ -104,7 +106,7 @@ function Register() {
                                 type="text"
                                 placeholder="Enter your name"
                                 value={name}
-                                onChange={(e)=>setName(e.target.value)}
+                                onChange={(e) => setName(e.target.value)}
                             />
 
                         </div>
@@ -117,7 +119,7 @@ function Register() {
                                 type="email"
                                 placeholder="Enter your email"
                                 value={email}
-                                onChange={(e)=>setEmail(e.target.value)}
+                                onChange={(e) => setEmail(e.target.value)}
                             />
 
                         </div>
@@ -130,7 +132,7 @@ function Register() {
                                 type="password"
                                 placeholder="Create a password"
                                 value={password}
-                                onChange={(e)=>setPassword(e.target.value)}
+                                onChange={(e) => setPassword(e.target.value)}
                             />
 
                         </div>
@@ -143,7 +145,7 @@ function Register() {
                                 type="password"
                                 placeholder="Confirm your password"
                                 value={confirmPassword}
-                                onChange={(e)=>setConfirmPassword(e.target.value)}
+                                onChange={(e) => setConfirmPassword(e.target.value)}
                             />
 
                         </div>

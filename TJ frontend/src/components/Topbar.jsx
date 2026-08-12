@@ -35,7 +35,7 @@ function Topbar({ isSidebarOpen, setIsSidebarOpen }) {
     if (location.pathname === "/dashboard") {
         page = {
             title: "Dashboard",
-            subtitle: `${greeting}, ${username} 👋`,
+            
         };
     }
 
@@ -133,12 +133,7 @@ function Topbar({ isSidebarOpen, setIsSidebarOpen }) {
 
                 <div className="topbar-actions">
 
-                    <Link
-                        to="/create-trade"
-                        className="add-trade-btn desktop-add-btn"
-                    >
-                        + Add Trade
-                    </Link>
+                    
 
                     <div
                         className="profile-menu"

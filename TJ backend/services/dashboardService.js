@@ -33,6 +33,15 @@ const getDashboardStats = async (userId) => {
                 averagePnl: {
                     $avg: "$pnl"
                 },
+                averageRR: {
+                    $avg: {
+                        $cond: [
+                            { $ne: [{ $type: "$rr" }, "missing"] },
+                            "$rr",
+                            null
+                        ]
+                    }
+                },
             },
         },
         {
@@ -44,6 +53,7 @@ const getDashboardStats = async (userId) => {
                 breakeven: 1,
                 totalPnl: 1,
                 averagePnl: 1,
+                averageRR: 1,
                 winRate: {
                     $cond: [
                         { $eq: ["$totalTrades", 0] },

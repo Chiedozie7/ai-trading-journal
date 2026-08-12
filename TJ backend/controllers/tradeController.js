@@ -24,7 +24,7 @@ const createTrade = async (req, res) => {
 
         let risk;
         let actualMove;
-        let plannedRR;
+        
 
         if (direction === "buy") {
             risk = entryPrice - stopLoss;
@@ -41,7 +41,7 @@ const createTrade = async (req, res) => {
         }
 
         const rr = Number((actualMove / risk).toFixed(2));
-        plannedRR = rewardToTP / risk;
+       
 
         const images = req.files
             ? req.files.map(file => file.filename)

@@ -18,10 +18,10 @@
     position:relative;
     display:flex;
     flex-direction:column;
-    justify-content:center;
+    justify-content:space-between;
     padding:4rem 5rem;
     overflow:hidden;
-     min-height:100vh;
+    min-height:100vh;
 }
 
 .auth-brand{
@@ -64,11 +64,6 @@
     margin:0;
     color:var(--text);
     line-height:1.1;
-}
-
-.brand-title{
-    font-size:3rem;
-    font-weight:700;
 }
 
 .auth-brand p{
@@ -297,8 +292,12 @@
     }
 
     .auth-brand{
-        margin:0;
-    }
+    margin:0;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+}
 
     .auth-brand .brand-icon{
         width:48px;
@@ -307,9 +306,9 @@
         font-size:1.4rem;
     }
 
-    .brand-title{
-        font-size:.5rem;
-    }
+    .auth-brand .brand-title{
+    font-size:1.75rem;
+}
 
     .brand-tagline{
         margin-top:.45rem;
