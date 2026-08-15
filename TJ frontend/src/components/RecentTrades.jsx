@@ -1,11 +1,12 @@
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import PairIcon from "./PairIcon";
 import "../styles/dashboard.css";
 
 function RecentTrades({ trades }) {
     const navigate = useNavigate();
+
     return (
-        <div className="recent-trades">
+        <div>
             <h2>Recent Trades</h2>
 
             {trades.length > 0 ? (
@@ -15,17 +16,29 @@ function RecentTrades({ trades }) {
                             <div
                                 key={trade._id}
                                 className="recent-trade-item"
-                                onClick={() => navigate(`/trades/${trade._id}`)}
+                                onClick={() =>
+                                    navigate(`/trades/${trade._id}`)
+                                }
                             >
                                 <div className="recent-trade-header">
 
-                                    <h3>{trade.pair}</h3>
+                                    <div className="recent-trade-pair">
+                                        <div className="trade-pair-icon">
+                                            <PairIcon
+                                                pair={trade.pair}
+                                                size={20}
+                                            />
+                                        </div>
+
+                                        <h3>{trade.pair}</h3>
+                                    </div>
 
                                     <span
-                                        className={`recent-trade-rr ${trade.rr >= 0
-                                            ? "profit"
-                                            : "loss"
-                                            }`}
+                                        className={`recent-trade-rr ${
+                                            trade.rr >= 0
+                                                ? "profit"
+                                                : "loss"
+                                        }`}
                                     >
                                         {trade.rr > 0 ? "+" : ""}
                                         {trade.rr}R
@@ -36,10 +49,11 @@ function RecentTrades({ trades }) {
                                 <div className="recent-trade-meta">
 
                                     <span
-                                        className={`trade-badge ${trade.direction === "buy"
-                                            ? "buy"
-                                            : "sell"
-                                            }`}
+                                        className={`trade-badge ${
+                                            trade.direction === "buy"
+                                                ? "buy"
+                                                : "sell"
+                                        }`}
                                     >
                                         {trade.direction === "buy"
                                             ? "Long"
@@ -59,16 +73,15 @@ function RecentTrades({ trades }) {
                                             trade.tradeDate
                                         ).toLocaleDateString("en-GB", {
                                             day: "numeric",
-                                            month: "short"
+                                            month: "short",
                                         })}
                                     </span>
 
                                 </div>
-
                             </div>
-
                         ))}
                     </div>
+
                     <div className="recent-trades-footer">
                         <Link
                             to="/trades"
@@ -78,11 +91,13 @@ function RecentTrades({ trades }) {
                         </Link>
                     </div>
                 </>
-
             ) : (
                 <div className="recent-trades-empty">
                     <p>No trades yet.</p>
-                    <p>Start recording trades to see your recent activity.</p>
+
+                    <p>
+                        Start recording trades to see your recent activity.
+                    </p>
 
                     <Link
                         to="/create-trade"
@@ -92,7 +107,6 @@ function RecentTrades({ trades }) {
                     </Link>
                 </div>
             )}
-
         </div>
     );
 }

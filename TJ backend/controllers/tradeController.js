@@ -24,7 +24,7 @@ const createTrade = async (req, res) => {
 
         let risk;
         let actualMove;
-        
+
 
         if (direction === "buy") {
             risk = entryPrice - stopLoss;
@@ -41,7 +41,7 @@ const createTrade = async (req, res) => {
         }
 
         const rr = Number((actualMove / risk).toFixed(2));
-       
+
 
         const images = req.files
             ? req.files.map(file => file.filename)
@@ -205,10 +205,46 @@ const updateTrade = async (req, res) => {
                 : [req.body.existingImages];
         }
 
+        const {
+            direction,
+            entryPrice,
+            exitPrice,
+            stopLoss,
+        } = req.body;
+
+        let rr;
+
+        if (
+            direction &&
+            entryPrice !== undefined &&
+            exitPrice !== undefined &&
+            stopLoss !== undefined
+        ) {
+            let risk;
+            let actualMove;
+
+            if (direction === "buy") {
+                risk = Number(entryPrice) - Number(stopLoss);
+                actualMove = Number(exitPrice) - Number(entryPrice);
+            } else {
+                risk = Number(stopLoss) - Number(entryPrice);
+                actualMove = Number(entryPrice) - Number(exitPrice);
+            }
+
+            if (risk <= 0) {
+                return res.status(400).json({
+                    message: "Invalid trade. Stop loss must create a positive risk."
+                });
+            }
+
+            rr = Number((actualMove / risk).toFixed(2));
+        }
+
         const updatedTrade = await Trade.findByIdAndUpdate(
             req.params.id,
             {
                 ...req.body,
+                ...(rr !== undefined && { rr }),
                 images: [...existingImages, ...uploadedImages],
             },
             {

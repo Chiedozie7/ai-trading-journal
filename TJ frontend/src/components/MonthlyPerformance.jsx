@@ -126,10 +126,11 @@ function MonthlyPerformance({ data }) {
                         tick={{ fontSize: 12 }}
                     />
 
-                    <Tooltip/>
+                    <Tooltip />
 
                     <Bar
                         dataKey="pnl"
+                        fill="#2563eb"
                         radius={[5, 5, 0, 0]}
                     />
 

@@ -13,17 +13,16 @@
 
 .add-trade-btn {
     padding: .7rem 1.2rem;
-
     text-decoration: none;
-
     background: var(--primary-btn-bg);
     color: var(--primary-btn-text);
-
     border-radius: 8px;
-
     font-weight: 600;
-
     transition: background .2s ease;
+}
+.add-trade-btn a{
+    text-decoration: none;
+    color: var(--primary-btn-text);
 }
 
 .add-trade-btn:hover {

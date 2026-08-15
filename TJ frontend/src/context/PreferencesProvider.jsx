@@ -6,7 +6,7 @@ export function PreferencesProvider({ children }) {
 
     const defaultPreferences = {
         appearance: {
-            theme: "system",
+            theme: "light",
         },
         trading: {
             defaultRisk: 1,

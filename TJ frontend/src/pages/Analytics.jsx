@@ -3,8 +3,10 @@ import { useSearchParams } from "react-router-dom";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import StatCard from "../components/StatCard";
 import "../styles/analytics.css"
+import "../styles/dashboard.css"
 import TradingCalendar from "../components/TradingCalendar";
 import CustomSelect from "../components/CustomSelect";
+import PairIcon from "../components/PairIcon";
 
 import {
     strategyOptions,
@@ -38,6 +40,73 @@ const Analytics = () => {
     };
     const activeTab = searchParams.get("tab") || "overview";
     const axiosPrivate = useAxiosPrivate();
+
+    const normalizedStrategyPerformance = Object.values(
+        strategyPerformance.reduce((acc, item) => {
+            const key = item.strategy?.trim().toLowerCase();
+
+            if (!acc[key]) {
+                acc[key] = {
+                    ...item,
+                    strategy: item.strategy?.trim().toUpperCase(),
+                };
+            } else {
+                acc[key].totalTrades += item.totalTrades;
+                acc[key].wins += item.wins;
+                acc[key].breakeven += item.breakeven;
+                acc[key].losses += item.losses;
+                acc[key].totalPnl += item.totalPnl;
+
+                acc[key].winRate =
+                    acc[key].totalTrades > 0
+                        ? Number(
+                            (
+                                (acc[key].wins / acc[key].totalTrades) *
+                                100
+                            ).toFixed(2)
+                        )
+                        : 0;
+            }
+
+            return acc;
+        }, {})
+    ).sort((a, b) => b.totalTrades - a.totalTrades);
+
+    const normalizedPairPerformance = Object.values(
+        pairPerformance.reduce((acc, item) => {
+            const key = item.pair?.trim().toUpperCase();
+
+            if (!acc[key]) {
+                acc[key] = {
+                    ...item,
+                    pair: key,
+                };
+            } else {
+                acc[key].totalTrades += item.totalTrades;
+                acc[key].wins += item.wins;
+                acc[key].breakeven += item.breakeven;
+                acc[key].losses += item.losses;
+                acc[key].totalPnl += item.totalPnl;
+
+                acc[key].winRate =
+                    acc[key].totalTrades > 0
+                        ? Number(
+                            (
+                                (acc[key].wins / acc[key].totalTrades) *
+                                100
+                            ).toFixed(2)
+                        )
+                        : 0;
+            }
+
+            return acc;
+        }, {})
+    ).sort((a, b) => b.totalTrades - a.totalTrades);
+
+    const sortedTimeframePerformance = [...timeframePerformance].sort(
+        (a, b) => b.totalTrades - a.totalTrades
+    );
+
 
     useEffect(() => {
         const fetchAnalytics = async () => {
@@ -177,7 +246,7 @@ const Analytics = () => {
                         value={range}
                         onChange={setRange}
                     />
-                    
+
                     <CustomSelect
                         options={directionOptions}
                         value={direction}
@@ -322,7 +391,7 @@ const Analytics = () => {
                                     </thead>
 
                                     <tbody>
-                                        {strategyPerformance.map((strategy) => (
+                                        {normalizedStrategyPerformance.map((strategy) => (
                                             <tr key={strategy.strategy}>
                                                 <td>{strategy.strategy}</td>
                                                 <td>{strategy.totalTrades}</td>
@@ -356,9 +425,17 @@ const Analytics = () => {
                                     </thead>
 
                                     <tbody>
-                                        {pairPerformance.map((pair) => (
+                                        {normalizedPairPerformance.map((pair) => (
                                             <tr key={pair.pair}>
-                                                <td>{pair.pair}</td>
+                                                <td>
+                                                    <div className="analytics-pair-display">
+                                                        <PairIcon
+                                                            pair={pair.pair}
+                                                            size={20}
+                                                        />
+                                                        <span>{pair.pair}</span>
+                                                    </div>
+                                                </td>
                                                 <td>{pair.totalTrades}</td>
                                                 <td>{pair.wins}</td>
                                                 <td>{pair.breakeven}</td>
@@ -388,7 +465,7 @@ const Analytics = () => {
                                     </thead>
 
                                     <tbody>
-                                        {timeframePerformance.map((timeframe) => (
+                                        {sortedTimeframePerformance.map((timeframe) => (
                                             <tr key={timeframe.timeframe}>
                                                 <td>{timeframe.timeframe}</td>
                                                 <td>{timeframe.totalTrades}</td>

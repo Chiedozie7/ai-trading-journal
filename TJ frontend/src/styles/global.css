@@ -53,20 +53,20 @@
 [data-theme="dark"] {
 
     /* Page */
-    --page-bg: #111827;
+    --page-bg: #0e1625;
 
     /* Layout */
-    --topbar-bg: #1f2937;
-    --sidebar-bg: #1f2937;
+    --topbar-bg: #0e1625;
+    --sidebar-bg: #0e1625;
 
     /* Surfaces */
-    --card-bg: #1f2937;
-    --dropdown-bg: #1f2937;
+    --card-bg: #0e1625;
+    --dropdown-bg: #0e1625;
     --input-bg: #111827;
     --input-bg: #111827;
     --input-border: #4b5563;
     --input-focus: #3b82f6;
-    --table-fade: #1f2937;
+    --table-fade: #0e1625;
 
     /* Text */
     --text: #f9fafb;

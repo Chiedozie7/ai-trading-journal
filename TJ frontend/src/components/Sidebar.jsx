@@ -4,7 +4,7 @@ import {
     FiHome,
     FiBarChart2,
     FiFileText,
-    FiSettings,
+    FiCalendar,
     FiTrendingUp,
     FiX
 } from "react-icons/fi";
@@ -24,6 +24,11 @@ const navItems = [
         name: "Analytics",
         path: "/analytics",
         icon: FiBarChart2,
+    },
+    {
+        name: "Calendar",
+        path: "/calendar",
+        icon: FiCalendar,
     },
 ];
 

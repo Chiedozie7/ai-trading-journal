@@ -14,7 +14,7 @@ connectDB();
 app.use(
     cors({
         origin: [
-            "http://192.168.223.142:5173",
+            "http://192.168.251.142:5173",
             "http://localhost:5173",
         ],
         credentials: true,

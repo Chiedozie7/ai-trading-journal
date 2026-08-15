@@ -89,7 +89,22 @@
 
     color: var(--text);
 }
+.profit-day .day-number,
+.profit-day .day-pl,
+.profit-day .day-trades {
+    color: #14532d;
+}
+.loss-day .day-number,
+.loss-day .day-pl,
+.loss-day .day-trades {
+    color: #7f1d1d;
+}
 
+.breakeven-day .day-number,
+.breakeven-day .day-pl,
+.breakeven-day .day-trades {
+    color: #854d0e;
+}
 .calendar-day {
     min-height: 80px;
 

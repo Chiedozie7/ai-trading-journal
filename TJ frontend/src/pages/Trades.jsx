@@ -6,7 +6,9 @@ import axios from "../api/axios";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import '../styles/Trades.css';
+import '../styles/dashboard.css';
 import CustomSelect from "../components/CustomSelect";
+import PairIcon from "../components/PairIcon";
 import {
     strategyOptions,
     timeframeOptions,
@@ -33,6 +35,7 @@ function Trades() {
     const [totalPages, setTotalPages] = useState(1);
     const [tradeDate, setTradeDate] = useState(selectedDate || "");
     const tradeDateObj = tradeDate ? new Date(tradeDate) : null;
+    
 
 
     useEffect(() => {
@@ -200,7 +203,18 @@ function Trades() {
                                             onClick={() => navigate(`/trades/${trade._id}`)}
                                             style={{ cursor: "pointer" }}
                                         >
-                                            <td>{trade.pair}</td>
+                                            <td>
+                                                <div className="trade-pair-display">
+                                                <div className="trade-pair-icon">
+                                                    <PairIcon
+                                                        pair={trade.pair}
+                                                        size={20}
+                                                    />
+                                                </div>
+
+                                                <span>{trade.pair?.trim().toUpperCase()}</span>
+                                            </div>
+                                            </td>
                                             <td>{trade.direction}</td>
                                             <td>{trade.strategy}</td>
                                             <td>{trade.timeframe}</td>
