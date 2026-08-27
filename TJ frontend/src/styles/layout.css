@@ -8,6 +8,29 @@
 
 .app-layout{
     min-height:100vh;
+    
+    background:
+        radial-gradient(
+            700px circle at 0% 0%,
+            rgba(37, 99, 235, 0.1),
+            transparent 65%
+        ),
+        radial-gradient(
+            600px circle at 100% 100%,
+            rgba(37, 99, 235, 0.1),
+            transparent 65%
+        ),
+        linear-gradient(
+            135deg,
+            #f8fbff 0%,
+            #f8fafc 45%,
+            #f6f9ff 100%
+        );
+
+}
+
+[data-theme="dark"] .app-layout {
+    background: var(--bg);
 }
 
 .main-content{
@@ -25,7 +48,7 @@
     padding:2rem;
     
 
-    border-top:1px solid #e5e7eb;
+   
 }
 
 /* ---------- Tablet ---------- */

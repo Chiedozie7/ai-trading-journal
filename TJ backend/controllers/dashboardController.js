@@ -2,6 +2,7 @@ const {
     getDashboardStats,
     getEquityCurveData,
     getMonthlyStats,
+    getPnlOverview,
 } = require("../services/dashboardService");
 
 const getDashboard = async (req, res) => {
@@ -44,8 +45,28 @@ const getMonthlyPerformance = async (req, res) => {
     }
 };
 
+const getPnlOverviewData = async (req, res) => {
+    try {
+        const { startDate, endDate } = req.query;
+
+        const pnlOverview = await getPnlOverview(
+            req.id,
+            startDate,
+            endDate
+        );
+
+        res.json(pnlOverview);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            message: "Internal server error",
+        });
+    }
+};
+
 module.exports = {
     getDashboard,
     getEquityCurve,
-    getMonthlyPerformance
+    getMonthlyPerformance,
+    getPnlOverviewData
 };

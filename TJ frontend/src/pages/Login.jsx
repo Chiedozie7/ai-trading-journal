@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from "../api/axios";
 import { useNavigate, Link } from "react-router-dom";
-import { FiTrendingUp } from "react-icons/fi";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 import useAuth from "../hooks/useAuth";
 import "../styles/Login.css";
 
@@ -10,7 +10,7 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-
+  const [showPassword, setShowPassword] = useState(false);
   const { setAuth } = useAuth();
   const navigate = useNavigate();
 
@@ -47,7 +47,10 @@ function Login() {
       console.log(err.message);
 
       if (err.response) {
-        setError(`${err.response.status} - ${err.response.data?.message || "Request failed"}`);
+        setError(
+          err.response.data?.message ||
+          "Unable to sign in."
+        );
       } else {
         setError(err.message);
       }
@@ -62,9 +65,11 @@ function Login() {
 
         <div className="auth-brand">
 
-          <div className="brand-icon">
-            <FiTrendingUp />
-          </div>
+          <img
+            src="/images/tradeledger-logo.png"
+            alt="TradeLedger"
+            className="auth-logo"
+          />
 
           <h1 className="brand-title">
             Trade<span>Ledger</span>
@@ -131,12 +136,29 @@ function Login() {
 
               <label>Password</label>
 
-              <input
-                type="password"
-                placeholder="Enter your password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
+              <div className="password-input-wrapper">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Enter your password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+
+                <button
+                  type="button"
+                  className="password-toggle"
+                  onClick={() =>
+                    setShowPassword(prev => !prev)
+                  }
+                  aria-label={
+                    showPassword
+                      ? "Hide password"
+                      : "Show password"
+                  }
+                >
+                  {showPassword ? <FiEyeOff /> : <FiEye />}
+                </button>
+              </div>
 
             </div>
 

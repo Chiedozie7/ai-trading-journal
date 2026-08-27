@@ -7,12 +7,6 @@ export const strategyOptions = [
 
 export const pairOptions = [
     { value: "", label: "All Pairs" },
-    { value: "BTCUSDT", label: "BTCUSDT" },
-    { value: "ETHUSDT", label: "ETHUSDT" },
-    { value: "RULEUSDT", label: "RULEUSDT" },
-    { value: "ASDUSDT", label: "ASDUSDT" },
-    { value: "MATEUSDT", label: "MATEUSDT" },
-    { value: "YOUUSDT", label: "YOUUSDT" },
 ];
 
 export const timeframeOptions = [

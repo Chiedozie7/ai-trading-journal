@@ -14,7 +14,7 @@ connectDB();
 app.use(
     cors({
         origin: [
-            "http://192.168.251.142:5173",
+            "http://192.168.152.142:5173",
             "http://localhost:5173",
         ],
         credentials: true,
@@ -33,12 +33,16 @@ app.use('/forgot-password', require('./routes/forgotPassword'));
 app.use('/reset-password', require('./routes/resetPassword'));
 app.use('/refresh', require('./routes/refresh'));
 app.use('/logout', require('./routes/logout'));
+app.use("/verify-email", require("./routes/verifyEmail"));
 
 app.use(verifyJWT);
 app.use('/trades', require('./routes/api/tradeRoutes'));
 app.use('/dashboard', require('./routes/api/dashboardRoutes'));
 app.use('/analytics', require('./routes/api/analyticsRoutes'));
+app.use('/goals', require('./routes/api/goals'));
+app.use('/notes', require('./routes/api/notes'));
 app.use('/change-password', require('./routes/changePassword'));
+
 
 
 

@@ -55,7 +55,7 @@ function TradeDetails() {
 
         <div className="trade-details-container">
             <div className="trade-header">
-                <h1>{trade.pair}</h1>
+                <h1>{trade.pair?.trim().toUpperCase()}</h1>
 
                 <p className="trade-subtitle">
                     {trade.direction.toUpperCase()} • {trade.strategy} • {trade.timeframe}
@@ -81,66 +81,69 @@ function TradeDetails() {
                                 : ""
                             }`}
                     >
-                        {trade.pnl > 0 ? "+" : ""}
-                        {trade.pnl}
+                        {Number(trade.pnl) > 0 ? "+" : Number(trade.pnl) < 0 ? "-" : ""}
+                        ${Math.abs(Number(trade.pnl)).toFixed(2)}
                     </span>
                 </div>
             </div>
 
 
-            
-                <div className="details-card">
-                    <div className="trade-info-grid">
-                        <div className="info-item">
-                            <span className="label">Direction</span>
-                            <span>{trade.direction}</span>
-                        </div>
 
-                        <div className="info-item">
-                            <span className="label">Entry</span>
-                            <span>{trade.entryPrice}</span>
-                        </div>
+            <div className="details-card">
+                <div className="trade-info-grid">
+                    <div className="info-item">
+                        <span className="label">Direction</span>
+                        <span>{trade.direction?.charAt(0).toUpperCase() + trade.direction?.slice(1).toLowerCase()}</span>
+                    </div>
 
-                        <div className="info-item">
-                            <span className="label">Strategy</span>
-                            <span>{trade.strategy}</span>
-                        </div>
+                    <div className="info-item">
+                        <span className="label">Entry</span>
+                        <span>{trade.entryPrice}</span>
+                    </div>
 
-                        <div className="info-item">
-                            <span className="label">Exit</span>
-                            <span>{trade.exitPrice}</span>
-                        </div>
+                    <div className="info-item">
+                        <span className="label">Strategy</span>
+                        <span>{trade.strategy}</span>
+                    </div>
 
-                        <div className="info-item">
-                            <span className="label">Timeframe</span>
-                            <span>{trade.timeframe}</span>
-                        </div>
+                    <div className="info-item">
+                        <span className="label">Exit</span>
+                        <span>{trade.exitPrice}</span>
+                    </div>
 
-                        <div className="info-item">
-                            <span className="label">RR</span>
-                            <span>{trade.rr}</span>
-                        </div>
+                    <div className="info-item">
+                        <span className="label">Timeframe</span>
+                        <span>{trade.timeframe}</span>
+                    </div>
 
-                        <div className="info-item">
-                            <span className="label">Trade Date</span>
-                            <span>{new Date(trade.tradeDate).toLocaleDateString()}</span>
-                        </div>
+                    <div className="info-item">
+                        <span className="label">RR</span>
+                        <span>{trade.rr}</span>
+                    </div>
 
-                        <div className="info-item">
-                            <span className="label">Risk %</span>
-                            <span>{trade.riskPercent}</span>
-                        </div>
+                    <div className="info-item">
+                        <span className="label">Trade Date</span>
+                        <span>{new Date(trade.tradeDate).toLocaleDateString()}</span>
+                    </div>
+
+                    <div className="info-item">
+                        <span className="label">Risk %</span>
+                        <span>{trade.riskPercent}</span>
                     </div>
                 </div>
-            
+            </div>
+
 
             <div className="details-card">
                 <div className="info-item">
                     <span className="label">Tags</span>
                     {tags.length > 0 ? (
                         <div>
-                            {tags.map((tag) => (
-                                <span key={tag}>{tag}</span>
+                            {tags.map((tag, index) => (
+                                <span key={tag}>
+                                    {tag}
+                                    {index < tags.length - 1 && ", "}
+                                </span>
                             ))}
                         </div>
                     ) : (

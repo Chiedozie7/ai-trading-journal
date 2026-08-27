@@ -66,23 +66,18 @@
 .select-menu{
     position:absolute;
     top:calc(100% + .45rem);
-    left:0;
+    left:0; 
     right:0;
-
+    min-width: 100%;
+    white-space: nowrap;
     background:var(--card-bg);
-
     border:1px solid var(--border);
     border-radius:10px;
-
     box-shadow:var(--shadow);
-
     overflow:hidden;
-
     max-height:240px;
     overflow-y:auto;
-
     z-index:500;
-
     animation:dropdownIn .18s ease;
 }
 
@@ -109,6 +104,11 @@
     transition:
         background .15s ease,
         color .15s ease;
+}
+
+.select-trigger,
+.select-option {
+    white-space: nowrap;
 }
 
 .select-option:hover{

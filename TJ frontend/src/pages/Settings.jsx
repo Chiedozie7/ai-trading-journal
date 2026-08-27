@@ -110,15 +110,6 @@ function Settings() {
 
             </div>
 
-            <div className="settings-section danger-zone">
-
-                <h3>Danger Zone</h3>
-
-                <button disabled>
-                    Delete Account
-                </button>
-
-            </div>
 
         </div>
     );

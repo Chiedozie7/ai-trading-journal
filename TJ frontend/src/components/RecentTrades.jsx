@@ -30,7 +30,7 @@ function RecentTrades({ trades }) {
                                             />
                                         </div>
 
-                                        <h3>{trade.pair}</h3>
+                                        <h3>{trade.pair?.trim().toUpperCase()}</h3>
                                     </div>
 
                                     <span

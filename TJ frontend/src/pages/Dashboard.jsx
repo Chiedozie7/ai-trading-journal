@@ -3,7 +3,7 @@ import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import StatCard from "../components/StatCard";
 import "../styles/dashboard.css";
 import EquityCurve from "../components/EquityCurve";
-import MonthlyPerformance from "../components/MonthlyPerformance";
+import PnlOverview from "../components/PnlOverview";
 import RecentTrades from "../components/RecentTrades";
 import useAuth from "../hooks/useAuth";
 import {
@@ -257,7 +257,7 @@ function Dashboard() {
                     <div className="dashboard-hero-content">
 
                         <h1>
-                            {greeting}, <span>{username}</span> 👋
+                            {greeting}, <span>{username}</span> 
                         </h1>
 
                         <p
@@ -286,97 +286,7 @@ function Dashboard() {
 
                     </div>
 
-                    <div className="hero-chart-decoration">
-                        <svg
-                            viewBox="0 0 500 160"
-                            preserveAspectRatio="none"
-                            aria-hidden="true"
-                        >
-                            <defs>
-                                <linearGradient
-                                    id="heroChartFade"
-                                    x1="0"
-                                    y1="0"
-                                    x2="1"
-                                    y2="0"
-                                >
-                                    <stop
-                                        offset="0%"
-                                        stopColor="var(--primary-btn-bg)"
-                                        stopOpacity="0.06"
-                                    />
-
-                                    <stop
-                                        offset="100%"
-                                        stopColor="var(--primary-btn-bg)"
-                                        stopOpacity="0.2"
-                                    />
-                                </linearGradient>
-
-                                <filter id="heroChartGlow">
-                                    <feGaussianBlur
-                                        stdDeviation="5"
-                                        result="blur"
-                                    />
-
-                                    <feMerge>
-                                        <feMergeNode in="blur" />
-                                        <feMergeNode in="SourceGraphic" />
-                                    </feMerge>
-                                </filter>
-                            </defs>
-
-                            {/* Glow */}
-                            <path
-                                d="
-                M0 135
-                L55 135
-                L90 100
-                L125 118
-                L165 65
-                L205 92
-                L250 42
-                L290 70
-                L335 28
-                L375 58
-                L420 20
-                L455 42
-                L500 8
-            "
-                                fill="none"
-                                stroke="var(--primary-btn-bg)"
-                                strokeWidth="8"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                opacity=".01"
-                                filter="url(#heroChartGlow)"
-                            />
-
-                            {/* Main structure */}
-                            <path
-                                d="
-                M0 135
-                L55 135
-                L90 100
-                L125 118
-                L165 65
-                L205 92
-                L250 42
-                L290 70
-                L335 28
-                L375 58
-                L420 20
-                L455 42
-                L500 8
-            "
-                                fill="none"
-                                stroke="url(#heroChartFade)"
-                                strokeWidth="3"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                            />
-                        </svg>
-                    </div>
+                    
                 </section>
                 <div className="stats-grid">
 
@@ -430,7 +340,7 @@ function Dashboard() {
 
                     <StatCard
                         title="Total PnL"
-                        value={Number(stats.totalPnl).toFixed(2)}
+                        value={`$${Number(stats.totalPnl).toFixed(2)}`}
                         icon={FiDollarSign}
                         change={totalPnlChange}
                         changeType="percentage"
@@ -440,7 +350,7 @@ function Dashboard() {
 
                     <StatCard
                         title="Average PnL"
-                        value={Number(stats.averagePnl).toFixed(2)}
+                        value={`$${Number(stats.averagePnl).toFixed(2)}`}
                         icon={FiActivity}
                         change={averagePnlChange}
                         changeType="percentage"
@@ -467,11 +377,11 @@ function Dashboard() {
                     </div>
 
                     <div className="dashboard-card">
-                        <MonthlyPerformance data={monthlyStats} />
+                        <PnlOverview />
                     </div>
 
                 </div>
-                <div className="dashboard-card">
+                <div className="dashboard-card equity-card">
                     <EquityCurve data={equityCurve} />
                 </div>
 

@@ -121,6 +121,9 @@
     color: var(--text-secondary);
     font-size: 0.9rem;
 }
+.analytics-clean-card .stat-card-visual {
+    display: none;
+}
 
 /* ==========================
    Headings
@@ -159,6 +162,20 @@
 .analytics-table {
     width: 100%;
     border-collapse: collapse;
+}
+.analytics-table .pnl-profit {
+    color: #16a34a;
+    font-weight: 600;
+}
+
+.analytics-table .pnl-loss {
+    color: #dc2626;
+    font-weight: 600;
+}
+
+.analytics-table .pnl-neutral {
+    color: var(--text-secondary);
+    font-weight: 600;
 }
 
 .analytics-table th,
@@ -321,7 +338,7 @@
 
 .analytics-stat-card p{
     font-size:1rem;
-}
+} 
 
 .analytics-stat-card small{
     font-size:.75rem;

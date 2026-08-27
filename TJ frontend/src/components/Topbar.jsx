@@ -35,7 +35,7 @@ function Topbar({ isSidebarOpen, setIsSidebarOpen }) {
     if (location.pathname === "/dashboard") {
         page = {
             title: "Dashboard",
-            
+
         };
     }
 
@@ -63,6 +63,26 @@ function Topbar({ isSidebarOpen, setIsSidebarOpen }) {
         page = {
             title: "Calendar",
             subtitle: "View your trading calendar.",
+        };
+    }
+    else if (location.pathname === "/goals") {
+        page = {
+            title: "Goals",
+            subtitle: "Set targets and track your progress.",
+        };
+    }
+
+    else if (location.pathname === "/notes") {
+        page = {
+            title: "Notes",
+            subtitle: "Capture thoughts and trading ideas.",
+        };
+    }
+
+    else if (location.pathname === "/settings") {
+        page = {
+            title: "Settings",
+            subtitle: "Manage your journal preferences.",
         };
     }
 
@@ -133,11 +153,11 @@ function Topbar({ isSidebarOpen, setIsSidebarOpen }) {
 
                 <div className="topbar-actions">
 
-                    
-                        <a href="/create-trade"  className="add-trade-btn">
-                            + Add Trade
-                        </a>
-                    
+
+                    <a href="/create-trade" className="add-trade-btn">
+                        + Add Trade
+                    </a>
+
 
                     <div
                         className="profile-menu"
@@ -167,13 +187,6 @@ function Topbar({ isSidebarOpen, setIsSidebarOpen }) {
                                     onClick={() => setIsMenuOpen(false)}
                                 >
                                     Profile
-                                </Link>
-
-                                <Link
-                                    to="/settings"
-                                    onClick={() => setIsMenuOpen(false)}
-                                >
-                                    Settings
                                 </Link>
 
                                 <button onClick={handleLogout}>

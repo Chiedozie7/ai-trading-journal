@@ -18,6 +18,10 @@ import Layout from "./components/Layout";
 import Profile from './pages/Profile';
 import Settings from './pages/Settings';
 import ChangePassword from './pages/ChangePassword';
+import Goals from './pages/Goals';
+import Notes from './pages/Notes';
+import VerifyEmail from './pages/VerifyEmail';
+
 
 function App() {
 
@@ -28,6 +32,7 @@ function App() {
       <Route path="/register" element={<Register />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/reset-password" element={<ResetPassword />} />
+      <Route path="/verify-email" element={<VerifyEmail />}/>
 
       <Route element={<PersistLogin />}>
         <Route element={<ProtectedRoute />}>
@@ -72,6 +77,8 @@ function App() {
               path="/edit-trade/:id"
               element={<EditTrade />}
             />
+            <Route path="/goals" element={<Goals />} />
+            <Route path="/notes" element={<Notes />} />
 
           </Route>
         </Route>

@@ -23,4 +23,11 @@
     .auth-footer{
         font-size:.88rem;
     }
+
+}
+
+.auth-success {
+    margin-bottom: 1rem;
+    color: #16a34a;
+    font-size: .9rem;
 }

@@ -45,7 +45,7 @@ const handleChangePassword = async (req, res) => {
         }
     );
 
-    foundUser.refreshToken = refreshToken;
+    foundUser.refreshTokens = [refreshToken];
 
     await foundUser.save();
     const updatedUser = await User.findById(foundUser._id);

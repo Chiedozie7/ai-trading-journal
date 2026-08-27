@@ -35,7 +35,7 @@ function Trades() {
     const [totalPages, setTotalPages] = useState(1);
     const [tradeDate, setTradeDate] = useState(selectedDate || "");
     const tradeDateObj = tradeDate ? new Date(tradeDate) : null;
-    
+
 
 
     useEffect(() => {
@@ -70,6 +70,7 @@ function Trades() {
 
         fetchTrades();
     }, [search, strategy, timeframe, result, tradeDate, sort, page]);
+
 
     const handleDelete = async (id) => {
         const confirmed = window.confirm(
@@ -205,22 +206,32 @@ function Trades() {
                                         >
                                             <td>
                                                 <div className="trade-pair-display">
-                                                <div className="trade-pair-icon">
-                                                    <PairIcon
-                                                        pair={trade.pair}
-                                                        size={20}
-                                                    />
-                                                </div>
+                                                    <div className="trade-pair-icon">
+                                                        <PairIcon
+                                                            pair={trade.pair}
+                                                            size={20}
+                                                        />
+                                                    </div>
 
-                                                <span>{trade.pair?.trim().toUpperCase()}</span>
-                                            </div>
+                                                    <span>{trade.pair?.trim().toUpperCase()}</span>
+                                                </div>
                                             </td>
-                                            <td>{trade.direction}</td>
+                                            <td>{trade.direction?.charAt(0).toUpperCase() + trade.direction?.slice(1).toLowerCase()}</td>
                                             <td>{trade.strategy}</td>
                                             <td>{trade.timeframe}</td>
                                             <td>{trade.rr}</td>
                                             <td>{trade.result}</td>
-                                            <td>{trade.pnl}</td>
+                                            <td
+                                                className={
+                                                    trade.pnl > 0
+                                                        ? "pnl-profit"
+                                                        : trade.pnl < 0
+                                                            ? "pnl-loss"
+                                                            : "pnl-neutral"
+                                                }
+                                            >
+                                                ${Number(trade.pnl).toFixed(2)}
+                                            </td>
                                         </tr>
                                     ))}
                                 </tbody>

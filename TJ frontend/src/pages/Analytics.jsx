@@ -9,9 +9,6 @@ import CustomSelect from "../components/CustomSelect";
 import PairIcon from "../components/PairIcon";
 
 import {
-    strategyOptions,
-    pairOptions,
-    timeframeOptions,
     directionOptions,
     rangeOptions,
 } from "../data/analyticsFilterOptions";
@@ -24,6 +21,9 @@ const Analytics = () => {
     const [pairPerformance, setPairPerformance] = useState([]);
     const [strategy, setStrategy] = useState("");
     const [pair, setPair] = useState("");
+    const [availablePairs, setAvailablePairs] = useState([]);
+    const [availableStrategies, setAvailableStrategies] = useState([]);
+    const [availableTimeframes, setAvailableTimeframes] = useState([]);
     const [timeframe, setTimeframe] = useState("");
     const [direction, setDirection] = useState("");
     const [range, setRange] = useState("all");
@@ -102,6 +102,56 @@ const Analytics = () => {
             return acc;
         }, {})
     ).sort((a, b) => b.totalTrades - a.totalTrades);
+
+    const dynamicPairOptions = [
+        { value: "", label: "All Pairs" },
+        ...[
+            ...new Set(
+                availablePairs
+                    .map((item) => item.pair?.trim().toUpperCase())
+                    .filter(Boolean)
+            ),
+        ].map((pair) => ({
+            value: pair,
+            label: pair,
+        })),
+    ];
+
+    const dynamicStrategyOptions = [
+        { value: "", label: "All Strategies" },
+        ...Object.values(
+            availableStrategies.reduce((acc, item) => {
+                const strategy = item.strategy?.trim();
+
+                if (!strategy) return acc;
+
+                const key = strategy.toLowerCase();
+
+                if (!acc[key]) {
+                    acc[key] = strategy.toUpperCase();
+                }
+
+                return acc;
+            }, {})
+        ).map((strategy) => ({
+            value: strategy,
+            label: strategy,
+        })),
+    ];
+
+    const dynamicTimeframeOptions = [
+        { value: "", label: "All Timeframes" },
+        ...[
+            ...new Set(
+                availableTimeframes
+                    .map((item) => item.timeframe?.trim())
+                    .filter(Boolean)
+            ),
+        ].map((timeframe) => ({
+            value: timeframe,
+            label: timeframe,
+        })),
+    ];
 
     const sortedTimeframePerformance = [...timeframePerformance].sort(
         (a, b) => b.totalTrades - a.totalTrades
@@ -187,6 +237,46 @@ const Analytics = () => {
         fetchAnalytics();
     }, [strategy, pair, timeframe, direction, range, startDate, endDate]);
 
+    useEffect(() => {
+        const fetchAvailableFilters = async () => {
+            try {
+                const params = {
+                    strategy: "",
+                    pair: "",
+                    timeframe: "",
+                    direction: "",
+                    range: "all",
+                    startDate: "",
+                    endDate: "",
+                };
+
+                const [pairResponse, strategyResponse, timeframeResponse] =
+                    await Promise.all([
+                        axiosPrivate.get("/analytics/pair", {
+                            params,
+                        }),
+
+                        axiosPrivate.get("/analytics/strategy", {
+                            params,
+                        }),
+
+                        axiosPrivate.get("/analytics/timeframe", {
+                            params,
+                        }),
+                    ]);
+
+                setAvailablePairs(pairResponse.data);
+                setAvailableStrategies(strategyResponse.data);
+                setAvailableTimeframes(timeframeResponse.data);
+
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        fetchAvailableFilters();
+    }, []);
+
     if (!summary) return <h2>Loading...</h2>;
 
     return (
@@ -224,23 +314,22 @@ const Analytics = () => {
                 <div className="analytics-filters">
 
                     <CustomSelect
-                        options={strategyOptions}
+                        options={dynamicStrategyOptions}
                         value={strategy}
                         onChange={setStrategy}
                     />
 
                     <CustomSelect
-                        options={pairOptions}
+                        options={dynamicPairOptions}
                         value={pair}
                         onChange={setPair}
                     />
 
                     <CustomSelect
-                        options={timeframeOptions}
+                        options={dynamicTimeframeOptions}
                         value={timeframe}
                         onChange={setTimeframe}
                     />
-
                     <CustomSelect
                         options={rangeOptions}
                         value={range}
@@ -283,13 +372,13 @@ const Analytics = () => {
                     <>
                         <section className="analytics-grid">
                             <StatCard
-                                className="analytics-stat-card"
+                                className="analytics-stat-card analytics-clean-card"
                                 title="Total Trades"
                                 value={summary.totalTrades}
                             />
 
                             <StatCard
-                                className="analytics-stat-card"
+                                className="analytics-stat-card analytics-clean-card"
                                 title="Win Rate"
                                 value={`${summary.winRate}%`}
                             />
@@ -301,7 +390,7 @@ const Analytics = () => {
                             />
 
                             <StatCard
-                                className="analytics-stat-card"
+                                className="analytics-stat-card analytics-clean-card"
                                 title="Average RR"
                                 value={`${summary.averageRR}R`}
                             />
@@ -338,7 +427,12 @@ const Analytics = () => {
                             <StatCard
                                 className="analytics-stat-card"
                                 title="Current Streak"
-                                value={`${summary.currentStreak.count} ${summary.currentStreak.type}s`}
+                                value={`${summary.currentStreak.count} ${summary.currentStreak.type === "win"
+                                        ? summary.currentStreak.count === 1 ? "win" : "wins"
+                                        : summary.currentStreak.type === "loss"
+                                            ? summary.currentStreak.count === 1 ? "loss" : "losses"
+                                            : summary.currentStreak.type
+                                    }`}
                             />
 
                             <StatCard
@@ -399,7 +493,17 @@ const Analytics = () => {
                                                 <td>{strategy.breakeven}</td>
                                                 <td>{strategy.losses}</td>
                                                 <td>{strategy.winRate}%</td>
-                                                <td>${strategy.totalPnl}</td>
+                                                <td
+                                                    className={
+                                                        strategy.totalPnl > 0
+                                                            ? "pnl-profit"
+                                                            : strategy.totalPnl < 0
+                                                                ? "pnl-loss"
+                                                                : "pnl-neutral"
+                                                    }
+                                                >
+                                                    ${Number(strategy.totalPnl).toFixed(2)}
+                                                </td>
                                             </tr>
                                         ))}
                                     </tbody>
@@ -441,7 +545,17 @@ const Analytics = () => {
                                                 <td>{pair.breakeven}</td>
                                                 <td>{pair.losses}</td>
                                                 <td>{pair.winRate}%</td>
-                                                <td>${pair.totalPnl}</td>
+                                                <td
+                                                    className={
+                                                        pair.totalPnl > 0
+                                                            ? "pnl-profit"
+                                                            : pair.totalPnl < 0
+                                                                ? "pnl-loss"
+                                                                : "pnl-neutral"
+                                                    }
+                                                >
+                                                    ${Number(pair.totalPnl).toFixed(2)}
+                                                </td>
                                             </tr>
                                         ))}
                                     </tbody>
@@ -473,7 +587,17 @@ const Analytics = () => {
                                                 <td>{timeframe.breakeven}</td>
                                                 <td>{timeframe.losses}</td>
                                                 <td>{timeframe.winRate}%</td>
-                                                <td>${timeframe.totalPnl}</td>
+                                                <td
+                                                    className={
+                                                        timeframe.totalPnl > 0
+                                                            ? "pnl-profit"
+                                                            : timeframe.totalPnl < 0
+                                                                ? "pnl-loss"
+                                                                : "pnl-neutral"
+                                                    }
+                                                >
+                                                    ${Number(timeframe.totalPnl).toFixed(2)}
+                                                </td>
                                             </tr>
                                         ))}
                                     </tbody>

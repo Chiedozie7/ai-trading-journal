@@ -2,27 +2,25 @@
 
 .sidebar {
     position: fixed;
-
     top: 0;
     left: 0;
-
-    width: 240px;
+    width: 250px;
     height: 100vh;
 
-    background: var(--sidebar-bg);
+    display: flex;
+    flex-direction: column;
 
-    border-right: 1px solid var(--border);
+    background: var(--sidebar-bg);
+    border-right: 1px solid rgba(148, 163, 184, 0.16);
+    box-shadow: 2px 0 12px rgba(15, 23, 42, 0.025);
 
     overflow-y: auto;
-
     z-index: 900;
 
     transition:
         width .25s ease,
         left .25s ease;
 }
-
-/* ---------- Brand ---------- */
 
 .sidebar-brand {
     padding: 1.5rem;
@@ -39,27 +37,23 @@
     display: flex;
     gap: 1rem;
     align-items: flex-start;
+     min-width: 0;
+    flex: 1;
 }
 
-.brand-icon {
+.brand-logo {
     width: 48px;
     height: 48px;
-
-    border-radius: 12px;
-
-    background: var(--primary-btn-bg);
-    color: var(--primary-btn-text);
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
     flex-shrink: 0;
+    object-fit: contain;
+    margin-left: 0;
 }
 
 .brand-content {
     display: flex;
     flex-direction: column;
+    min-width: 0;
+    flex: 1;
 }
 
 .brand-content h2 {
@@ -67,11 +61,15 @@
     font-size: 1.2rem;
     color: var(--text);
 }
+.brand-content h2 span {
+    color: #2563eb;
+}
 
 .brand-tagline {
     margin: .35rem 0 0;
-    font-size: .8rem;
+    font-size: .75rem;
     color: var(--text-secondary);
+    white-space: nowrap;
 }
 
 /* ---------- Close Button ---------- */
@@ -94,22 +92,18 @@
     display: flex;
     flex-direction: column;
     gap: .5rem;
-
     padding: 0 1rem;
+    flex: 1;
 }
 
 .sidebar-nav a {
     display: flex;
     align-items: center;
     gap: .75rem;
-
-    padding: .9rem 1rem;
-
+    padding: .75rem 1rem;
     border-radius: 10px;
-
     text-decoration: none;
     color: var(--text);
-
     transition:
         background .2s ease,
         color .2s ease;
@@ -117,11 +111,68 @@
 
 .sidebar-nav a:hover {
     background: var(--page-bg);
-}
+} 
 
 .sidebar-nav a.active {
-    background: var(--primary-btn-bg);
-    color: var(--primary-btn-text);
+    background: #eef0ff;
+    color: #1f61ee;
+    font-weight: 600;
+}
+
+.sidebar-nav a.active svg {
+    color:  #1d4ed8;
+}
+[data-theme="dark"] .sidebar-nav a.active {
+    background: rgba(37, 99, 235, 0.16);
+    color: #60a5fa;
+}
+
+[data-theme="dark"] .sidebar-nav a.active svg {
+    color: #60a5fa;
+}
+
+/* ---------- Theme Button ---------- */
+
+.sidebar-theme {
+    margin: auto 1rem 1.25rem;
+    padding-top: .75rem;
+
+    border-top: 1px solid rgba(148, 163, 184, 0.16);
+}
+
+.sidebar-theme-btn {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+
+    padding: .75rem 1rem;
+
+    border: none;
+    border-radius: 10px;
+
+    background: transparent;
+    color: var(--text);
+
+    font-family: inherit;
+    font-size: .85rem;
+    font-weight: 500;
+
+    cursor: pointer;
+
+    transition:
+        background .2s ease,
+        color .2s ease;
+}
+
+.sidebar-theme-btn:hover {
+    background: var(--page-bg);
+}
+
+.sidebar-theme-btn svg {
+    flex-shrink: 0;
+    font-size: 1.1rem;
 }
 
 /* ---------- Tablet ---------- */
@@ -156,6 +207,22 @@
         justify-content: center;
         padding: 1rem;
     }
+    @media (min-width: 768px) and (max-width: 1023px) {
+
+    .sidebar-theme {
+        margin: 1rem .75rem;
+    }
+
+    .sidebar-theme-btn {
+        justify-content: center;
+        padding: 1rem;
+    }
+
+    .sidebar-theme-btn span {
+        display: none;
+    }
+
+}
 
 }
 

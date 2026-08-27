@@ -143,6 +143,29 @@
     font-weight: 600;
     color: var(--text-secondary);
 }
+/* ---------- PnL ---------- */
+
+.trades-table-wrapper .pnl-profit {
+    color: #16a34a;
+    font-weight: 600;
+}
+
+.trades-table-wrapper .pnl-loss {
+    color: #dc2626;
+    font-weight: 600;
+}
+
+.trades-table-wrapper .pnl-neutral {
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+[data-theme="dark"] .trades-table-wrapper .pnl-profit {
+    color: #4ade80;
+}
+
+[data-theme="dark"] .trades-table-wrapper .pnl-loss {
+    color: #f87171;
+}
 
 .trades-table-wrapper td {
     color: var(--text);
@@ -324,12 +347,8 @@
 @media(min-width:400px) and (max-width:767px) {
 
     .trades-table-wrapper th,
-    .trades-table-wrapper td,
-    .analytics-table th,
-    .analytics-table td {
-
+    .trades-table-wrapper td {
         padding: .9rem;
-
     }
 
 }

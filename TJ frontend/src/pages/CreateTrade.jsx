@@ -16,6 +16,7 @@ function CreateTrade() {
         ...TradeFormData,
         riskPercent: preferences.trading.defaultRisk,
     });
+
     const [previewImage, setPreviewImage] = useState(null);
     const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
@@ -36,7 +37,9 @@ function CreateTrade() {
     const handleRemoveImage = (indexToRemove) => {
         setFormData(prev => ({
             ...prev,
-            newImages: prev.newImages.filter((_, index) => index !== indexToRemove),
+            newImages: prev.newImages.filter(
+                (_, index) => index !== indexToRemove
+            ),
         }));
     };
 
@@ -60,9 +63,21 @@ function CreateTrade() {
         try {
             const tradeData = new FormData();
 
+            const pnl = Number(formData.pnl);
+
+            const normalizedPnl =
+                formData.result === "loss"
+                    ? -Math.abs(pnl)
+                    : formData.result === "win"
+                        ? Math.abs(pnl)
+                        : 0;
+
             Object.entries(formData).forEach(([key, value]) => {
                 // Don't append frontend-only image state directly
                 if (key === "existingImages" || key === "newImages") return;
+
+                // PnL is handled separately so its sign matches the result
+                if (key === "pnl") return;
 
                 if (key === "tags") {
                     value
@@ -75,6 +90,8 @@ function CreateTrade() {
                 }
             });
 
+            tradeData.append("pnl", normalizedPnl);
+
             formData.newImages.forEach((image) => {
                 tradeData.append("images", image);
             });
@@ -86,6 +103,7 @@ function CreateTrade() {
             console.error(err);
         }
     };
+
     return (
         <div>
             <h1>Create Trade</h1>
@@ -102,7 +120,6 @@ function CreateTrade() {
                 handleSubmit={handleSubmit}
                 submitText="Create Trade"
             />
-
         </div>
     );
 }

@@ -162,9 +162,69 @@ const getMonthlyStats = async (userId) => {
     ]);
 };
 
+const getPnlOverview = async (userId, startDate, endDate) => {
+    const match = {
+        owner: new mongoose.Types.ObjectId(userId),
+    };
+
+    if (startDate || endDate) {
+        match.tradeDate = {};
+
+        if (startDate) {
+            match.tradeDate.$gte = new Date(startDate);
+        }
+
+        if (endDate) {
+            match.tradeDate.$lte = new Date(endDate);
+        }
+    }
+
+    return await Trade.aggregate([
+        {
+            $match: match,
+        },
+
+        {
+            $group: {
+                _id: {
+                    year: { $year: "$tradeDate" },
+                    month: { $month: "$tradeDate" },
+                    day: { $dayOfMonth: "$tradeDate" },
+                },
+
+                dailyPnl: {
+                    $sum: "$pnl",
+                },
+            },
+        },
+
+        {
+            $sort: {
+                "_id.year": 1,
+                "_id.month": 1,
+                "_id.day": 1,
+            },
+        },
+
+        {
+            $project: {
+                _id: 0,
+                date: {
+                    $dateFromParts: {
+                        year: "$_id.year",
+                        month: "$_id.month",
+                        day: "$_id.day",
+                    },
+                },
+                dailyPnl: 1,
+            },
+        },
+    ]);
+};
 
 module.exports = {
     getDashboardStats,
     getEquityCurveData,
-    getMonthlyStats
+    getMonthlyStats,
+    getPnlOverview
 };

@@ -8,12 +8,14 @@ import "./styles/global.css";
 import "./styles/forms.css";
 import "./styles/buttons.css";
 import "./styles/auth.css";
+import ScrollToTop from './components/ScrollToTop.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <PreferencesProvider>
       <AuthProvider>
         <BrowserRouter>
+        <ScrollToTop/>
           <App />
         </BrowserRouter>
       </AuthProvider>

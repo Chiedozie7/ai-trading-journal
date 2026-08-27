@@ -1,12 +1,18 @@
+import { useContext } from "react";
 import { NavLink } from "react-router-dom";
 import "../styles/sidebar.css";
+import PreferencesContext from "../context/PreferencesProvider";
 import {
     FiHome,
     FiBarChart2,
     FiFileText,
     FiCalendar,
-    FiTrendingUp,
-    FiX
+    FiTarget,
+    FiEdit3,
+    FiSettings,
+    FiX,
+    FiMoon,
+    FiSun
 } from "react-icons/fi";
 
 const navItems = [
@@ -30,9 +36,40 @@ const navItems = [
         path: "/calendar",
         icon: FiCalendar,
     },
+    {
+        name: "Goals",
+        path: "/goals",
+        icon: FiTarget,
+    },
+    {
+        name: "Notes",
+        path: "/notes",
+        icon: FiEdit3,
+    },
+    {
+        name: "Settings",
+        path: "/settings",
+        icon: FiSettings,
+    },
 ];
 
 function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
+
+    const { preferences, setPreferences } =
+        useContext(PreferencesContext);
+
+    const isDarkMode =
+        preferences.appearance.theme === "dark";
+
+    const handleThemeToggle = () => {
+        setPreferences((prev) => ({
+            ...prev,
+            appearance: {
+                ...prev.appearance,
+                theme: isDarkMode ? "light" : "dark",
+            },
+        }));
+    };
     return (
         <aside
             className={`sidebar ${isSidebarOpen ? "sidebar-open" : ""}`}
@@ -44,14 +81,19 @@ function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
 
                     <div className="brand-left">
 
-                        <div className="brand-icon">
-                            <FiTrendingUp />
-                        </div>
+                        <img
+                            src="/images/tradeledger-logo.png"
+                            alt="TradeLedger"
+                            className="brand-logo"
+                        />
 
                         <div className="brand-content">
-                            <h2>Trading Journal</h2>
+                            <h2>
+                                Trade<span>Ledger</span>
+                            </h2>
+
                             <p className="brand-tagline">
-                                Track • Review • Improve
+                                Review • Refine • Repeat
                             </p>
                         </div>
 
@@ -90,6 +132,20 @@ function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
                 })}
 
             </nav>
+
+            <div className="sidebar-theme">
+                <button
+                    type="button"
+                    className="sidebar-theme-btn"
+                    onClick={handleThemeToggle}
+                >
+                    {isDarkMode ? <FiSun /> : <FiMoon />}
+
+                    <span>
+                        {isDarkMode ? "Light Mode" : "Dark Mode"}
+                    </span>
+                </button>
+            </div>
         </aside>
     );
 }
