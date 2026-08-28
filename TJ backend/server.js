@@ -16,6 +16,7 @@ app.use(
         origin: [
             "http://192.168.152.142:5173",
             "http://localhost:5173",
+            "https://tradeledger-ch.vercel.app",
         ],
         credentials: true,
     })
