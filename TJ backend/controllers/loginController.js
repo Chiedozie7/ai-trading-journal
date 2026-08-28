@@ -45,7 +45,12 @@ const handleLogin = async (req, res) => {
         foundUser.refreshTokens.push(refreshToken);
         await foundUser.save();
 
-        res.cookie('jwt', refreshToken, { httpOnly: true, sameSite: 'Lax', maxAge: 24 * 60 * 60 * 1000 }); //for testing purposes with ThunderClient, comment out "secure:true." Add it back when working with Chrome
+        res.cookie("jwt", refreshToken, {
+            httpOnly: true,
+            sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+            secure: process.env.NODE_ENV === "production",
+            maxAge: 24 * 60 * 60 * 1000,
+        }); //for testing purposes with ThunderClient, comment out "secure:true." Add it back when working with Chrome
         res.json({
             accessToken,
             user: {

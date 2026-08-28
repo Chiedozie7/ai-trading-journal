@@ -14,9 +14,11 @@ const handleLogout = async (req, res) => {
     }).exec();
 
     if (!foundUser) {
-        res.clearCookie('jwt', {
+        res.cookie("jwt", refreshToken, {
             httpOnly: true,
-            sameSite: 'Lax'
+            sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+            secure: process.env.NODE_ENV === "production",
+            maxAge: 24 * 60 * 60 * 1000,
         });
 
         return res.sendStatus(204);
