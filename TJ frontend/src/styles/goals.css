@@ -90,6 +90,56 @@
     cursor: pointer;
 }
 
+.goal-menu {
+    position: relative;
+}
+
+.goal-menu-dropdown {
+    position: absolute;
+    top: calc(100% + .4rem);
+    right: 0;
+
+    min-width: 110px;
+
+    display: flex;
+    flex-direction: column;
+
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+
+    box-shadow: var(--shadow);
+
+    overflow: hidden;
+
+    z-index: 20;
+}
+
+.goal-menu-dropdown button {
+    width: 100%;
+
+    padding: .6rem .75rem;
+
+    border: none;
+    background: transparent;
+
+    color: var(--text);
+
+    text-align: left;
+    font: inherit;
+    font-size: .8rem;
+
+    cursor: pointer;
+}
+
+.goal-menu-dropdown button:hover {
+    background: var(--page-bg);
+}
+
+.goal-menu-dropdown .goal-delete-option {
+    color: var(--danger);
+}
+
 .goal-progress-info {
     display: flex;
     justify-content: space-between;

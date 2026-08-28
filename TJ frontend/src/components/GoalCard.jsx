@@ -1,4 +1,53 @@
-const GoalCard = ({ goal }) => {
+import { useEffect, useRef, useState } from "react";
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
+
+const GoalCard = ({ goal, onUpdate, onEdit }) => {
+    const axiosPrivate = useAxiosPrivate();
+
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const menuRef = useRef(null);
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (
+                menuRef.current &&
+                !menuRef.current.contains(event.target)
+            ) {
+                setIsMenuOpen(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+
+        return () => {
+            document.removeEventListener(
+                "mousedown",
+                handleClickOutside
+            );
+        };
+    }, []);
+
+    const handleDelete = async () => {
+        setIsMenuOpen(false);
+
+        const confirmed = window.confirm(
+            "Are you sure you want to delete this goal?"
+        );
+
+        if (!confirmed) return;
+
+        try {
+            await axiosPrivate.delete(`/goals/${goal._id}`);
+            onUpdate();
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const handleEdit = () => {
+        setIsMenuOpen(false);
+        onEdit(goal);
+    };
 
     const formatValue = () => {
         if (goal.type === "totalPnl") {
@@ -57,9 +106,8 @@ const GoalCard = ({ goal }) => {
 
     return (
         <div
-            className={`goal-card ${
-                goal.completed ? "goal-completed" : ""
-            }`}
+            className={`goal-card ${goal.completed ? "goal-completed" : ""
+                }`}
         >
 
             <div className="goal-card-header">
@@ -72,9 +120,41 @@ const GoalCard = ({ goal }) => {
                     </span>
                 </div>
 
-                <button className="goal-menu-btn">
-                    ⋮
-                </button>
+                <div
+                    className="goal-menu"
+                    ref={menuRef}
+                >
+                    <button
+                        type="button"
+                        className="goal-menu-btn"
+                        onClick={() =>
+                            setIsMenuOpen(prev => !prev)
+                        }
+                    >
+                        ⋮
+                    </button>
+
+                    {isMenuOpen && (
+                        <div className="goal-menu-dropdown">
+
+                            <button
+                                type="button"
+                                onClick={handleEdit}
+                            >
+                                Edit
+                            </button>
+
+                            <button
+                                type="button"
+                                className="goal-delete-option"
+                                onClick={handleDelete}
+                            >
+                                Delete
+                            </button>
+
+                        </div>
+                    )}
+                </div>
 
             </div>
 

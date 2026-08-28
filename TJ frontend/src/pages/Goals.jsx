@@ -6,10 +6,10 @@ import GoalModal from "../components/GoalModal";
 
 const Goals = () => {
     const axiosPrivate = useAxiosPrivate();
-
     const [goals, setGoals] = useState([]);
     const [loading, setLoading] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [editingGoal, setEditingGoal] = useState(null);
 
     const fetchGoals = async () => {
         try {
@@ -37,7 +37,10 @@ const Goals = () => {
                 {goals.length > 0 && (
                     <button
                         className="primary-btn goals-new-btn"
-                        onClick={() => setIsModalOpen(true)}
+                        onClick={() => {
+                            setEditingGoal(null);
+                            setIsModalOpen(true);
+                        }}
                     >
                         + New Goal
                     </button>
@@ -72,6 +75,10 @@ const Goals = () => {
                             key={goal._id}
                             goal={goal}
                             onUpdate={fetchGoals}
+                            onEdit={(selectedGoal) => {
+                                setEditingGoal(selectedGoal);
+                                setIsModalOpen(true);
+                            }}
                         />
                     ))}
                 </div>
@@ -79,8 +86,12 @@ const Goals = () => {
 
             {isModalOpen && (
                 <GoalModal
-                    onClose={() => setIsModalOpen(false)}
-                    onCreated={fetchGoals}
+                    goal={editingGoal}
+                    onClose={() => {
+                        setIsModalOpen(false);
+                        setEditingGoal(null);
+                    }}
+                    onSaved={fetchGoals}
                 />
             )}
 

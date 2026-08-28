@@ -44,7 +44,7 @@ const periodOptions = [
     },
 ];
 
-function GoalModal({ onClose, onCreated }) {
+function GoalModal({ goal, onClose, onSaved }) {
     const axiosPrivate = useAxiosPrivate();
 
     const [title, setTitle] = useState("");
@@ -58,6 +58,8 @@ function GoalModal({ onClose, onCreated }) {
     const [error, setError] = useState("");
     const [submitting, setSubmitting] = useState(false);
 
+    const isEditing = Boolean(goal);
+
     useEffect(() => {
         document.body.style.overflow = "hidden";
 
@@ -65,6 +67,38 @@ function GoalModal({ onClose, onCreated }) {
             document.body.style.overflow = "";
         };
     }, []);
+
+    useEffect(() => {
+        if (goal) {
+            setTitle(goal.title || "");
+            setType(goal.type || "totalTrades");
+            setTarget(
+                goal.target !== undefined
+                    ? String(goal.target)
+                    : ""
+            );
+            setPeriod(goal.period || "thisMonth");
+            setStartDate(
+                goal.startDate
+                    ? goal.startDate.split("T")[0]
+                    : ""
+            );
+            setEndDate(
+                goal.endDate
+                    ? goal.endDate.split("T")[0]
+                    : ""
+            );
+        } else {
+            setTitle("");
+            setType("totalTrades");
+            setTarget("");
+            setPeriod("thisMonth");
+            setStartDate("");
+            setEndDate("");
+        }
+
+        setError("");
+    }, [goal]);
 
     const getTargetPlaceholder = () => {
         if (type === "totalTrades") return "e.g. 50";
@@ -126,31 +160,43 @@ function GoalModal({ onClose, onCreated }) {
             }
         }
 
+        const data = {
+            title: title.trim(),
+            type,
+            target: Number(target),
+            period,
+            startDate:
+                period === "custom"
+                    ? startDate
+                    : null,
+            endDate:
+                period === "custom"
+                    ? endDate
+                    : null,
+        };
+
         try {
             setSubmitting(true);
 
-            await axiosPrivate.post("/goals", {
-                title: title.trim(),
-                type,
-                target: Number(target),
-                period,
-                startDate:
-                    period === "custom"
-                        ? startDate
-                        : null,
-                endDate:
-                    period === "custom"
-                        ? endDate
-                        : null,
-            });
+            if (isEditing) {
+                await axiosPrivate.put(
+                    `/goals/${goal._id}`,
+                    data
+                );
+            } else {
+                await axiosPrivate.post(
+                    "/goals",
+                    data
+                );
+            }
 
-            onCreated();
+            onSaved();
             onClose();
 
         } catch (error) {
             setError(
                 error.response?.data?.message ||
-                "Unable to create goal."
+                `Unable to ${isEditing ? "update" : "create"} goal.`
             );
         } finally {
             setSubmitting(false);
@@ -169,12 +215,21 @@ function GoalModal({ onClose, onCreated }) {
             <div className="goal-modal">
 
                 <div className="goal-modal-header">
+
                     <div>
-                        <h2>New Goal</h2>
+
+                        <h2>
+                            {isEditing
+                                ? "Edit Goal"
+                                : "New Goal"}
+                        </h2>
+
                         <p>
-                            Set a target and let your trades
-                            track the progress automatically.
+                            {isEditing
+                                ? "Update your goal and its target."
+                                : "Set a target and let your trades track the progress automatically."}
                         </p>
+
                     </div>
 
                     <button
@@ -184,11 +239,13 @@ function GoalModal({ onClose, onCreated }) {
                     >
                         ×
                     </button>
+
                 </div>
 
                 <form onSubmit={handleSubmit}>
 
                     <div className="goal-form-field">
+
                         <label>Goal Title</label>
 
                         <input
@@ -200,11 +257,13 @@ function GoalModal({ onClose, onCreated }) {
                             placeholder="e.g. Complete 50 trades"
                             maxLength={100}
                         />
+
                     </div>
 
                     <div className="goal-form-row">
 
                         <div className="goal-form-field">
+
                             <label>Goal Type</label>
 
                             <CustomSelect
@@ -212,9 +271,11 @@ function GoalModal({ onClose, onCreated }) {
                                 value={type}
                                 onChange={setType}
                             />
+
                         </div>
 
                         <div className="goal-form-field">
+
                             <label>Target</label>
 
                             <input
@@ -231,11 +292,13 @@ function GoalModal({ onClose, onCreated }) {
                             <small>
                                 {getTargetHint()}
                             </small>
+
                         </div>
 
                     </div>
 
                     <div className="goal-form-field goal-period-field">
+
                         <label>Period</label>
 
                         <CustomSelect
@@ -243,12 +306,14 @@ function GoalModal({ onClose, onCreated }) {
                             value={period}
                             onChange={setPeriod}
                         />
+
                     </div>
 
                     {period === "custom" && (
                         <div className="goal-form-row">
 
                             <div className="goal-form-field">
+
                                 <label>Start Date</label>
 
                                 <input
@@ -260,9 +325,11 @@ function GoalModal({ onClose, onCreated }) {
                                         )
                                     }
                                 />
+
                             </div>
 
                             <div className="goal-form-field">
+
                                 <label>End Date</label>
 
                                 <input
@@ -274,6 +341,7 @@ function GoalModal({ onClose, onCreated }) {
                                         )
                                     }
                                 />
+
                             </div>
 
                         </div>
@@ -302,8 +370,12 @@ function GoalModal({ onClose, onCreated }) {
                             disabled={submitting}
                         >
                             {submitting
-                                ? "Creating..."
-                                : "Create Goal"}
+                                ? isEditing
+                                    ? "Saving..."
+                                    : "Creating..."
+                                : isEditing
+                                    ? "Save Changes"
+                                    : "Create Goal"}
                         </button>
 
                     </div>
