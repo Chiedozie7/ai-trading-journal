@@ -72,7 +72,9 @@ function EditTrade() {
             setPreviewImage(URL.createObjectURL(image));
         } else {
             setPreviewImage(
-                `${API_URL}/uploads/screenshots/${image}`
+                image.startsWith("http")
+                    ? image
+                    : `${API_URL}/uploads/screenshots/${image}`
             );
         }
 

@@ -165,19 +165,23 @@ function TradeDetails() {
 
                     {trade.images?.length > 0 ? (
                         <div className="trade-images-grid">
-                            {trade.images.map((image) => (
-                                <img
-                                    key={image}
-                                    src={`${API_URL}/uploads/screenshots/${image}`}
-                                    alt="Trade Screenshot"
-                                    className="trade-image"
-                                    onClick={() =>
-                                        setSelectedImage(
-                                            `${API_URL}/uploads/screenshots/${image}`
-                                        )
-                                    }
-                                />
-                            ))}
+                            {trade.images.map((image) => {
+                                const imageUrl = image.startsWith("http")
+                                    ? image
+                                    : `${API_URL}/uploads/screenshots/${image}`;
+
+                                return (
+                                    <img
+                                        key={image}
+                                        src={imageUrl}
+                                        alt="Trade Screenshot"
+                                        className="trade-image"
+                                        onClick={() =>
+                                            setSelectedImage(imageUrl)
+                                        }
+                                    />
+                                );
+                            })}
                         </div>
                     ) : (
                         <p>No screenshots uploaded.</p>

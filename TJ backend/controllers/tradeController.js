@@ -1,6 +1,30 @@
 const Trade = require('../model/Trades');
 const mongoose = require('mongoose');
 const { getDashboardStats } = require('../services/dashboardService');
+const cloudinary = require("../utils/cloudinary");
+const streamifier = require("streamifier");
+
+const uploadToCloudinary = (file) => {
+    return new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+            {
+                folder: "tradeledger/trades",
+                resource_type: "image",
+            },
+            (error, result) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve(result);
+                }
+            }
+        );
+
+        streamifier
+            .createReadStream(file.buffer)
+            .pipe(stream);
+    });
+};
 
 const createTrade = async (req, res) => {
     try {
@@ -44,7 +68,12 @@ const createTrade = async (req, res) => {
 
 
         const images = req.files
-            ? req.files.map(file => file.filename)
+            ? await Promise.all(
+                req.files.map(async (file) => {
+                    const result = await uploadToCloudinary(file);
+                    return result.secure_url;
+                })
+            )
             : [];
 
         const trade = await Trade.create({
@@ -190,13 +219,22 @@ const updateTrade = async (req, res) => {
         });
 
         if (!trade) {
-            return res.status(404).json({ message: "Trade not found" });
+            return res.status(404).json({
+                message: "Trade not found"
+            });
         }
 
+        // Upload newly added images to Cloudinary
         const uploadedImages = req.files
-            ? req.files.map(file => file.filename)
+            ? await Promise.all(
+                req.files.map(async (file) => {
+                    const result = await uploadToCloudinary(file);
+                    return result.secure_url;
+                })
+            )
             : [];
 
+        // Images the user chose to keep
         let existingImages = [];
 
         if (req.body.existingImages) {
@@ -224,41 +262,63 @@ const updateTrade = async (req, res) => {
             let actualMove;
 
             if (direction === "buy") {
-                risk = Number(entryPrice) - Number(stopLoss);
-                actualMove = Number(exitPrice) - Number(entryPrice);
+                risk =
+                    Number(entryPrice) -
+                    Number(stopLoss);
+
+                actualMove =
+                    Number(exitPrice) -
+                    Number(entryPrice);
             } else {
-                risk = Number(stopLoss) - Number(entryPrice);
-                actualMove = Number(entryPrice) - Number(exitPrice);
+                risk =
+                    Number(stopLoss) -
+                    Number(entryPrice);
+
+                actualMove =
+                    Number(entryPrice) -
+                    Number(exitPrice);
             }
 
             if (risk <= 0) {
                 return res.status(400).json({
-                    message: "Invalid trade. Stop loss must create a positive risk."
+                    message:
+                        "Invalid trade. Stop loss must create a positive risk."
                 });
             }
 
-            rr = Number((actualMove / risk).toFixed(2));
+            rr = Number(
+                (actualMove / risk).toFixed(2)
+            );
         }
 
-        const updatedTrade = await Trade.findByIdAndUpdate(
-            req.params.id,
-            {
-                ...req.body,
-                ...(rr !== undefined && { rr }),
-                images: [...existingImages, ...uploadedImages],
-            },
-            {
-                returnDocument: "after",
-                runValidators: true,
-            }
-        );
+        const updatedTrade =
+            await Trade.findOneAndUpdate(
+                {
+                    _id: req.params.id,
+                    owner: req.id,
+                },
+                {
+                    ...req.body,
+                    ...(rr !== undefined && { rr }),
+                    images: [
+                        ...existingImages,
+                        ...uploadedImages
+                    ],
+                },
+                {
+                    returnDocument: "after",
+                    runValidators: true,
+                }
+            );
 
         res.json(updatedTrade);
-        console.log("req.files:", req.files);
-        console.log("req.body:", req.body);
+
     } catch (err) {
         console.error(err);
-        res.status(500).json({ message: err.message });
+
+        res.status(500).json({
+            message: err.message
+        });
     }
 };
 

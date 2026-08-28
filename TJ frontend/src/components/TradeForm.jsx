@@ -230,34 +230,40 @@ function TradeForm({
                         <h4>Existing Screenshots</h4>
 
                         <div className="image-preview-container">
-                            {formData.existingImages.map((image, index) => (
-                                <div
-                                    key={image}
-                                    className="image-preview"
-                                >
-                                    <img
-                                        src={`${API_URL}/uploads/screenshots/${image}`}
-                                        alt={`Existing ${index + 1}`}
-                                        className="clickable-preview"
-                                    />
+                            {formData.existingImages.map((image, index) => {
+                                const imageUrl = image.startsWith("http")
+                                    ? image
+                                    : `${API_URL}/uploads/screenshots/${image}`;
 
-                                    <p>{image}</p>
-
-                                    <button
-                                        type="button"
-                                        className="remove-image-btn"
-                                        onClick={() =>
-                                            handleRemoveExistingImage(index)
-                                        }
+                                return (
+                                    <div
+                                        key={image}
+                                        className="image-preview"
                                     >
-                                        Remove
-                                    </button>
-                                </div>
-                            ))}
+                                        <img
+                                            src={imageUrl}
+                                            alt={`Existing ${index + 1}`}
+                                            className="clickable-preview"
+                                            onClick={() =>
+                                                handleOpenPreview(image)
+                                            }
+                                        />
+
+                                        <button
+                                            type="button"
+                                            className="remove-image-btn"
+                                            onClick={() =>
+                                                handleRemoveExistingImage(index)
+                                            }
+                                        >
+                                            Remove
+                                        </button>
+                                    </div>
+                                );
+                            })}
                         </div>
                     </>
                 )}
-
                 {/* Newly selected screenshots */}
 
                 {formData.newImages?.length > 0 && (
