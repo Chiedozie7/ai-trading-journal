@@ -154,9 +154,12 @@ function Topbar({ isSidebarOpen, setIsSidebarOpen }) {
                 <div className="topbar-actions">
 
 
-                    <a href="/create-trade" className="add-trade-btn">
+                    <Link
+                        to="/create-trade"
+                        className="add-trade-btn"
+                    >
                         + Add Trade
-                    </a>
+                    </Link>
 
 
                     <div
