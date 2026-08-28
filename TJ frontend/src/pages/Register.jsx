@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "../api/axios";
-import "../styles/Auth.css";
+import "../styles/auth.css";
 import "../styles/Register.css";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 

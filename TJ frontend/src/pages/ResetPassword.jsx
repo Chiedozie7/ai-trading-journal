@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import axios from "../api/axios";
-import "../styles/Auth.css";
+import "../styles/auth.css";
 
 const ResetPassword = () => {
     const [password, setPassword] = useState("");
