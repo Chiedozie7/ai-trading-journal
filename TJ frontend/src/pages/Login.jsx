@@ -11,11 +11,13 @@ function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
   const { setAuth } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     console.log("API URL:", import.meta.env.VITE_API_URL);
     console.log("Sending login request...");
 
@@ -42,6 +44,7 @@ function Login() {
 
       navigate("/dashboard");
     } catch (err) {
+      setLoading(false);
       console.log(err);
       console.log(err.response);
       console.log(err.message);
@@ -165,8 +168,9 @@ function Login() {
             <button
               type="submit"
               className="primary-btn"
+              disabled={loading}
             >
-              Sign In
+              {loading ? "Signing In..." : "Sign In"}
             </button>
 
           </form>

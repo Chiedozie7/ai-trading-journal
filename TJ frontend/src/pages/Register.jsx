@@ -15,6 +15,7 @@ function Register() {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
 
     const handleSubmit = async (e) => {
 
@@ -24,6 +25,7 @@ function Register() {
             return setError("Passwords do not match.");
         }
         setError("");
+        setLoading(true);
 
         try {
 
@@ -36,6 +38,7 @@ function Register() {
             setRegistrationComplete(true);
 
         } catch (err) {
+            setLoading(false);
 
             if (err.response) {
                 setError(err.response.data?.message || "Registration failed.");
@@ -233,10 +236,10 @@ function Register() {
                                 <button
                                     type="submit"
                                     className="primary-btn"
+                                    disabled={loading}
                                 >
-                                    Create Account
+                                    {loading ? "Creating Account..." : "Create Account"}
                                 </button>
-
                             </form>
 
                             <p className="auth-footer">

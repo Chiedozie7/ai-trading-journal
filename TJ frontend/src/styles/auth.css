@@ -450,10 +450,12 @@
         margin-top: 1rem;
     }
     .verify-email-page {
-        height: 100dvh;
-        min-height: 100dvh;
-        overflow: hidden;
-    }
+    height: 100dvh;
+    min-height: 100dvh;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+}
 
     .verify-email-page .auth-panel {
         height: 100dvh;

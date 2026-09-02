@@ -13,6 +13,26 @@
     font-size:2rem;
     color:var(--text);
 }
+.back-to-trades-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-bottom: 1rem;
+    padding: 0.55rem 0.85rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--primary-btn-bg);
+    color: var(--primary-btn-text);
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.back-to-trades-btn:hover {
+    background: var(--primary-btn-hover);
+    border-color: var(--primary-btn-text);
+}
 
 .trade-subtitle{
     margin:.5rem 0 1rem;
@@ -152,6 +172,146 @@
 
 .action-buttons button:last-child:hover{
     opacity:.9;
+}
+/* ==========================
+   Success Popup
+========================== */
+
+.trade-success-popup {
+    position: fixed;
+    top: 1.5rem;
+    right: 1.5rem;
+    z-index: 1000;
+
+    padding: .85rem 1.25rem;
+
+    border: 1px solid var(--border);
+    border-radius: 8px;
+
+    background: var(--card-bg);
+    color: var(--text);
+
+    box-shadow: var(--shadow);
+
+    font-size: .9rem;
+    font-weight: 500;
+
+    animation: trade-popup-in .2s ease;
+}
+
+@keyframes trade-popup-in {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* ==========================
+   Delete Confirmation
+========================== */
+
+.delete-confirm-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1100;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 1rem;
+
+    background: rgba(0, 0, 0, .45);
+}
+
+.delete-confirm-modal {
+    width: 100%;
+    max-width: 420px;
+
+    padding: 1.5rem;
+
+    border: 1px solid var(--border);
+    border-radius: 12px;
+
+    background: var(--card-bg);
+    box-shadow: var(--shadow);
+}
+
+.delete-confirm-modal h2 {
+    margin: 0 0 .6rem;
+    color: var(--text);
+    font-size: 1.25rem;
+}
+
+.delete-confirm-modal p {
+    margin: 0;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+.delete-confirm-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: .75rem;
+
+    margin-top: 1.5rem;
+}
+
+.delete-cancel-btn,
+.delete-confirm-btn {
+    padding: .65rem 1rem;
+
+    border-radius: 8px;
+
+    font-size: .9rem;
+    font-weight: 600;
+
+    cursor: pointer;
+    transition: .2s ease;
+}
+
+.delete-cancel-btn {
+    border: 1px solid var(--border);
+    background: var(--card-bg);
+    color: var(--text);
+}
+
+.delete-cancel-btn:hover {
+    background: var(--page-bg);
+}
+
+.delete-confirm-btn {
+    border: none;
+    background: var(--danger);
+    color: #fff;
+}
+
+.delete-confirm-btn:hover {
+    opacity: .9;
+}
+
+@media (max-width: 480px) {
+    .delete-confirm-actions {
+        flex-direction: column-reverse;
+    }
+
+    .delete-cancel-btn,
+    .delete-confirm-btn {
+        width: 100%;
+    }
+
+    .trade-success-popup {
+        left: 1rem;
+        right: 1rem;
+        top: 1rem;
+        text-align: center;
+    }
 }
 
 @media (max-width:768px){

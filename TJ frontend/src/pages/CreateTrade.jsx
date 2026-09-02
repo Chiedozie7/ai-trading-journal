@@ -73,10 +73,13 @@ function CreateTrade() {
                         : 0;
 
             Object.entries(formData).forEach(([key, value]) => {
-                // Don't append frontend-only image state directly
-                if (key === "existingImages" || key === "newImages") return;
+                if (
+                    key === "existingImages" ||
+                    key === "newImages"
+                ) {
+                    return;
+                }
 
-                // PnL is handled separately so its sign matches the result
                 if (key === "pnl") return;
 
                 if (key === "tags") {
@@ -84,7 +87,9 @@ function CreateTrade() {
                         .split(",")
                         .map(tag => tag.trim())
                         .filter(Boolean)
-                        .forEach(tag => tradeData.append("tags", tag));
+                        .forEach(tag =>
+                            tradeData.append("tags", tag)
+                        );
                 } else {
                     tradeData.append(key, value);
                 }
@@ -96,9 +101,17 @@ function CreateTrade() {
                 tradeData.append("images", image);
             });
 
-            await axiosPrivate.post("/trades", tradeData);
+            await axiosPrivate.post(
+                "/trades",
+                tradeData
+            );
 
-            navigate("/trades");
+            navigate("/trades", {
+                state: {
+                    message: "Trade created successfully."
+                }
+            });
+
         } catch (err) {
             console.error(err);
         }

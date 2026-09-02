@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import CreateTrade from "./CreateTrade";
 import { Link } from "react-router-dom";
@@ -18,24 +18,76 @@ import {
 import ScrollableTable from "../components/ScrollableTable";
 
 function Trades() {
+    const tradeRowRefs = useRef({});
     const axiosPrivate = useAxiosPrivate();
     const navigate = useNavigate();
     const location = useLocation();
+
     const selectedDate = location.state?.selectedDate;
+    const restoredState = location.state?.restoreTradesState;
 
-
+    const [message, setMessage] = useState(
+        location.state?.message || ""
+    );
 
     const [trades, setTrades] = useState([]);
-    const [search, setSearch] = useState("");
-    const [strategy, setStrategy] = useState("");
-    const [timeframe, setTimeframe] = useState("");
-    const [result, setResult] = useState("");
-    const [sort, setSort] = useState("newest");
-    const [page, setPage] = useState(1);
+    const [search, setSearch] = useState(
+        restoredState?.search || ""
+    );
+
+    const [strategy, setStrategy] = useState(
+        restoredState?.strategy || ""
+    );
+
+    const [timeframe, setTimeframe] = useState(
+        restoredState?.timeframe || ""
+    );
+
+    const [result, setResult] = useState(
+        restoredState?.result || ""
+    );
+
+    const [sort, setSort] = useState(
+        restoredState?.sort || "newest"
+    );
+
+    const [page, setPage] = useState(
+        restoredState?.page || 1
+    );
+
     const [totalPages, setTotalPages] = useState(1);
-    const [tradeDate, setTradeDate] = useState(selectedDate || "");
+
+    const [tradeDate, setTradeDate] = useState(
+        restoredState?.tradeDate || selectedDate || ""
+    );
+
     const tradeDateObj = tradeDate ? new Date(tradeDate) : null;
 
+
+    useEffect(() => {
+        if (location.state?.message) {
+            setMessage(location.state.message);
+
+            navigate(location.pathname + location.search, {
+                replace: true,
+                state: {
+                    ...location.state,
+                    message: undefined,
+                },
+            });
+        }
+    }, []);
+
+
+    useEffect(() => {
+        if (!message) return;
+
+        const timer = setTimeout(() => {
+            setMessage("");
+        }, 3000);
+
+        return () => clearTimeout(timer);
+    }, [message]);
 
 
     useEffect(() => {
@@ -45,10 +97,12 @@ function Trades() {
         }
     }, [selectedDate]);
 
+
     useEffect(() => {
         const fetchTrades = async () => {
             try {
-                const response = await axiosPrivate.get("/trades",
+                const response = await axiosPrivate.get(
+                    "/trades",
                     {
                         params: {
                             search,
@@ -61,6 +115,7 @@ function Trades() {
                         }
                     }
                 );
+
                 setTrades(response.data.trades);
                 setTotalPages(response.data.totalPages);
             } catch (err) {
@@ -69,26 +124,62 @@ function Trades() {
         };
 
         fetchTrades();
-    }, [search, strategy, timeframe, result, tradeDate, sort, page]);
+    }, [
+        search,
+        strategy,
+        timeframe,
+        result,
+        tradeDate,
+        sort,
+        page
+    ]);
+
+
+    useEffect(() => {
+        const tradeId = location.state?.tradeId;
+
+        if (!tradeId || trades.length === 0) return;
+
+        let attempts = 0;
+
+        const restorePosition = () => {
+            const row = tradeRowRefs.current[tradeId];
+
+            if (row) {
+                row.scrollIntoView({
+                    behavior: "auto",
+                    block: "center",
+                });
+
+                return;
+            }
+
+            attempts++;
+
+            if (attempts < 10) {
+                requestAnimationFrame(restorePosition);
+            }
+        };
+
+        requestAnimationFrame(restorePosition);
+    }, [trades, location.state?.tradeId]);
 
 
     const handleDelete = async (id) => {
-        const confirmed = window.confirm(
-            "Are you sure you want to delete this trade?"
-        );
-
-        if (!confirmed) return;
-
         try {
             await axiosPrivate.delete(`/trades/${id}`);
 
-            const updatedTrades = trades.filter(trade => trade._id !== id);
+            const updatedTrades = trades.filter(
+                trade => trade._id !== id
+            );
 
             setTrades(updatedTrades);
 
             if (updatedTrades.length === 0 && page > 1) {
                 setPage(prev => prev - 1);
             }
+
+            setMessage("Trade deleted successfully.");
 
         } catch (err) {
             console.error(err);
@@ -99,43 +190,67 @@ function Trades() {
     return (
         <div className="trades-page">
 
+            {message && (
+                <div className="trade-success-popup">
+                    {message}
+                </div>
+            )}
+
             {tradeDate && (
-
-
                 <button
                     className="back-to-calendar-btn"
                     onClick={() => {
+                        const from =
+                            location.state?.from ||
+                            "/analytics?tab=calendar";
 
-                        const from = location.state?.from || "/analytics?tab=calendar";
-                        const [pathname, query = ""] = from.split("?");
-                        const params = new URLSearchParams(query);
-                        params.set("month", tradeDateObj.getMonth() + 1);
-                        params.set("year", tradeDateObj.getFullYear());
-                        navigate(`${pathname}?${params.toString()}`);
+                        const [pathname, query = ""] =
+                            from.split("?");
+
+                        const params =
+                            new URLSearchParams(query);
+
+                        params.set(
+                            "month",
+                            tradeDateObj.getMonth() + 1
+                        );
+
+                        params.set(
+                            "year",
+                            tradeDateObj.getFullYear()
+                        );
+
+                        navigate(
+                            `${pathname}?${params.toString()}`
+                        );
                     }}
                 >
                     ← Back to Calendar
                 </button>
-            )
-            }
-            {
-                tradeDate && (
-                    <div className="calendar-filter-banner">
-                        <span>
-                            Showing trades for <strong>{tradeDate}</strong>
-                        </span>
+            )}
 
-                        <button
-                            onClick={() => {
-                                setTradeDate("");
-                                navigate("/trades", { replace: true });
-                            }}
-                        >
-                            Clear
-                        </button>
-                    </div>
-                )
-            }
+
+            {tradeDate && (
+                <div className="calendar-filter-banner">
+                    <span>
+                        Showing trades for{" "}
+                        <strong>{tradeDate}</strong>
+                    </span>
+
+                    <button
+                        onClick={() => {
+                            setTradeDate("");
+
+                            navigate("/trades", {
+                                replace: true
+                            });
+                        }}
+                    >
+                        Clear
+                    </button>
+                </div>
+            )}
+
 
             <div className="trades-toolbar">
 
@@ -143,7 +258,9 @@ function Trades() {
                     type="text"
                     placeholder="Search trades"
                     value={search}
-                    onChange={(e) => setSearch(e.target.value)}
+                    onChange={(e) =>
+                        setSearch(e.target.value)
+                    }
                 />
 
                 <CustomSelect
@@ -152,6 +269,7 @@ function Trades() {
                     onChange={setStrategy}
                     className="filter"
                 />
+
                 <CustomSelect
                     options={timeframeOptions}
                     value={timeframe}
@@ -172,84 +290,169 @@ function Trades() {
                     onChange={setSort}
                     className="filter"
                 />
+
             </div>
 
-            {
-                trades.length === 0 ? (
-                    <div className="trades-empty">
-                        <h3>No trades found</h3>
 
-                        <p>Try adjusting your filters or add your first trade.</p>
-                    </div>
-                ) : (
-                    <ScrollableTable>
-                        <div className="trades-table-wrapper">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Pair</th>
-                                        <th>Dir</th>
-                                        <th>Strategy</th>
-                                        <th>TF</th>
-                                        <th>RR</th>
-                                        <th>Result</th>
-                                        <th>PnL</th>
-                                    </tr>
-                                </thead>
+            {trades.length === 0 ? (
+                <div className="trades-empty">
+                    <h3>No trades found</h3>
 
-                                <tbody>
-                                    {trades.map((trade) => (
-                                        <tr
-                                            key={trade._id}
-                                            onClick={() => navigate(`/trades/${trade._id}`)}
-                                            style={{ cursor: "pointer" }}
-                                        >
-                                            <td>
-                                                <div className="trade-pair-display">
-                                                    <div className="trade-pair-icon">
-                                                        <PairIcon
-                                                            pair={trade.pair}
-                                                            size={20}
-                                                        />
-                                                    </div>
+                    <p>
+                        Try adjusting your filters or add
+                        your first trade.
+                    </p>
+                </div>
+            ) : (
+                <ScrollableTable>
 
-                                                    <span>{trade.pair?.trim().toUpperCase()}</span>
-                                                </div>
-                                            </td>
-                                            <td>{trade.direction?.charAt(0).toUpperCase() + trade.direction?.slice(1).toLowerCase()}</td>
-                                            <td>{trade.strategy}</td>
-                                            <td>{trade.timeframe}</td>
-                                            <td>{trade.rr}</td>
-                                            <td>{trade.result}</td>
-                                            <td
-                                                className={
-                                                    trade.pnl > 0
-                                                        ? "pnl-profit"
-                                                        : trade.pnl < 0
-                                                            ? "pnl-loss"
-                                                            : "pnl-neutral"
+                    <div className="trades-table-wrapper">
+
+                        <table>
+
+                            <thead>
+                                <tr>
+                                    <th>Pair</th>
+                                    <th>Dir</th>
+                                    <th>Strategy</th>
+                                    <th>TF</th>
+                                    <th>RR</th>
+                                    <th>Result</th>
+                                    <th>PnL</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                {trades.map((trade) => (
+
+                                    <tr
+                                        key={trade._id}
+                                        ref={(el) => {
+                                            if (el) {
+                                                tradeRowRefs.current[
+                                                    trade._id
+                                                ] = el;
+                                            }
+                                        }}
+                                        onClick={() =>
+                                            navigate(
+                                                `/trades/${trade._id}`,
+                                                {
+                                                    state: {
+                                                        from: "/trades",
+                                                        tradesState: {
+                                                            search,
+                                                            strategy,
+                                                            timeframe,
+                                                            result,
+                                                            sort,
+                                                            page,
+                                                            tradeDate,
+                                                        },
+                                                        tradeId:
+                                                            trade._id,
+                                                    },
                                                 }
-                                            >
-                                                ${Number(trade.pnl).toFixed(2)}
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                    </ScrollableTable>
-                )
-            }
+                                            )
+                                        }
+                                        style={{
+                                            cursor: "pointer"
+                                        }}
+                                    >
+
+                                        <td>
+
+                                            <div className="trade-pair-display">
+
+                                                <div className="trade-pair-icon">
+
+                                                    <PairIcon
+                                                        pair={trade.pair}
+                                                        size={20}
+                                                    />
+
+                                                </div>
+
+                                                <span>
+                                                    {trade.pair
+                                                        ?.trim()
+                                                        .toUpperCase()}
+                                                </span>
+
+                                            </div>
+
+                                        </td>
+
+                                        <td>
+                                            {trade.direction
+                                                ?.charAt(0)
+                                                .toUpperCase() +
+                                                trade.direction
+                                                    ?.slice(1)
+                                                    .toLowerCase()}
+                                        </td>
+
+                                        <td>
+                                            {trade.strategy}
+                                        </td>
+
+                                        <td>
+                                            {trade.timeframe}
+                                        </td>
+
+                                        <td>
+                                            {trade.rr}
+                                        </td>
+
+                                        <td>
+                                            {trade.result}
+                                        </td>
+
+                                        <td
+                                            className={
+                                                trade.pnl > 0
+                                                    ? "pnl-profit"
+                                                    : trade.pnl < 0
+                                                        ? "pnl-loss"
+                                                        : "pnl-neutral"
+                                            }
+                                        >
+                                            $
+                                            {Number(
+                                                trade.pnl
+                                            ).toFixed(2)}
+                                        </td>
+
+                                    </tr>
+
+                                ))}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </ScrollableTable>
+            )}
+
+
             <Link
                 to="/create-trade"
                 className="primary-btn add-trade-btn"
             >
                 Add Trade
             </Link>
+
+
             <div className="pagination">
+
                 <button
                     disabled={page === 1}
-                    onClick={() => setPage(page - 1)}
+                    onClick={() =>
+                        setPage(page - 1)
+                    }
                 >
                     Previous
                 </button>
@@ -260,12 +463,16 @@ function Trades() {
 
                 <button
                     disabled={page === totalPages}
-                    onClick={() => setPage(page + 1)}
+                    onClick={() =>
+                        setPage(page + 1)
+                    }
                 >
                     Next
                 </button>
+
             </div>
-        </div >
+
+        </div>
     );
 }
 

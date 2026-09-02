@@ -294,7 +294,238 @@
 .pagination span {
     color: var(--text-secondary);
 }
+.back-to-calendar-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-bottom: 1rem;
+    padding: 0.55rem 0.85rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--primary-btn-bg);
+    color: var(--primary-btn-text);
+    font-size: 0.8rem;
+    font-weight: 600;
 
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.back-to-calendar-btn:hover {
+    background: var(--primary-btn-hover);
+    text-decoration: none;
+}
+/* ==========================
+   Toast Notifications
+========================== */
+
+.toast {
+    position: fixed;
+    top: 1.25rem;
+    right: 1.25rem;
+    z-index: 2000;
+
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    min-width: 260px;
+    max-width: 400px;
+
+    padding: .85rem 1rem;
+
+    border: 1px solid var(--border);
+    border-radius: 10px;
+
+    background: var(--card-bg);
+    color: var(--text);
+
+    box-shadow: var(--shadow);
+
+    animation: toastIn .25s ease;
+}
+
+.toast-success {
+    border-left: 4px solid #16a34a;
+}
+
+.toast-error {
+    border-left: 4px solid var(--danger);
+}
+
+.toast button {
+    margin-left: auto;
+
+    border: none;
+    background: transparent;
+
+    color: var(--text-secondary);
+
+    font-size: 1.2rem;
+    line-height: 1;
+
+    cursor: pointer;
+}
+
+.toast button:hover {
+    color: var(--text);
+}
+
+@keyframes toastIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* ==========================
+   Confirmation Modal
+========================== */
+
+.confirm-overlay {
+    position: fixed;
+    inset: 0;
+
+    z-index: 2100;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 1rem;
+
+    background: rgba(15, 23, 42, .45);
+    backdrop-filter: blur(4px);
+}
+
+.confirm-modal {
+    width: 100%;
+    max-width: 400px;
+
+    padding: 1.5rem;
+
+    border: 1px solid var(--border);
+    border-radius: 14px;
+
+    background: var(--card-bg);
+    box-shadow: var(--shadow);
+
+    animation: confirmIn .2s ease;
+}
+
+.confirm-modal h3 {
+    margin: 0 0 .5rem;
+    color: var(--text);
+}
+
+.confirm-modal p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: .85rem;
+    line-height: 1.5;
+}
+
+.confirm-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: .75rem;
+
+    margin-top: 1.5rem;
+}
+
+.confirm-cancel,
+.confirm-delete {
+    padding: .65rem 1rem;
+
+    border-radius: 8px;
+
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.confirm-cancel {
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text);
+}
+
+.confirm-delete {
+    border: none;
+    background: var(--danger);
+    color: #fff;
+}
+
+.confirm-cancel:hover {
+    background: var(--page-bg);
+}
+
+.confirm-delete:hover {
+    opacity: .9;
+}
+
+@keyframes confirmIn {
+    from {
+        opacity: 0;
+        transform: scale(.97);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+/* ==========================
+   Success Popup
+========================== */
+
+.trade-success-popup {
+    position: fixed;
+    top: 1.5rem;
+    right: 1.5rem;
+    z-index: 1000;
+
+    padding: .85rem 1.25rem;
+
+    border: 1px solid var(--border);
+    border-radius: 8px;
+
+    background: var(--card-bg);
+    color: var(--text);
+
+    box-shadow: var(--shadow);
+
+    font-size: .9rem;
+    font-weight: 500;
+
+    animation: trade-popup-in .2s ease;
+}
+
+@keyframes trade-popup-in {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 600px) {
+    .trade-success-popup {
+        left: 1rem;
+        right: 1rem;
+        top: 1rem;
+        text-align: center;
+    }
+}
 /* ==========================
    Responsive
 ========================== */

@@ -17,16 +17,23 @@ function EditTrade() {
     useEffect(() => {
         const fetchTrade = async () => {
             try {
-                const response = await axiosPrivate.get(`/trades/${id}`);
+                const response = await axiosPrivate.get(
+                    `/trades/${id}`
+                );
 
                 setFormData({
                     ...tradeFormData,
                     ...response.data,
-                    existingImages: response.data.images || [],
+                    existingImages:
+                        response.data.images || [],
                     newImages: [],
-                    tags: response.data.tags?.join(", ") || "",
-                    tradeDate: response.data.tradeDate?.split("T")[0] || "",
+                    tags:
+                        response.data.tags?.join(", ") || "",
+                    tradeDate:
+                        response.data.tradeDate
+                            ?.split("T")[0] || "",
                 });
+
             } catch (err) {
                 console.log(err);
             }
@@ -61,15 +68,19 @@ function EditTrade() {
     const handleRemoveExistingImage = (indexToRemove) => {
         setFormData(prev => ({
             ...prev,
-            existingImages: prev.existingImages.filter(
-                (_, index) => index !== indexToRemove
-            ),
+            existingImages:
+                prev.existingImages.filter(
+                    (_, index) =>
+                        index !== indexToRemove
+                ),
         }));
     };
 
     const handleOpenPreview = (image) => {
         if (image instanceof File) {
-            setPreviewImage(URL.createObjectURL(image));
+            setPreviewImage(
+                URL.createObjectURL(image)
+            );
         } else {
             setPreviewImage(
                 image.startsWith("http")
@@ -92,34 +103,54 @@ function EditTrade() {
         setPreviewImage(null);
         setIsPreviewOpen(false);
     };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
             const tradeData = new FormData();
 
-            Object.entries(formData).forEach(([key, value]) => {
-                if (key === "newImages") return;
+            Object.entries(formData).forEach(
+                ([key, value]) => {
 
-                if (key === "existingImages") {
-                    value.forEach(image =>
-                        tradeData.append("existingImages", image)
-                    );
-                    return;
-                }
+                    if (key === "newImages") return;
 
-                if (key === "tags") {
-                    value
-                        .split(",")
-                        .map(tag => tag.trim())
-                        .filter(Boolean)
-                        .forEach(tag => tradeData.append("tags", tag));
-                } else {
-                    if (value !== null && value !== undefined && value !== "") {
-                        tradeData.append(key, value);
-                    };
+                    if (key === "existingImages") {
+                        value.forEach(image =>
+                            tradeData.append(
+                                "existingImages",
+                                image
+                            )
+                        );
+
+                        return;
+                    }
+
+                    if (key === "tags") {
+                        value
+                            .split(",")
+                            .map(tag => tag.trim())
+                            .filter(Boolean)
+                            .forEach(tag =>
+                                tradeData.append(
+                                    "tags",
+                                    tag
+                                )
+                            );
+                    } else {
+                        if (
+                            value !== null &&
+                            value !== undefined &&
+                            value !== ""
+                        ) {
+                            tradeData.append(
+                                key,
+                                value
+                            );
+                        }
+                    }
                 }
-            });
+            );
 
             formData.newImages.forEach(image => {
                 tradeData.append("images", image);
@@ -132,12 +163,16 @@ function EditTrade() {
                 tradeData
             );
 
-            navigate(`/trades/${id}`);
+            navigate(`/trades/${id}`, {
+                state: {
+                    message: "Trade updated successfully."
+                }
+            });
+
         } catch (err) {
             console.error(err);
         }
     };
-
 
 
     return (
@@ -149,7 +184,9 @@ function EditTrade() {
                 handleChange={handleChange}
                 handleImageChange={handleImageChange}
                 handleRemoveImage={handleRemoveImage}
-                handleRemoveExistingImage={handleRemoveExistingImage}
+                handleRemoveExistingImage={
+                    handleRemoveExistingImage
+                }
                 handleOpenPreview={handleOpenPreview}
                 handleClosePreview={handleClosePreview}
                 previewImage={previewImage}
