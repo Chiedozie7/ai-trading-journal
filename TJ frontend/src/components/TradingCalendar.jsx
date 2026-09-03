@@ -73,7 +73,10 @@ function TradingCalendar({
         params.set("month", currentDate.getMonth() + 1);
         params.set("year", currentDate.getFullYear());
 
-        setSearchParams(params, { replace: true });
+        setSearchParams(params, {
+            replace: true,
+            preventScrollReset: true,
+        });;
     }, [currentDate]);
 
     return (
