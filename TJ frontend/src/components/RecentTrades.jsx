@@ -6,7 +6,7 @@ function RecentTrades({ trades }) {
     const navigate = useNavigate();
 
     return (
-        <div>
+        <div className="recent-trades-card-content">
             <h2>Recent Trades</h2>
 
             {trades.length > 0 ? (
