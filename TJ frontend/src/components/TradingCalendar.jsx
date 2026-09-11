@@ -174,7 +174,7 @@ function TradingCalendar({
                             {tradeDay && (
                                 <>
                                     <div className="day-pl">
-                                        ${tradeDay.netPL}
+                                        {tradeDay.netPL < 0 ? "-" : ""}${Math.abs(tradeDay.netPL)}
                                     </div>
 
                                     <div className="day-trades">
