@@ -19,6 +19,7 @@ function TradeForm({
     isPreviewOpen,
     handleSubmit,
     submitText,
+    intelligencePanel,
 }) {
 
     return (
@@ -188,6 +189,8 @@ function TradeForm({
                 </div>
 
             </div>
+
+            {intelligencePanel}
 
             <div className="form-field">
                 <label htmlFor="tags">Tags</label>

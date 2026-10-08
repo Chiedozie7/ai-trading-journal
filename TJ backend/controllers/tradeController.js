@@ -3,6 +3,26 @@ const mongoose = require('mongoose');
 const { getDashboardStats } = require('../services/dashboardService');
 const cloudinary = require("../utils/cloudinary");
 const streamifier = require("streamifier");
+const { isPantaEnabled } = require('../config/panta');
+
+const parsePantaAnalysis = (value) => {
+    if (!isPantaEnabled() || !value) return undefined;
+
+    try {
+        const analysis = typeof value === 'string' ? JSON.parse(value) : value;
+
+        if (
+            !Number.isFinite(Number(analysis?.pantaAlignmentScore)) ||
+            !Array.isArray(analysis?.markets)
+        ) {
+            return undefined;
+        }
+
+        return analysis;
+    } catch {
+        return undefined;
+    }
+};
 
 const uploadToCloudinary = (file) => {
     return new Promise((resolve, reject) => {
@@ -41,10 +61,13 @@ const createTrade = async (req, res) => {
             pnl,
             strategy,
             timeframe,
+            expectedHoldingPeriod,
             tradeDate,
             notes,
-            tags
+            tags,
+            pantaAnalysis: rawPantaAnalysis,
         } = req.body;
+        const pantaAnalysis = parsePantaAnalysis(rawPantaAnalysis);
 
         let risk;
         let actualMove;
@@ -91,10 +114,12 @@ const createTrade = async (req, res) => {
             pnl,
             strategy,
             timeframe,
+            expectedHoldingPeriod,
             tradeDate,
             notes,
             images,
-            tags
+            tags,
+            ...(pantaAnalysis && { pantaAnalysis })
         });
         console.log("trade created")
         res.status(201).json(trade);
@@ -213,6 +238,16 @@ const getTrade = async (req, res) => {
 
 const updateTrade = async (req, res) => {
     try {
+        if (req.body.pantaAnalysis) {
+            const pantaAnalysis = parsePantaAnalysis(req.body.pantaAnalysis);
+
+            if (pantaAnalysis) {
+                req.body.pantaAnalysis = pantaAnalysis;
+            } else {
+                delete req.body.pantaAnalysis;
+            }
+        }
+
         const trade = await Trade.findOne({
             _id: req.params.id,
             owner: req.id,

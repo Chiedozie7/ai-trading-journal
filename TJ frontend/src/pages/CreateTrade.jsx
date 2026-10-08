@@ -1,15 +1,14 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
-import useAuth from "../hooks/useAuth";
 import TradeForm from "../components/TradeForm";
 import TradeFormData from "../data/TradeFormData";
 import usePreferences from "../hooks/usePreferences";
+import PantaIntelligencePanel from "../components/PantaIntelligencePanel";
 
 function CreateTrade() {
     const axiosPrivate = useAxiosPrivate();
     const navigate = useNavigate();
-    const { auth } = useAuth();
     const { preferences } = usePreferences();
 
     const [formData, setFormData] = useState({
@@ -21,11 +20,30 @@ function CreateTrade() {
     const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
     const handleChange = (e) => {
+        const pantaFields = [
+            "pair",
+            "direction",
+            "entryPrice",
+            "stopLoss",
+            "takeProfit",
+            "expectedHoldingPeriod",
+        ];
+
         setFormData(prev => ({
             ...prev,
             [e.target.name]: e.target.value,
+            ...(pantaFields.includes(e.target.name) && {
+                pantaAnalysis: null,
+            }),
         }));
     };
+
+    const handlePantaAnalysisChange = useCallback((pantaAnalysis) => {
+        setFormData(prev => ({
+            ...prev,
+            pantaAnalysis,
+        }));
+    }, []);
 
     const handleImageChange = (e) => {
         setFormData(prev => ({
@@ -82,6 +100,13 @@ function CreateTrade() {
 
                 if (key === "pnl") return;
 
+                if (key === "pantaAnalysis") {
+                    if (value) {
+                        tradeData.append(key, JSON.stringify(value));
+                    }
+                    return;
+                }
+
                 if (key === "tags") {
                     value
                         .split(",")
@@ -132,6 +157,13 @@ function CreateTrade() {
                 isPreviewOpen={isPreviewOpen}
                 handleSubmit={handleSubmit}
                 submitText="Create Trade"
+                intelligencePanel={(
+                    <PantaIntelligencePanel
+                        tradeIdea={formData}
+                        onAnalysisChange={handlePantaAnalysisChange}
+                        onTradeIdeaChange={handleChange}
+                    />
+                )}
             />
         </div>
     );

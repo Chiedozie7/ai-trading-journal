@@ -3,6 +3,7 @@ const tradeFormData = {
     direction: "buy",
     strategy: "",
     timeframe: "",
+    expectedHoldingPeriod: "",
     entryPrice: "",
     exitPrice: "",
     stopLoss: "",
@@ -16,6 +17,7 @@ const tradeFormData = {
     notes: "",
     existingImages: [],
     newImages: [],
+    pantaAnalysis: null,
 };
 
 export default tradeFormData;

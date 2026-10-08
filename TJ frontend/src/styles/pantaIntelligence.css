@@ -1,0 +1,146 @@
+.panta-panel {
+    padding: 1rem;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--card-bg);
+}
+
+.panta-panel-header,
+.panta-market-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.panta-panel h2,
+.panta-market h3 {
+    margin: 0;
+    color: var(--text);
+}
+
+.panta-panel h2 {
+    font-size: 1.15rem;
+}
+
+.panta-powered {
+    display: block;
+    margin-bottom: .2rem;
+    color: var(--input-focus);
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.panta-score {
+    white-space: nowrap;
+    color: var(--text-secondary);
+}
+
+.panta-score strong {
+    color: var(--text);
+    font-size: 1.75rem;
+}
+
+.panta-disclaimer,
+.panta-helper,
+.panta-message,
+.panta-market p {
+    color: var(--text-secondary);
+}
+
+.panta-disclaimer {
+    margin: .75rem 0;
+    font-size: .85rem;
+}
+
+.panta-holding-period {
+    margin-bottom: .75rem;
+}
+
+.panta-analyze-button {
+    padding: .7rem 1rem;
+    border: 1px solid var(--input-focus);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--text);
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.panta-analyze-button:disabled {
+    cursor: not-allowed;
+    opacity: .55;
+}
+
+.panta-helper,
+.panta-error,
+.panta-message {
+    margin: .65rem 0 0;
+    font-size: .85rem;
+}
+
+.panta-error {
+    color: var(--danger);
+}
+
+.panta-results {
+    display: grid;
+    gap: .75rem;
+    margin-top: 1rem;
+}
+
+.panta-market {
+    padding: .85rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+}
+
+.panta-market a,
+.panta-market h3 {
+    color: var(--text);
+    font-size: .95rem;
+    font-weight: 600;
+}
+
+.panta-market p {
+    margin: .45rem 0 0;
+    font-size: .84rem;
+}
+
+.panta-market .panta-probability {
+    color: var(--text);
+    font-weight: 600;
+}
+
+.panta-classification {
+    padding: .2rem .5rem;
+    border-radius: 999px;
+    font-size: .7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.panta-support {
+    background: rgba(34, 197, 94, .14);
+    color: #16a34a;
+}
+
+.panta-oppose {
+    background: rgba(239, 68, 68, .14);
+    color: #dc2626;
+}
+
+.panta-neutral {
+    background: rgba(148, 163, 184, .18);
+    color: var(--text-secondary);
+}
+
+@media (max-width: 520px) {
+    .panta-panel-header,
+    .panta-market-heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}

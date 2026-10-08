@@ -1,5 +1,35 @@
 const mongoose = require('mongoose');
 
+const pantaMarketSchema = new mongoose.Schema({
+    marketId: String,
+    title: String,
+    url: String,
+    yesProbability: Number,
+    endsAt: Date,
+    relevanceScore: Number,
+    classification: {
+        type: String,
+        enum: ['support', 'oppose', 'neutral']
+    },
+    reason: String,
+}, { _id: false });
+
+const pantaAnalysisSchema = new mongoose.Schema({
+    pantaAlignmentScore: {
+        type: Number,
+        min: 0,
+        max: 100,
+    },
+    status: {
+        type: String,
+        enum: ['available', 'no_relevant_markets', 'unavailable'],
+    },
+    message: String,
+    analyzedAt: Date,
+    markets: [pantaMarketSchema],
+    disclaimer: String,
+}, { _id: false });
+
 const tradeSchema = new mongoose.Schema({
     owner: {
         type: mongoose.Schema.Types.ObjectId,
@@ -57,6 +87,10 @@ const tradeSchema = new mongoose.Schema({
         type: String,
         trim: true
     },
+    expectedHoldingPeriod: {
+        type: String,
+        trim: true
+    },
     tradeDate: {
         type: Date,
         default: Date.now
@@ -67,6 +101,7 @@ const tradeSchema = new mongoose.Schema({
     },
     images: [String],
     tags: [{ type: String, trim: true }],
+    pantaAnalysis: pantaAnalysisSchema,
 },{
     timestamps: true
 });

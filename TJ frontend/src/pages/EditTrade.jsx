@@ -115,6 +115,8 @@ function EditTrade() {
 
                     if (key === "newImages") return;
 
+                    if (key === "pantaAnalysis") return;
+
                     if (key === "existingImages") {
                         value.forEach(image =>
                             tradeData.append(
