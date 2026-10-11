@@ -4,11 +4,9 @@ const buildMarketsUrl = (apiBaseUrl) =>
     `${apiBaseUrl.replace(/\/+$/, '')}/markets/`;
 
 const extractMarketCollection = (payload) => {
-    if (Array.isArray(payload)) return payload;
-    if (Array.isArray(payload?.results)) return payload.results;
-    if (Array.isArray(payload?.data)) return payload.data;
+    if (Array.isArray(payload?.items)) return payload.items;
 
-    throw new Error('Panta markets response did not contain a market collection');
+    throw new Error('Panta markets response did not contain an items collection');
 };
 
 const fetchPantaMarkets = async () => {

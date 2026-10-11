@@ -57,6 +57,8 @@ const clamp = (value, minimum, maximum) =>
     Math.min(Math.max(value, minimum), maximum);
 
 const normalizeProbability = (value) => {
+    if (value === null || value === undefined || value === '') return null;
+
     const number = Number(value);
 
     if (!Number.isFinite(number) || number < 0) return null;
@@ -66,45 +68,23 @@ const normalizeProbability = (value) => {
     return null;
 };
 
-const probabilityFromOdds = (value) => {
-    const odds = Number(value);
-    return Number.isFinite(odds) && odds > 0
-        ? clamp(1 / odds, 0, 1)
-        : null;
-};
-
 const getMarketStatus = (market) => {
-    if (market.isCancelled ?? market.is_cancelled) return 'cancelled';
-    if (market.isResolved ?? market.is_resolved) return 'resolved';
-    if ((market.isActive ?? market.is_active) === false) return 'closed';
-    return 'active';
+    if (market.resolved) return 'resolved';
+    return String(market.status || market.phase || 'active').toLowerCase();
 };
 
 const normalizeMarket = (market, index) => {
-    const title = market.question || market.match || '';
-    const yesProbability = normalizeProbability(
-        market.yesPrice ??
-        market.yes_price ??
-        market.lastYesPriceSOL ??
-        market.last_yes_price_sol
-    ) ?? probabilityFromOdds(market.yesOdd ?? market.yes_odd);
+    const yesProbability = normalizeProbability(market.yesPrice);
 
     return {
-        marketId: String(
-            market.id ||
-            market.registryEventId ||
-            market.registry_event_id ||
-            market.eventPda ||
-            market.event_pda ||
-            `panta-market-${index}`
-        ),
-        title: String(title),
-        description: '',
+        marketId: String(market.marketId || `panta-market-${index}`),
+        title: String(market.title || ''),
+        description: String(market.description || ''),
         category: String(market.category || ''),
         status: getMarketStatus(market),
         yesProbability,
         url: null,
-        endsAt: market.startTime || market.start_time || null,
+        endsAt: market.endTime || null,
     };
 };
 
@@ -214,11 +194,19 @@ const classifyMarket = (market, tradeIdea) => {
     const direction = String(tradeIdea.direction).toLowerCase();
     const probability = market.yesProbability;
 
-    if (orientation === 'ambiguous' || probability === null) {
+    if (orientation === 'ambiguous') {
         return {
             classification: 'neutral',
             alignedValue: 0.5,
             reason: `The market outcome is not directional enough to compare reliably with this ${direction} idea.`,
+        };
+    }
+
+    if (probability === null) {
+        return {
+            classification: 'neutral',
+            alignedValue: 0.5,
+            reason: `Panta does not currently provide a YES probability for this ${orientation} outcome, so it is neutral for the ${direction} idea.`,
         };
     }
 
