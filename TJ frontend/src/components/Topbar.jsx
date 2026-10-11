@@ -59,6 +59,12 @@ function Topbar({ isSidebarOpen, setIsSidebarOpen }) {
             subtitle: "Analyze your performance.",
         };
     }
+    else if (location.pathname === "/panta-intelligence") {
+        page = {
+            title: "Panta Intelligence",
+            subtitle: "Check market alignment and review Panta insights.",
+        };
+    }
     else if (location.pathname === "/calendar") {
         page = {
             title: "Calendar",
@@ -88,8 +94,8 @@ function Topbar({ isSidebarOpen, setIsSidebarOpen }) {
 
     else if (location.pathname === "/create-trade") {
         page = {
-            title: "New Trade",
-            subtitle: "Record a new trade.",
+            title: "Add to Journal",
+            subtitle: "Record a trade you have already executed.",
         };
     }
 

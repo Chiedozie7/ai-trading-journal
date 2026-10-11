@@ -30,7 +30,6 @@ const Analytics = () => {
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
     const [calendarData, setCalendarData] = useState([]);
-    const [pantaAnalytics, setPantaAnalytics] = useState(null);
     const [searchParams, setSearchParams] = useSearchParams();
     const changeTab = (tab) => {
         const params = new URLSearchParams(searchParams);
@@ -228,22 +227,6 @@ const Analytics = () => {
 
 
                 setCalendarData(calendarResponse.data);
-
-                const pantaResponse = await axiosPrivate.get("/analytics/panta", {
-                    params: {
-                        strategy,
-                        pair,
-                        timeframe,
-                        direction,
-                        range,
-                        startDate,
-                        endDate,
-                    }
-                });
-
-                setPantaAnalytics(pantaResponse.data);
-
-
             } catch (error) {
                 console.error(error);
             }
@@ -435,78 +418,6 @@ const Analytics = () => {
                                 value={summary.breakeven}
                             />
                         </section>
-
-                        {pantaAnalytics?.enabled && (
-                            <section className="panta-analytics-section">
-                                <span className="panta-powered">Powered by Panta</span>
-                                <h2>Panta Alignment Analytics</h2>
-                                <p className="panta-analytics-disclaimer">
-                                    Contextual agreement with Panta markets, not the probability of trade success.
-                                </p>
-
-                                <div className="analytics-grid">
-                                    <StatCard
-                                        className="analytics-stat-card analytics-clean-card"
-                                        title="Supported Trades"
-                                        value={pantaAnalytics.supported.count}
-                                    />
-                                    <StatCard
-                                        className="analytics-stat-card analytics-clean-card"
-                                        title="Neutral Trades"
-                                        value={pantaAnalytics.neutral.count}
-                                    />
-                                    <StatCard
-                                        className="analytics-stat-card analytics-clean-card"
-                                        title="Opposed Trades"
-                                        value={pantaAnalytics.opposed.count}
-                                    />
-                                    <StatCard
-                                        className="analytics-stat-card analytics-clean-card"
-                                        title="Strong Support Win Rate"
-                                        value={`${pantaAnalytics.supported.winRate}%`}
-                                    />
-                                    <StatCard
-                                        className="analytics-stat-card analytics-clean-card"
-                                        title="Opposed Win Rate"
-                                        value={`${pantaAnalytics.opposed.winRate}%`}
-                                    />
-                                    <StatCard
-                                        className="analytics-stat-card analytics-clean-card"
-                                        title="Supported Average R"
-                                        value={`${pantaAnalytics.supported.averageR}R`}
-                                    />
-                                    <StatCard
-                                        className="analytics-stat-card analytics-clean-card"
-                                        title="Opposed Average R"
-                                        value={`${pantaAnalytics.opposed.averageR}R`}
-                                    />
-                                </div>
-
-                                <h3>Entry Alignment vs Final Outcome</h3>
-                                <div className="analytics-table-container">
-                                    <table className="analytics-table">
-                                        <thead>
-                                            <tr>
-                                                <th>Entry Alignment</th>
-                                                <th>Wins</th>
-                                                <th>Losses</th>
-                                                <th>Breakeven</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {['supported', 'neutral', 'opposed'].map((bucket) => (
-                                                <tr key={bucket}>
-                                                    <td>{bucket}</td>
-                                                    <td>{pantaAnalytics[bucket].wins}</td>
-                                                    <td>{pantaAnalytics[bucket].losses}</td>
-                                                    <td>{pantaAnalytics[bucket].breakeven}</td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </section>
-                        )}
 
                         <h2>Streaks</h2>
 

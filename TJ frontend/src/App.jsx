@@ -21,6 +21,7 @@ import ChangePassword from './pages/ChangePassword';
 import Goals from './pages/Goals';
 import Notes from './pages/Notes';
 import VerifyEmail from './pages/VerifyEmail';
+import PantaIntelligence from './pages/PantaIntelligence';
 
 
 function App() {
@@ -52,6 +53,10 @@ function App() {
             <Route
               path="/analytics"
               element={<Analytics />}
+            />
+            <Route
+              path="/panta-intelligence"
+              element={<PantaIntelligence />}
             />
             <Route
               path="/calendar"

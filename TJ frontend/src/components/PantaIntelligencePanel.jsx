@@ -1,18 +1,24 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
+import {
+    formatPantaProbability,
+    getPantaAlignmentMeta,
+    hasPantaProbability,
+} from "../utils/pantaDisplay";
 import "../styles/pantaIntelligence.css";
 
 function PantaIntelligencePanel({
+    enabled,
     tradeIdea,
     onAnalysisChange,
-    onTradeIdeaChange,
-    onEnabledChange,
 }) {
     const axiosPrivate = useAxiosPrivate();
-    const [enabled, setEnabled] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
     const analysis = tradeIdea.pantaAnalysis;
+    const alignment = analysis
+        ? getPantaAlignmentMeta(analysis.pantaAlignmentScore)
+        : null;
 
     const canAnalyze = Boolean(
         tradeIdea.pair &&
@@ -21,31 +27,6 @@ function PantaIntelligencePanel({
         tradeIdea.stopLoss &&
         tradeIdea.takeProfit
     );
-
-    useEffect(() => {
-        let isMounted = true;
-
-        const loadStatus = async () => {
-            try {
-                const response = await axiosPrivate.get("/trades/panta/config");
-                if (isMounted) {
-                    const isEnabled = response.data.enabled === true;
-                    setEnabled(isEnabled);
-                    onEnabledChange(isEnabled);
-                }
-            } catch {
-                if (isMounted) {
-                    setEnabled(false);
-                    onEnabledChange(false);
-                }
-            }
-        };
-
-        loadStatus();
-        return () => {
-            isMounted = false;
-        };
-    }, [axiosPrivate, onEnabledChange]);
 
     const handleAnalyze = async () => {
         setIsLoading(true);
@@ -86,27 +67,22 @@ function PantaIntelligencePanel({
                 </div>
 
                 {analysis && (
-                    <div className="panta-score" aria-label={`Panta Alignment score ${analysis.pantaAlignmentScore} out of 100`}>
-                        <strong>{analysis.pantaAlignmentScore}</strong>
-                        <span>/100</span>
+                    <div
+                        className={`panta-score panta-score-${alignment.tone}`}
+                        aria-label={`Panta Alignment ${analysis.pantaAlignmentScore} out of 100, ${alignment.label}`}
+                    >
+                        <div>
+                            <strong>{analysis.pantaAlignmentScore}</strong>
+                            <span>/100</span>
+                        </div>
+                        <span className="panta-score-label">— {alignment.label}</span>
                     </div>
                 )}
             </div>
 
             <p className="panta-disclaimer">
-                Contextual alignment with relevant Panta markets — not the probability that this trade will win.
+                Panta Alignment is contextual agreement, not win probability.
             </p>
-
-            <div className="form-field panta-holding-period">
-                <label htmlFor="expectedHoldingPeriod">Expected Holding Period</label>
-                <input
-                    id="expectedHoldingPeriod"
-                    name="expectedHoldingPeriod"
-                    placeholder="Optional, e.g. 3 days"
-                    value={tradeIdea.expectedHoldingPeriod ?? ""}
-                    onChange={onTradeIdeaChange}
-                />
-            </div>
 
             <button
                 className="panta-analyze-button"
@@ -139,16 +115,18 @@ function PantaIntelligencePanel({
                                 ) : (
                                     <h3>{market.title}</h3>
                                 )}
+                            </div>
+                            <div className="panta-market-signals">
+                                <span className={`panta-probability ${hasPantaProbability(market.yesProbability) ? "" : "panta-probability-unavailable"}`}>
+                                    {formatPantaProbability(market.yesProbability)}
+                                </span>
                                 <span className={`panta-classification panta-${market.classification}`}>
                                     {market.classification}
                                 </span>
                             </div>
-                            <p className="panta-probability">
-                                Current YES probability: {market.yesProbability === null
-                                    ? "Unavailable"
-                                    : `${Math.round(market.yesProbability * 100)}%`}
+                            <p className="panta-market-reason">
+                                <strong>Why:</strong> {market.reason}
                             </p>
-                            <p>{market.reason}</p>
                         </article>
                     ))}
                 </div>

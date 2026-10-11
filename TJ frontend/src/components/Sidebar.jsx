@@ -12,7 +12,8 @@ import {
     FiSettings,
     FiX,
     FiMoon,
-    FiSun
+    FiSun,
+    FiActivity,
 } from "react-icons/fi";
 
 const navItems = [
@@ -25,6 +26,11 @@ const navItems = [
         name: "Trades",
         path: "/trades",
         icon: FiFileText,
+    },
+    {
+        name: "Panta Intelligence",
+        path: "/panta-intelligence",
+        icon: FiActivity,
     },
     {
         name: "Analytics",

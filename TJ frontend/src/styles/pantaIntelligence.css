@@ -1,14 +1,17 @@
 .panta-panel {
-    padding: 1rem;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    background: var(--card-bg);
+    padding: 1.25rem;
+    border: 1px solid rgba(37, 99, 235, .35);
+    border-radius: 12px;
+    background:
+        linear-gradient(135deg, rgba(37, 99, 235, .08), transparent 42%),
+        var(--card-bg);
+    box-shadow: var(--shadow);
 }
 
 .panta-panel-header,
 .panta-market-heading {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: space-between;
     gap: 1rem;
 }
@@ -20,7 +23,7 @@
 }
 
 .panta-panel h2 {
-    font-size: 1.15rem;
+    font-size: 1.35rem;
 }
 
 .panta-powered {
@@ -34,13 +37,44 @@
 }
 
 .panta-score {
+    min-width: 132px;
+    padding: .65rem .8rem;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--page-bg);
+    text-align: right;
     white-space: nowrap;
-    color: var(--text-secondary);
 }
 
 .panta-score strong {
     color: var(--text);
-    font-size: 1.75rem;
+    font-size: 2rem;
+    line-height: 1;
+}
+
+.panta-score > div > span {
+    margin-left: .15rem;
+    color: var(--text-secondary);
+    font-size: .75rem;
+}
+
+.panta-score-label {
+    display: block;
+    margin-top: .3rem;
+    font-size: .78rem;
+    font-weight: 700;
+}
+
+.panta-score-support .panta-score-label {
+    color: var(--success);
+}
+
+.panta-score-oppose .panta-score-label {
+    color: var(--danger);
+}
+
+.panta-score-neutral .panta-score-label {
+    color: var(--text-secondary);
 }
 
 .panta-disclaimer,
@@ -51,8 +85,13 @@
 }
 
 .panta-disclaimer {
-    margin: .75rem 0;
+    margin: 1rem 0;
+    padding: .7rem .8rem;
+    border-left: 3px solid var(--input-focus);
+    border-radius: 0 8px 8px 0;
+    background: rgba(37, 99, 235, .07);
     font-size: .85rem;
+    font-weight: 600;
 }
 
 .panta-holding-period {
@@ -63,10 +102,16 @@
     padding: .7rem 1rem;
     border: 1px solid var(--input-focus);
     border-radius: 8px;
-    background: transparent;
-    color: var(--text);
+    background: var(--input-focus);
+    color: #fff;
     cursor: pointer;
     font-weight: 600;
+    transition: opacity .2s ease, transform .2s ease;
+}
+
+.panta-analyze-button:not(:disabled):hover {
+    opacity: .9;
+    transform: translateY(-1px);
 }
 
 .panta-analyze-button:disabled {
@@ -87,14 +132,16 @@
 
 .panta-results {
     display: grid;
-    gap: .75rem;
+    gap: .9rem;
     margin-top: 1rem;
 }
 
 .panta-market {
-    padding: .85rem;
+    padding: 1rem;
     border: 1px solid var(--border);
-    border-radius: 8px;
+    border-radius: 10px;
+    background: var(--card-bg);
+    box-shadow: 0 4px 14px rgba(15, 23, 42, .05);
 }
 
 .panta-market a,
@@ -109,9 +156,37 @@
     font-size: .84rem;
 }
 
-.panta-market .panta-probability {
+.panta-market-signals {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: .5rem;
+    margin-top: .7rem;
+}
+
+.panta-probability {
+    padding: .25rem .55rem;
+    border-radius: 999px;
+    background: rgba(37, 99, 235, .1);
+    color: var(--input-focus);
+    font-size: .76rem;
+    font-weight: 700;
+}
+
+.panta-probability-unavailable {
+    background: rgba(245, 158, 11, .12);
+    color: #b45309;
+}
+
+.panta-market .panta-market-reason {
+    margin-top: .75rem;
+    padding-top: .7rem;
+    border-top: 1px solid var(--border);
+    line-height: 1.45;
+}
+
+.panta-market-reason strong {
     color: var(--text);
-    font-weight: 600;
 }
 
 .panta-classification {
@@ -142,5 +217,10 @@
     .panta-market-heading {
         align-items: flex-start;
         flex-direction: column;
+    }
+
+    .panta-score {
+        width: 100%;
+        text-align: left;
     }
 }

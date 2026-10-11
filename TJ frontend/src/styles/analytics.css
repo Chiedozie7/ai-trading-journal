@@ -127,10 +127,13 @@
 
 .panta-analytics-section {
     margin-top: 3rem;
-    padding: 1.25rem;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    background: var(--card-bg);
+    padding: 1.5rem;
+    border: 1px solid rgba(37, 99, 235, .35);
+    border-radius: 12px;
+    background:
+        linear-gradient(135deg, rgba(37, 99, 235, .07), transparent 32%),
+        var(--card-bg);
+    box-shadow: var(--shadow);
 }
 
 .panta-analytics-section .panta-powered {
@@ -151,9 +154,114 @@
 }
 
 .panta-analytics-disclaimer {
-    margin: 0;
+    margin: 0 0 1.25rem;
+    padding: .7rem .8rem;
+    border-left: 3px solid var(--input-focus);
+    border-radius: 0 8px 8px 0;
+    background: rgba(37, 99, 235, .07);
     color: var(--text-secondary);
     font-size: .85rem;
+    font-weight: 600;
+}
+
+.panta-analytics-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.panta-analytics-card {
+    padding: 1rem;
+    border: 1px solid var(--border);
+    border-top-width: 3px;
+    border-radius: 10px;
+    background: var(--card-bg);
+}
+
+.panta-analytics-support {
+    border-top-color: var(--success);
+}
+
+.panta-analytics-neutral {
+    border-top-color: var(--text-secondary);
+}
+
+.panta-analytics-oppose {
+    border-top-color: var(--danger);
+}
+
+.panta-analytics-card-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .5rem;
+    color: var(--text-secondary);
+    font-size: .72rem;
+}
+
+.panta-analytics-status {
+    display: inline-flex;
+    width: fit-content;
+    padding: .2rem .5rem;
+    border-radius: 999px;
+    font-size: .7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.panta-analytics-status.panta-support {
+    background: rgba(34, 197, 94, .14);
+    color: var(--success);
+}
+
+.panta-analytics-status.panta-neutral {
+    background: rgba(148, 163, 184, .18);
+    color: var(--text-secondary);
+}
+
+.panta-analytics-status.panta-oppose {
+    background: rgba(239, 68, 68, .14);
+    color: var(--danger);
+}
+
+.panta-analytics-card > strong {
+    display: block;
+    margin-top: 1rem;
+    color: var(--text);
+    font-size: 2rem;
+    line-height: 1;
+}
+
+.panta-analytics-trades {
+    display: block;
+    margin-top: .25rem;
+    color: var(--text-secondary);
+    font-size: .8rem;
+}
+
+.panta-analytics-metrics {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: .5rem;
+    margin-top: 1rem;
+    padding-top: .8rem;
+    border-top: 1px solid var(--border);
+}
+
+.panta-analytics-metrics span,
+.panta-analytics-metrics strong {
+    display: block;
+}
+
+.panta-analytics-metrics span {
+    color: var(--text-secondary);
+    font-size: .72rem;
+}
+
+.panta-analytics-metrics strong {
+    margin-top: .2rem;
+    color: var(--text);
+    font-size: 1rem;
 }
 
 /* ==========================
@@ -401,6 +509,14 @@
 
     .analytics-filters>*:last-child{
         grid-column:1 / -1;
+    }
+
+    .panta-analytics-section {
+        padding: 1rem;
+    }
+
+    .panta-analytics-grid {
+        grid-template-columns: 1fr;
     }
     
 

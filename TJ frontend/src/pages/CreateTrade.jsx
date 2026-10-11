@@ -1,24 +1,47 @@
-import { useCallback, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import TradeForm from "../components/TradeForm";
 import TradeFormData from "../data/TradeFormData";
 import usePreferences from "../hooks/usePreferences";
-import PantaIntelligencePanel from "../components/PantaIntelligencePanel";
+import PantaAttachedSummary from "../components/PantaAttachedSummary";
 
 function CreateTrade() {
     const axiosPrivate = useAxiosPrivate();
     const navigate = useNavigate();
+    const location = useLocation();
     const { preferences } = usePreferences();
+    const pantaPreTrade = location.state?.pantaPreTrade;
 
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState(() => ({
         ...TradeFormData,
         riskPercent: preferences.trading.defaultRisk,
-    });
+        ...(pantaPreTrade?.fields || {}),
+        ...(pantaPreTrade && {
+            result: "",
+            pantaAnalysis: pantaPreTrade.analysis,
+        }),
+    }));
 
     const [previewImage, setPreviewImage] = useState(null);
     const [isPreviewOpen, setIsPreviewOpen] = useState(false);
     const [pantaEnabled, setPantaEnabled] = useState(false);
+
+    useEffect(() => {
+        let isMounted = true;
+
+        axiosPrivate.get("/trades/panta/config")
+            .then((response) => {
+                if (isMounted) setPantaEnabled(response.data.enabled === true);
+            })
+            .catch(() => {
+                if (isMounted) setPantaEnabled(false);
+            });
+
+        return () => {
+            isMounted = false;
+        };
+    }, [axiosPrivate]);
 
     const handleChange = (e) => {
         const pantaFields = [
@@ -38,13 +61,6 @@ function CreateTrade() {
             }),
         }));
     };
-
-    const handlePantaAnalysisChange = useCallback((pantaAnalysis) => {
-        setFormData(prev => ({
-            ...prev,
-            pantaAnalysis,
-        }));
-    }, []);
 
     const handleImageChange = (e) => {
         setFormData(prev => ({
@@ -145,7 +161,7 @@ function CreateTrade() {
 
     return (
         <div>
-            <h1>Create Trade</h1>
+            <h1>Add Trade to Journal</h1>
 
             <TradeForm
                 formData={formData}
@@ -157,16 +173,11 @@ function CreateTrade() {
                 previewImage={previewImage}
                 isPreviewOpen={isPreviewOpen}
                 handleSubmit={handleSubmit}
-                submitText="Create Trade"
+                submitText="Add to Journal"
                 allowOpenTrade={pantaEnabled}
-                intelligencePanel={(
-                    <PantaIntelligencePanel
-                        tradeIdea={formData}
-                        onAnalysisChange={handlePantaAnalysisChange}
-                        onTradeIdeaChange={handleChange}
-                        onEnabledChange={setPantaEnabled}
-                    />
-                )}
+                intelligencePanel={formData.pantaAnalysis
+                    ? <PantaAttachedSummary analysis={formData.pantaAnalysis} />
+                    : null}
             />
         </div>
     );
