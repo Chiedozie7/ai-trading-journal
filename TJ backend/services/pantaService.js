@@ -1,37 +1,36 @@
 const { getPantaConfig } = require('../config/panta');
 
-const extractMarketCollection = (payload) => {
-    const candidates = [
-        payload,
-        payload?.markets,
-        payload?.items,
-        payload?.data,
-        payload?.data?.markets,
-        payload?.data?.items,
-    ];
+const buildMarketsUrl = (apiBaseUrl) =>
+    `${apiBaseUrl.replace(/\/+$/, '')}/markets/`;
 
-    return candidates.find(Array.isArray) || [];
+const extractMarketCollection = (payload) => {
+    if (Array.isArray(payload)) return payload;
+    if (Array.isArray(payload?.results)) return payload.results;
+    if (Array.isArray(payload?.data)) return payload.data;
+
+    throw new Error('Panta markets response did not contain a market collection');
 };
 
 const fetchPantaMarkets = async () => {
     const config = getPantaConfig();
 
-    if (!config.apiUrl) {
-        throw new Error('PANTA_API_URL is not configured');
+    if (!config.apiBaseUrl) {
+        throw new Error('PANTA_API_BASE_URL is not configured');
+    }
+
+    if (!config.apiKey) {
+        throw new Error('PANTA_API_KEY is not configured');
     }
 
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), config.timeoutMs);
     const headers = {
         Accept: 'application/json',
+        'X-Api-Key': config.apiKey,
     };
 
-    if (config.apiKey) {
-        headers[config.apiKeyHeader] = `${config.apiKeyPrefix}${config.apiKey}`;
-    }
-
     try {
-        const response = await fetch(config.apiUrl, {
+        const response = await fetch(buildMarketsUrl(config.apiBaseUrl), {
             method: 'GET',
             headers,
             signal: controller.signal,
@@ -49,5 +48,7 @@ const fetchPantaMarkets = async () => {
 };
 
 module.exports = {
+    buildMarketsUrl,
+    extractMarketCollection,
     fetchPantaMarkets,
 };

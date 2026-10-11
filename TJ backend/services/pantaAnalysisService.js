@@ -66,69 +66,45 @@ const normalizeProbability = (value) => {
     return null;
 };
 
-const getOutcomeValue = (market, outcomeName) => {
-    const outcomes = market.outcomes || market.options;
+const probabilityFromOdds = (value) => {
+    const odds = Number(value);
+    return Number.isFinite(odds) && odds > 0
+        ? clamp(1 / odds, 0, 1)
+        : null;
+};
 
-    if (Array.isArray(outcomes)) {
-        const outcome = outcomes.find((item) =>
-            String(item?.name || item?.label || item?.outcome)
-                .toLowerCase() === outcomeName
-        );
-
-        if (outcome) {
-            return outcome.probability ?? outcome.price ?? outcome.percentage;
-        }
-    }
-
-    if (
-        Array.isArray(market.outcomes) &&
-        Array.isArray(market.outcomePrices)
-    ) {
-        const index = market.outcomes.findIndex((outcome) =>
-            String(outcome).toLowerCase() === outcomeName
-        );
-
-        if (index >= 0) return market.outcomePrices[index];
-    }
-
-    return null;
+const getMarketStatus = (market) => {
+    if (market.isCancelled ?? market.is_cancelled) return 'cancelled';
+    if (market.isResolved ?? market.is_resolved) return 'resolved';
+    if ((market.isActive ?? market.is_active) === false) return 'closed';
+    return 'active';
 };
 
 const normalizeMarket = (market, index) => {
-    const title = market.question || market.title || market.name || '';
+    const title = market.question || market.match || '';
     const yesProbability = normalizeProbability(
-        market.yesProbability ??
-        market.yes_probability ??
         market.yesPrice ??
         market.yes_price ??
-        market.yesPercentage ??
-        market.probability ??
-        market.prices?.yes ??
-        getOutcomeValue(market, 'yes')
-    );
+        market.lastYesPriceSOL ??
+        market.last_yes_price_sol
+    ) ?? probabilityFromOdds(market.yesOdd ?? market.yes_odd);
 
     return {
         marketId: String(
             market.id ||
-            market._id ||
-            market.address ||
-            market.marketAddress ||
-            market.slug ||
+            market.registryEventId ||
+            market.registry_event_id ||
+            market.eventPda ||
+            market.event_pda ||
             `panta-market-${index}`
         ),
         title: String(title),
-        description: String(market.description || market.summary || ''),
-        category: String(market.category || market.topic || ''),
-        status: String(market.status || market.state || '').toLowerCase(),
+        description: '',
+        category: String(market.category || ''),
+        status: getMarketStatus(market),
         yesProbability,
-        url: market.url || market.marketUrl || market.market_url || null,
-        endsAt:
-            market.endsAt ||
-            market.endDate ||
-            market.end_date ||
-            market.resolutionDate ||
-            market.resolution_date ||
-            null,
+        url: null,
+        endsAt: market.startTime || market.start_time || null,
     };
 };
 

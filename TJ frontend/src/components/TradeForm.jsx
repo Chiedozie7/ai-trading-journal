@@ -20,6 +20,7 @@ function TradeForm({
     handleSubmit,
     submitText,
     intelligencePanel,
+    allowOpenTrade = false,
 }) {
 
     return (
@@ -164,7 +165,9 @@ function TradeForm({
                 <div className="form-field">
                     <label htmlFor="result">Result</label>
                     <CustomSelect
-                        options={resultOptions}
+                        options={allowOpenTrade
+                            ? [{ value: "", label: "Open" }, ...resultOptions]
+                            : resultOptions}
                         value={formData.result}
                         onChange={(value) =>
                             handleChange({

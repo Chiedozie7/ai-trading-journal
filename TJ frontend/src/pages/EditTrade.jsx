@@ -32,6 +32,8 @@ function EditTrade() {
                     tradeDate:
                         response.data.tradeDate
                             ?.split("T")[0] || "",
+                    result: response.data.result || "",
+                    exitPrice: response.data.exitPrice ?? "",
                 });
 
             } catch (err) {
@@ -117,6 +119,8 @@ function EditTrade() {
 
                     if (key === "pantaAnalysis") return;
 
+                    if (key === "pantaTimeline") return;
+
                     if (key === "existingImages") {
                         value.forEach(image =>
                             tradeData.append(
@@ -195,6 +199,7 @@ function EditTrade() {
                 isPreviewOpen={isPreviewOpen}
                 handleSubmit={handleSubmit}
                 submitText="Update Trade"
+                allowOpenTrade={!formData.result}
             />
         </>
     );

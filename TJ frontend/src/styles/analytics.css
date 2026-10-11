@@ -125,6 +125,37 @@
     display: none;
 }
 
+.panta-analytics-section {
+    margin-top: 3rem;
+    padding: 1.25rem;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--card-bg);
+}
+
+.panta-analytics-section .panta-powered {
+    display: block;
+    color: var(--input-focus);
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.panta-analytics-section h2 {
+    margin: .25rem 0 .5rem;
+}
+
+.panta-analytics-section h3 {
+    margin: 2rem 0 0;
+}
+
+.panta-analytics-disclaimer {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: .85rem;
+}
+
 /* ==========================
    Headings
 ========================== */

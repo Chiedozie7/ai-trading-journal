@@ -4,6 +4,10 @@ const { getDashboardStats } = require('../services/dashboardService');
 const cloudinary = require("../utils/cloudinary");
 const streamifier = require("streamifier");
 const { isPantaEnabled } = require('../config/panta');
+const {
+    createPantaSnapshot,
+    refreshTradePantaSnapshot,
+} = require('../services/pantaSnapshotService');
 
 const parsePantaAnalysis = (value) => {
     if (!isPantaEnabled() || !value) return undefined;
@@ -13,7 +17,8 @@ const parsePantaAnalysis = (value) => {
 
         if (
             !Number.isFinite(Number(analysis?.pantaAlignmentScore)) ||
-            !Array.isArray(analysis?.markets)
+            !Array.isArray(analysis?.markets) ||
+            !['available', 'no_relevant_markets'].includes(analysis?.status)
         ) {
             return undefined;
         }
@@ -68,17 +73,19 @@ const createTrade = async (req, res) => {
             pantaAnalysis: rawPantaAnalysis,
         } = req.body;
         const pantaAnalysis = parsePantaAnalysis(rawPantaAnalysis);
+        const normalizedResult = result || undefined;
+        const isOpenTrade = !normalizedResult;
 
         let risk;
-        let actualMove;
+        let actualMove = null;
 
 
         if (direction === "buy") {
             risk = entryPrice - stopLoss;
-            actualMove = exitPrice - entryPrice;
+            if (!isOpenTrade) actualMove = exitPrice - entryPrice;
         } else {
             risk = stopLoss - entryPrice;
-            actualMove = entryPrice - exitPrice;
+            if (!isOpenTrade) actualMove = entryPrice - exitPrice;
         }
 
         if (risk <= 0) {
@@ -87,7 +94,9 @@ const createTrade = async (req, res) => {
             });
         }
 
-        const rr = Number((actualMove / risk).toFixed(2));
+        const rr = actualMove === null
+            ? undefined
+            : Number((actualMove / risk).toFixed(2));
 
 
         const images = req.files
@@ -104,13 +113,13 @@ const createTrade = async (req, res) => {
             pair,
             direction,
             entryPrice,
-            exitPrice,
+            ...(!isOpenTrade && { exitPrice }),
             stopLoss,
             takeProfit,
             rr,
             riskPercent,
             lotSize,
-            result,
+            result: normalizedResult,
             pnl,
             strategy,
             timeframe,
@@ -119,7 +128,10 @@ const createTrade = async (req, res) => {
             notes,
             images,
             tags,
-            ...(pantaAnalysis && { pantaAnalysis })
+            ...(pantaAnalysis && {
+                pantaAnalysis,
+                pantaTimeline: [createPantaSnapshot(pantaAnalysis)],
+            })
         });
         console.log("trade created")
         res.status(201).json(trade);
@@ -236,8 +248,33 @@ const getTrade = async (req, res) => {
     }
 };
 
+const refreshTradePanta = async (req, res) => {
+    try {
+        const trade = await Trade.findOne({
+            _id: req.params.id,
+            owner: req.id,
+        });
+
+        if (!trade) {
+            return res.status(404).json({ message: 'Trade not found' });
+        }
+
+        const result = await refreshTradePantaSnapshot(trade);
+
+        return res.json({
+            trade: result.trade,
+            snapshotAdded: result.snapshotAdded,
+            status: result.status,
+        });
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+};
+
 const updateTrade = async (req, res) => {
     try {
+        delete req.body.pantaTimeline;
+
         if (req.body.pantaAnalysis) {
             const pantaAnalysis = parsePantaAnalysis(req.body.pantaAnalysis);
 
@@ -402,5 +439,6 @@ module.exports = {
     updateTrade,
     deleteTrade,
     getTradeStats,
+    refreshTradePanta,
 
 };

@@ -30,6 +30,25 @@ const pantaAnalysisSchema = new mongoose.Schema({
     disclaimer: String,
 }, { _id: false });
 
+const pantaSnapshotSchema = new mongoose.Schema({
+    capturedAt: {
+        type: Date,
+        required: true,
+    },
+    alignmentScore: {
+        type: Number,
+        min: 0,
+        max: 100,
+        required: true,
+    },
+    status: {
+        type: String,
+        enum: ['available', 'no_relevant_markets'],
+        required: true,
+    },
+    markets: [pantaMarketSchema],
+}, { _id: false });
+
 const tradeSchema = new mongoose.Schema({
     owner: {
         type: mongoose.Schema.Types.ObjectId,
@@ -52,7 +71,6 @@ const tradeSchema = new mongoose.Schema({
     },
     exitPrice: {
         type: Number,
-        required: true
     },
     stopLoss: {
         type: Number,
@@ -102,6 +120,10 @@ const tradeSchema = new mongoose.Schema({
     images: [String],
     tags: [{ type: String, trim: true }],
     pantaAnalysis: pantaAnalysisSchema,
+    pantaTimeline: {
+        type: [pantaSnapshotSchema],
+        default: undefined,
+    },
 },{
     timestamps: true
 });

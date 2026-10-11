@@ -6,6 +6,7 @@ function PantaIntelligencePanel({
     tradeIdea,
     onAnalysisChange,
     onTradeIdeaChange,
+    onEnabledChange,
 }) {
     const axiosPrivate = useAxiosPrivate();
     const [enabled, setEnabled] = useState(null);
@@ -27,9 +28,16 @@ function PantaIntelligencePanel({
         const loadStatus = async () => {
             try {
                 const response = await axiosPrivate.get("/trades/panta/config");
-                if (isMounted) setEnabled(response.data.enabled === true);
+                if (isMounted) {
+                    const isEnabled = response.data.enabled === true;
+                    setEnabled(isEnabled);
+                    onEnabledChange(isEnabled);
+                }
             } catch {
-                if (isMounted) setEnabled(false);
+                if (isMounted) {
+                    setEnabled(false);
+                    onEnabledChange(false);
+                }
             }
         };
 
@@ -37,7 +45,7 @@ function PantaIntelligencePanel({
         return () => {
             isMounted = false;
         };
-    }, [axiosPrivate]);
+    }, [axiosPrivate, onEnabledChange]);
 
     const handleAnalyze = async () => {
         setIsLoading(true);

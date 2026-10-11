@@ -18,6 +18,7 @@ function CreateTrade() {
 
     const [previewImage, setPreviewImage] = useState(null);
     const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+    const [pantaEnabled, setPantaEnabled] = useState(false);
 
     const handleChange = (e) => {
         const pantaFields = [
@@ -157,11 +158,13 @@ function CreateTrade() {
                 isPreviewOpen={isPreviewOpen}
                 handleSubmit={handleSubmit}
                 submitText="Create Trade"
+                allowOpenTrade={pantaEnabled}
                 intelligencePanel={(
                     <PantaIntelligencePanel
                         tradeIdea={formData}
                         onAnalysisChange={handlePantaAnalysisChange}
                         onTradeIdeaChange={handleChange}
+                        onEnabledChange={setPantaEnabled}
                     />
                 )}
             />

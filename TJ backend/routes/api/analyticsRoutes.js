@@ -11,5 +11,6 @@ router.get("/strategy", analyticsController.getStrategyPerformance);
 router.get("/timeframe", analyticsController.getTimeframePerformance);
 router.get("/pair", analyticsController.getPairPerformance);
 router.get("/calendar", analyticsController.tradingCalendar);
+router.get("/panta", analyticsController.getPantaAnalytics);
 
 module.exports = router;

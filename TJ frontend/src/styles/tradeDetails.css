@@ -346,3 +346,7 @@
         width:100%;
     }
 }
+.result-badge.open {
+    background: var(--info-bg);
+    color: var(--input-focus);
+}

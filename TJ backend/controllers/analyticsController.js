@@ -51,6 +51,19 @@ const getPairPerformance = async (req, res) => {
     }
 };
 
+const getPantaAnalytics = async (req, res) => {
+    try {
+        const analytics = await analyticsService.getPantaAnalytics(
+            req.id,
+            req.query
+        );
+
+        return res.json(analytics);
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+};
+
 const tradingCalendar = async (req, res) => {
     try {
         const calendar = await analyticsService.getTradingCalendar(req.id, req.query);
@@ -72,6 +85,7 @@ module.exports = {
     getStrategyPerformance,
     getTimeframePerformance,
     getPairPerformance,
-    tradingCalendar
+    tradingCalendar,
+    getPantaAnalytics,
 
 };

@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import { useNavigate, useLocation } from "react-router-dom";
 import "../styles/tradeDetails.css";
+import PantaTradeIntelligence from "../components/PantaTradeIntelligence";
 
 
 function TradeDetails() {
@@ -12,6 +13,8 @@ function TradeDetails() {
     const location = useLocation();
 
     const [trade, setTrade] = useState(null);
+    const [pantaEnabled, setPantaEnabled] = useState(false);
+    const [isRefreshingPanta, setIsRefreshingPanta] = useState(false);
     const [selectedImage, setSelectedImage] = useState(null);
     const [showDeleteModal, setShowDeleteModal] =
         useState(false);
@@ -25,12 +28,24 @@ function TradeDetails() {
     useEffect(() => {
         const getTrade = async () => {
             try {
-                const response =
-                    await axiosPrivate.get(
-                        `/trades/${id}`
-                    );
+                const [tradeResponse, pantaResponse] = await Promise.all([
+                    axiosPrivate.get(`/trades/${id}`),
+                    axiosPrivate.get("/trades/panta/config").catch(() => ({
+                        data: { enabled: false },
+                    })),
+                ]);
+                const enabled = pantaResponse.data.enabled === true;
 
-                setTrade(response.data);
+                setPantaEnabled(enabled);
+
+                if (enabled && !tradeResponse.data.result) {
+                    const refreshResponse = await axiosPrivate.post(
+                        `/trades/${id}/panta/refresh`
+                    );
+                    setTrade(refreshResponse.data.trade);
+                } else {
+                    setTrade(tradeResponse.data);
+                }
 
             } catch (err) {
                 console.error(err);
@@ -38,13 +53,11 @@ function TradeDetails() {
         };
 
         getTrade();
-    }, [id]);
+    }, [id, axiosPrivate]);
 
 
     useEffect(() => {
         if (location.state?.message) {
-            setMessage(location.state.message);
-
             navigate(
                 location.pathname + location.search,
                 {
@@ -56,7 +69,7 @@ function TradeDetails() {
                 }
             );
         }
-    }, []);
+    }, [location.pathname, location.search, location.state, navigate]);
 
 
     useEffect(() => {
@@ -89,6 +102,21 @@ function TradeDetails() {
 
         } catch (err) {
             console.error(err);
+        }
+    };
+
+    const handlePantaRefresh = async () => {
+        setIsRefreshingPanta(true);
+
+        try {
+            const response = await axiosPrivate.post(
+                `/trades/${trade._id}/panta/refresh`
+            );
+            setTrade(response.data.trade);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setIsRefreshingPanta(false);
         }
     };
 
@@ -156,10 +184,12 @@ function TradeDetails() {
                                     ?.toLowerCase() ===
                                     "loss"
                                     ? "loss"
-                                    : "breakeven"
+                                : trade.result
+                                    ? "breakeven"
+                                    : "open"
                         }`}
                     >
-                        {trade.result.toUpperCase()}
+                        {(trade.result || "open").toUpperCase()}
                     </span>
 
                     <span
@@ -175,20 +205,26 @@ function TradeDetails() {
                                     : ""
                         }`}
                     >
-                        {Number(trade.pnl) > 0
-                            ? "+"
-                            : Number(trade.pnl) < 0
-                                ? "-"
-                                : ""}
-                        $
-                        {Math.abs(
-                            Number(trade.pnl)
-                        ).toFixed(2)}
+                        {trade.result
+                            ? `${Number(trade.pnl) > 0
+                                ? "+"
+                                : Number(trade.pnl) < 0
+                                    ? "-"
+                                    : ""}$${Math.abs(Number(trade.pnl)).toFixed(2)}`
+                            : "PnL pending"}
                     </span>
 
                 </div>
 
             </div>
+
+            {pantaEnabled && trade.pantaAnalysis && (
+                <PantaTradeIntelligence
+                    trade={trade}
+                    isRefreshing={isRefreshingPanta}
+                    onRefresh={handlePantaRefresh}
+                />
+            )}
 
 
             <div className="details-card">

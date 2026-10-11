@@ -1,5 +1,6 @@
 const Trade = require("../model/Trades");
 const mongoose = require("mongoose");
+const { isPantaEnabled } = require('../config/panta');
 const {
     startOfDay,
     endOfDay,
@@ -456,11 +457,80 @@ const getTradingCalendar = async (userId, query) => {
     return Object.values(calendar);
 };
 
+const getPantaAnalytics = async (userId, query) => {
+    if (!isPantaEnabled()) {
+        return { enabled: false };
+    }
+
+    const filter = buildFilter(userId, query);
+    filter['pantaAnalysis.status'] = 'available';
+
+    const trades = await Trade.find(filter).select(
+        'result rr pantaAnalysis.pantaAlignmentScore'
+    );
+    const buckets = {
+        supported: [],
+        neutral: [],
+        opposed: [],
+    };
+
+    trades.forEach((trade) => {
+        const score = trade.pantaAnalysis?.pantaAlignmentScore;
+
+        if (score >= 60) {
+            buckets.supported.push(trade);
+        } else if (score <= 40) {
+            buckets.opposed.push(trade);
+        } else {
+            buckets.neutral.push(trade);
+        }
+    });
+
+    const summarize = (bucketTrades) => {
+        const completed = bucketTrades.filter((trade) => trade.result);
+        const wins = completed.filter((trade) => trade.result === 'win').length;
+        const rValues = completed
+            .map((trade) => trade.rr)
+            .filter(Number.isFinite);
+
+        return {
+            count: bucketTrades.length,
+            wins,
+            losses: completed.filter((trade) => trade.result === 'loss').length,
+            breakeven: completed.filter(
+                (trade) => trade.result === 'breakeven'
+            ).length,
+            winRate: completed.length
+                ? Number(((wins / completed.length) * 100).toFixed(2))
+                : 0,
+            averageR: rValues.length
+                ? Number((
+                    rValues.reduce((total, value) => total + value, 0) /
+                    rValues.length
+                ).toFixed(2))
+                : 0,
+        };
+    };
+
+    return {
+        enabled: true,
+        thresholds: {
+            supported: 60,
+            opposed: 40,
+        },
+        supported: summarize(buckets.supported),
+        neutral: summarize(buckets.neutral),
+        opposed: summarize(buckets.opposed),
+        disclaimer: 'Panta Alignment is contextual agreement, not the probability of trade success.',
+    };
+};
+
 
 module.exports = {
     getSummary,
     getStrategyPerformance,
     getTimeframePerformance,
     getPairPerformance,
-    getTradingCalendar
+    getTradingCalendar,
+    getPantaAnalytics,
 };
