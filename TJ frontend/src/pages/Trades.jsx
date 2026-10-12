@@ -47,6 +47,10 @@ function Trades() {
         restoredState?.result || ""
     );
 
+    const [status, setStatus] = useState(
+        restoredState?.status || ""
+    );
+
     const [sort, setSort] = useState(
         restoredState?.sort || "newest"
     );
@@ -109,6 +113,7 @@ function Trades() {
                             strategy,
                             timeframe,
                             result,
+                            status,
                             tradeDate,
                             sort,
                             page,
@@ -129,6 +134,7 @@ function Trades() {
         strategy,
         timeframe,
         result,
+        status,
         tradeDate,
         sort,
         page
@@ -263,6 +269,31 @@ function Trades() {
                     }
                 />
 
+                <div
+                    className="trade-status-filter"
+                    role="group"
+                    aria-label="Trade lifecycle status"
+                >
+                    {[
+                        { value: "", label: "All" },
+                        { value: "open", label: "Open" },
+                        { value: "closed", label: "Closed" },
+                    ].map((option) => (
+                        <button
+                            key={option.value || "all"}
+                            type="button"
+                            className={status === option.value ? "active" : ""}
+                            aria-pressed={status === option.value}
+                            onClick={() => {
+                                setStatus(option.value);
+                                setPage(1);
+                            }}
+                        >
+                            {option.label}
+                        </button>
+                    ))}
+                </div>
+
                 <CustomSelect
                     options={strategyOptions}
                     value={strategy}
@@ -346,6 +377,7 @@ function Trades() {
                                                             strategy,
                                                             timeframe,
                                                             result,
+                                                            status,
                                                             sort,
                                                             page,
                                                             tradeDate,

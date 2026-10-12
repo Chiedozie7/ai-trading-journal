@@ -103,6 +103,46 @@
     border-color: var(--input-focus);
 }
 
+.trade-status-filter {
+    display: inline-grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    width: 100%;
+    padding: 3px;
+    border: 1px solid var(--input-border);
+    border-radius: 8px;
+    background: var(--input-bg);
+}
+
+.trade-status-filter button {
+    min-width: 0;
+    padding: .6rem .7rem;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--text-secondary);
+    font: inherit;
+    font-size: .85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .2s ease, color .2s ease, box-shadow .2s ease;
+}
+
+.trade-status-filter button:hover {
+    color: var(--text);
+    background: var(--page-bg);
+}
+
+.trade-status-filter button:focus-visible {
+    outline: 2px solid var(--input-focus);
+    outline-offset: -2px;
+}
+
+.trade-status-filter button.active {
+    background: var(--primary-btn-bg);
+    color: var(--primary-btn-text);
+    box-shadow: 0 1px 3px rgba(15, 23, 42, .16);
+}
+
 /* ==========================
    Table
 ========================== */

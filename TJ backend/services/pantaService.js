@@ -1,12 +1,46 @@
 const { getPantaConfig } = require('../config/panta');
 
-const buildMarketsUrl = (apiBaseUrl) =>
-    `${apiBaseUrl.replace(/\/+$/, '')}/markets/`;
+const buildMarketsUrl = (apiBaseUrl, cursor) => {
+    const url = `${apiBaseUrl.replace(/\/+$/, '')}/markets/`;
+
+    return cursor
+        ? `${url}?cursor=${encodeURIComponent(cursor)}`
+        : url;
+};
 
 const extractMarketCollection = (payload) => {
     if (Array.isArray(payload?.items)) return payload.items;
 
     throw new Error('Panta markets response did not contain an items collection');
+};
+
+const fetchPantaMarketPage = async (config, cursor) => {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), config.timeoutMs);
+
+    try {
+        const response = await fetch(buildMarketsUrl(config.apiBaseUrl, cursor), {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'X-Api-Key': config.apiKey,
+            },
+            signal: controller.signal,
+        });
+
+        if (!response.ok) {
+            throw new Error(`Panta API returned ${response.status}`);
+        }
+
+        const payload = await response.json();
+
+        return {
+            markets: extractMarketCollection(payload),
+            nextCursor: payload.nextCursor || null,
+        };
+    } finally {
+        clearTimeout(timeout);
+    }
 };
 
 const fetchPantaMarkets = async () => {
@@ -20,29 +54,21 @@ const fetchPantaMarkets = async () => {
         throw new Error('PANTA_API_KEY is not configured');
     }
 
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), config.timeoutMs);
-    const headers = {
-        Accept: 'application/json',
-        'X-Api-Key': config.apiKey,
-    };
+    const markets = [];
+    const seenCursors = new Set();
+    let cursor = null;
 
-    try {
-        const response = await fetch(buildMarketsUrl(config.apiBaseUrl), {
-            method: 'GET',
-            headers,
-            signal: controller.signal,
-        });
+    for (let page = 0; page < config.maxPages; page += 1) {
+        const result = await fetchPantaMarketPage(config, cursor);
+        markets.push(...result.markets);
 
-        if (!response.ok) {
-            throw new Error(`Panta API returned ${response.status}`);
-        }
+        if (!result.nextCursor || seenCursors.has(result.nextCursor)) break;
 
-        const payload = await response.json();
-        return extractMarketCollection(payload).slice(0, config.maxMarkets);
-    } finally {
-        clearTimeout(timeout);
+        seenCursors.add(result.nextCursor);
+        cursor = result.nextCursor;
     }
+
+    return markets;
 };
 
 module.exports = {

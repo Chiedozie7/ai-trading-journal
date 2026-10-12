@@ -42,7 +42,7 @@
     border: 1px solid var(--border);
     border-radius: 10px;
     background: var(--page-bg);
-    text-align: right;
+    text-align: left;
     white-space: nowrap;
 }
 
@@ -175,29 +175,41 @@
     text-transform: capitalize;
 }
 
-.panta-analysis-overview {
-    padding: .85rem;
-    border: 1px solid rgba(37, 99, 235, .25);
+.panta-result-summary {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(260px, 1fr);
+    gap: .9rem;
+}
+
+.panta-result-primary {
+    padding: 1rem;
+    border: 1px solid rgba(37, 99, 235, .3);
     border-radius: 10px;
     background: rgba(37, 99, 235, .05);
 }
 
-.panta-analysis-overview-heading {
+.panta-result-primary-heading {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
     gap: 1rem;
 }
 
-.panta-analysis-overview-heading strong {
-    color: var(--text);
-    font-size: .86rem;
-}
-
-.panta-analysis-overview-heading time {
+.panta-result-primary-heading time {
     color: var(--text-secondary);
     font-size: .72rem;
     text-align: right;
+}
+
+.panta-analysis-overview {
+    margin-top: .85rem;
+    padding-top: .75rem;
+    border-top: 1px solid var(--border);
+}
+
+.panta-analysis-overview > strong {
+    color: var(--text);
+    font-size: .86rem;
 }
 
 .panta-analysis-overview p {
@@ -205,6 +217,28 @@
     color: var(--text-secondary);
     font-size: .82rem;
     line-height: 1.45;
+}
+
+.panta-relevant-markets {
+    min-width: 0;
+}
+
+.panta-relevant-markets-heading {
+    margin-bottom: .65rem;
+    padding-bottom: .55rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.panta-relevant-markets-heading h3 {
+    margin: 0;
+    color: var(--text);
+    font-size: .95rem;
+}
+
+.panta-market-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: .75rem;
 }
 
 .panta-market {
@@ -270,6 +304,7 @@
 }
 
 .panta-setup-meaning {
+    align-self: stretch;
     padding: .85rem 1rem;
     border: 1px solid var(--border);
     border-left-width: 3px;
@@ -331,28 +366,34 @@
         flex-direction: column;
     }
 
-    .panta-score {
-        width: 100%;
-        text-align: left;
-    }
-
     .panta-setup-summary {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
-    .panta-analysis-overview-heading {
+    .panta-result-primary-heading {
         align-items: flex-start;
         flex-direction: column;
         gap: .25rem;
     }
 
-    .panta-analysis-overview-heading time {
+    .panta-result-primary-heading time {
         text-align: left;
+    }
+
+    .panta-score {
+        width: 100%;
     }
 }
 
 @media (min-width: 521px) and (max-width: 860px) {
     .panta-setup-summary {
         grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 760px) {
+    .panta-result-summary,
+    .panta-market-list {
+        grid-template-columns: 1fr;
     }
 }

@@ -151,7 +151,7 @@ const getAllTrades = async (req, res) => {
         const query = {
             owner: req.id,
         };
-        const { pair, strategy, timeframe, result, sort, search, startDate, endDate, tradeDate } = req.query;
+        const { pair, strategy, timeframe, result, status, sort, search, startDate, endDate, tradeDate } = req.query;
         const sortQuery = {};
         if (sort === 'newest') {
             sortQuery.tradeDate = -1;
@@ -170,7 +170,21 @@ const getAllTrades = async (req, res) => {
         if (pair) query.pair = pair;
         if (strategy) query.strategy = strategy;
         if (timeframe) query.timeframe = timeframe;
-        if (result) query.result = result;
+        const resultFilters = [];
+
+        if (result) resultFilters.push({ result });
+        if (status === 'open') resultFilters.push({ result: null });
+        if (status === 'closed') {
+            resultFilters.push({
+                result: { $in: ['win', 'loss', 'breakeven'] },
+            });
+        }
+
+        if (resultFilters.length === 1) {
+            Object.assign(query, resultFilters[0]);
+        } else if (resultFilters.length > 1) {
+            query.$and = resultFilters;
+        }
 
         if (search) {
             query.$or = [

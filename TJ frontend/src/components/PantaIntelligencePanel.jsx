@@ -96,19 +96,6 @@ function PantaIntelligencePanel({
                     <span className="panta-powered">Powered by Panta</span>
                     <h2 id="panta-panel-title">Panta Alignment</h2>
                 </div>
-
-                {analysis && (
-                    <div
-                        className={`panta-score panta-score-${alignment.tone}`}
-                        aria-label={`Panta Alignment ${analysis.pantaAlignmentScore} out of 100, ${alignment.label}`}
-                    >
-                        <div>
-                            <strong>{analysis.pantaAlignmentScore}</strong>
-                            <span>/100</span>
-                        </div>
-                        <span className="panta-score-label">— {alignment.label}</span>
-                    </div>
-                )}
             </div>
 
             <p className="panta-disclaimer">
@@ -143,52 +130,75 @@ function PantaIntelligencePanel({
                         <div><span>Holding Period</span><strong>{tradeIdea.expectedHoldingPeriod || "Not specified"}</strong></div>
                     </div>
 
-                    <div className="panta-analysis-overview">
-                        <div className="panta-analysis-overview-heading">
-                            <strong>Why this score</strong>
-                            <time dateTime={analysis.analyzedAt || undefined}>
-                                Analyzed {analyzedAt}
-                            </time>
+                    <div className="panta-result-summary">
+                        <section className="panta-result-primary">
+                            <div className="panta-result-primary-heading">
+                                <div
+                                    className={`panta-score panta-score-${alignment.tone}`}
+                                    aria-label={`Panta Alignment ${analysis.pantaAlignmentScore} out of 100, ${alignment.label}`}
+                                >
+                                    <div>
+                                        <strong>{analysis.pantaAlignmentScore}</strong>
+                                        <span>/100</span>
+                                    </div>
+                                    <span className="panta-score-label">— {alignment.label}</span>
+                                </div>
+                                <time dateTime={analysis.analyzedAt || undefined}>
+                                    Analyzed {analyzedAt}
+                                </time>
+                            </div>
+                            <div className="panta-analysis-overview">
+                                <strong>Why this score</strong>
+                                <p>{getAggregateExplanation(analysis)}</p>
+                            </div>
+                        </section>
+
+                        <div className={`panta-setup-meaning panta-setup-meaning-${alignment.tone}`}>
+                            <strong>What this means for your setup</strong>
+                            <p>{getSetupMeaning(analysis, tradeIdea.direction)}</p>
                         </div>
-                        <p>{getAggregateExplanation(analysis)}</p>
                     </div>
 
-                    {analysis.markets.map((market) => (
-                        <article className="panta-market" key={market.marketId}>
-                            <div className="panta-market-heading">
-                                {market.url ? (
-                                    <a href={market.url} target="_blank" rel="noreferrer">
-                                        {market.title}
-                                    </a>
-                                ) : (
-                                    <h3>{market.title}</h3>
-                                )}
-                            </div>
-                            <div className="panta-market-signals">
-                                <span className={`panta-probability ${hasPantaProbability(market.yesProbability) ? "" : "panta-probability-unavailable"}`}>
-                                    {formatPantaProbability(market.yesProbability)}
-                                </span>
-                                <span className={`panta-classification panta-${market.classification}`}>
-                                    {market.classification}
-                                </span>
-                                {market.relevanceScore !== null &&
-                                    market.relevanceScore !== undefined &&
-                                    Number.isFinite(Number(market.relevanceScore)) && (
-                                    <span className="panta-relevance">
-                                        Relevance {Math.round(Number(market.relevanceScore))}/100
-                                    </span>
-                                )}
-                            </div>
-                            <p className="panta-market-reason">
-                                <strong>Why:</strong> {market.reason}
-                            </p>
-                        </article>
-                    ))}
-
-                    <div className={`panta-setup-meaning panta-setup-meaning-${alignment.tone}`}>
-                        <strong>What this means for your setup</strong>
-                        <p>{getSetupMeaning(analysis, tradeIdea.direction)}</p>
-                    </div>
+                    <section className="panta-relevant-markets">
+                        <div className="panta-relevant-markets-heading">
+                            <h3>
+                                Relevant Panta Market{analysis.markets.length === 1 ? "" : "s"} ({analysis.markets.length})
+                            </h3>
+                        </div>
+                        <div className="panta-market-list">
+                            {analysis.markets.map((market) => (
+                                <article className="panta-market" key={market.marketId}>
+                                    <div className="panta-market-heading">
+                                        {market.url ? (
+                                            <a href={market.url} target="_blank" rel="noreferrer">
+                                                {market.title}
+                                            </a>
+                                        ) : (
+                                            <h3>{market.title}</h3>
+                                        )}
+                                    </div>
+                                    <div className="panta-market-signals">
+                                        <span className={`panta-probability ${hasPantaProbability(market.yesProbability) ? "" : "panta-probability-unavailable"}`}>
+                                            {formatPantaProbability(market.yesProbability)}
+                                        </span>
+                                        <span className={`panta-classification panta-${market.classification}`}>
+                                            {market.classification}
+                                        </span>
+                                        {market.relevanceScore !== null &&
+                                            market.relevanceScore !== undefined &&
+                                            Number.isFinite(Number(market.relevanceScore)) && (
+                                            <span className="panta-relevance">
+                                                Relevance {Math.round(Number(market.relevanceScore))}/100
+                                            </span>
+                                        )}
+                                    </div>
+                                    <p className="panta-market-reason">
+                                        <strong>Why:</strong> {market.reason}
+                                    </p>
+                                </article>
+                            ))}
+                        </div>
+                    </section>
                 </div>
             )}
         </section>
