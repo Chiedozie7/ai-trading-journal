@@ -109,6 +109,74 @@
     gap: 1rem;
 }
 
+.panta-check-grid .form-field {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+.panta-check-grid .form-field label {
+    color: var(--text);
+    font-size: .86rem;
+    font-weight: 650;
+    line-height: 1.25;
+}
+
+.panta-check-grid .form-field input,
+.panta-check-grid .select-trigger {
+    width: 100%;
+    height: 48px;
+    padding: 0 .95rem;
+    border: 1px solid var(--input-border);
+    border-radius: 9px;
+    background: var(--input-bg);
+    color: var(--text);
+    font-family: inherit;
+    font-size: .94rem;
+    line-height: 1;
+    transition:
+        border-color .2s ease,
+        box-shadow .2s ease,
+        background-color .2s ease;
+}
+
+.panta-check-grid .form-field input::placeholder {
+    color: var(--text-secondary);
+    opacity: .78;
+}
+
+.panta-check-grid .form-field input:hover,
+.panta-check-grid .select-trigger:hover {
+    border-color: color-mix(in srgb, var(--input-focus) 65%, var(--input-border));
+}
+
+.panta-check-grid .form-field input:focus,
+.panta-check-grid .form-field input:focus-visible,
+.panta-check-grid .select-trigger:focus,
+.panta-check-grid .select-trigger:focus-visible,
+.panta-check-grid .select-trigger.open {
+    outline: none;
+    border-color: var(--input-focus);
+    background: var(--card-bg);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, .14);
+}
+
+.panta-check-grid .select-trigger {
+    text-align: left;
+}
+
+.panta-check-grid .select-menu {
+    margin-top: .1rem;
+    border-color: var(--input-border);
+    border-radius: 9px;
+}
+
+.panta-check-grid .select-option {
+    min-height: 42px;
+    padding: .7rem .95rem;
+}
+
 .panta-journal-cta {
     display: flex;
     align-items: center;
@@ -271,5 +339,20 @@
     .panta-check-grid,
     .panta-open-grid {
         grid-template-columns: 1fr;
+    }
+
+    .panta-check-form-card {
+        padding: 1rem;
+    }
+
+    .panta-check-grid {
+        gap: .9rem;
+    }
+
+    .panta-check-grid .form-field input,
+    .panta-check-grid .select-trigger {
+        height: 46px;
+        padding: 0 .9rem;
+        font-size: .92rem;
     }
 }
