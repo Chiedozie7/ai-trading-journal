@@ -7,6 +7,34 @@ import {
 } from "../utils/pantaDisplay";
 import "../styles/pantaIntelligence.css";
 
+const getAggregateExplanation = (analysis) => {
+    if (!analysis.markets.length) return analysis.message;
+
+    const counts = analysis.markets.reduce((totals, market) => ({
+        ...totals,
+        [market.classification]: totals[market.classification] + 1,
+    }), { support: 0, oppose: 0, neutral: 0 });
+    const pricedMarkets = analysis.markets.filter((market) =>
+        hasPantaProbability(market.yesProbability)
+    ).length;
+
+    return `${counts.support} supporting, ${counts.oppose} opposing, and ${counts.neutral} neutral market signal${analysis.markets.length === 1 ? "" : "s"} ${analysis.markets.length === 1 ? "was" : "were"} combined into the ${analysis.pantaAlignmentScore}/100 alignment. ${pricedMarkets} of ${analysis.markets.length} currently provide a YES probability.`;
+};
+
+const getSetupMeaning = (analysis, direction) => {
+    const alignment = getPantaAlignmentMeta(analysis.pantaAlignmentScore);
+
+    if (alignment.tone === "support") {
+        return `Panta market context leans with this ${direction} setup. Treat that agreement as supporting context, not a prediction of the trade outcome.`;
+    }
+
+    if (alignment.tone === "oppose") {
+        return `Panta market context leans against this ${direction} setup. Consider the disagreement before execution, but do not treat it as a trade outcome prediction.`;
+    }
+
+    return `Panta market context is mixed, neutral, or not sufficiently priced for this ${direction} setup. The check does not add a strong directional signal.`;
+};
+
 function PantaIntelligencePanel({
     enabled,
     tradeIdea,
@@ -19,6 +47,9 @@ function PantaIntelligencePanel({
     const alignment = analysis
         ? getPantaAlignmentMeta(analysis.pantaAlignmentScore)
         : null;
+    const analyzedAt = analysis?.analyzedAt
+        ? new Date(analysis.analyzedAt).toLocaleString()
+        : "timestamp unavailable";
 
     const canAnalyze = Boolean(
         tradeIdea.pair &&
@@ -103,7 +134,24 @@ function PantaIntelligencePanel({
 
             {analysis && (
                 <div className="panta-results">
-                    <p className="panta-message">{analysis.message}</p>
+                    <div className="panta-setup-summary" aria-label="Proposed trade setup">
+                        <div><span>Asset</span><strong>{tradeIdea.pair}</strong></div>
+                        <div><span>Direction</span><strong>{tradeIdea.direction}</strong></div>
+                        <div><span>Entry</span><strong>{tradeIdea.entryPrice}</strong></div>
+                        <div><span>Stop Loss</span><strong>{tradeIdea.stopLoss}</strong></div>
+                        <div><span>Take Profit</span><strong>{tradeIdea.takeProfit}</strong></div>
+                        <div><span>Holding Period</span><strong>{tradeIdea.expectedHoldingPeriod || "Not specified"}</strong></div>
+                    </div>
+
+                    <div className="panta-analysis-overview">
+                        <div className="panta-analysis-overview-heading">
+                            <strong>Why this score</strong>
+                            <time dateTime={analysis.analyzedAt || undefined}>
+                                Analyzed {analyzedAt}
+                            </time>
+                        </div>
+                        <p>{getAggregateExplanation(analysis)}</p>
+                    </div>
 
                     {analysis.markets.map((market) => (
                         <article className="panta-market" key={market.marketId}>
@@ -123,12 +171,24 @@ function PantaIntelligencePanel({
                                 <span className={`panta-classification panta-${market.classification}`}>
                                     {market.classification}
                                 </span>
+                                {market.relevanceScore !== null &&
+                                    market.relevanceScore !== undefined &&
+                                    Number.isFinite(Number(market.relevanceScore)) && (
+                                    <span className="panta-relevance">
+                                        Relevance {Math.round(Number(market.relevanceScore))}/100
+                                    </span>
+                                )}
                             </div>
                             <p className="panta-market-reason">
                                 <strong>Why:</strong> {market.reason}
                             </p>
                         </article>
                     ))}
+
+                    <div className={`panta-setup-meaning panta-setup-meaning-${alignment.tone}`}>
+                        <strong>What this means for your setup</strong>
+                        <p>{getSetupMeaning(analysis, tradeIdea.direction)}</p>
+                    </div>
                 </div>
             )}
         </section>

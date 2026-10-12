@@ -10,6 +10,7 @@ import {
     FiSettings,
     FiMoreHorizontal,
     FiChevronDown,
+    FiActivity,
 } from "react-icons/fi";
 import { useState } from "react";
 import "../styles/mobileBottomNav.css";
@@ -19,6 +20,12 @@ function MobileBottomNav() {
     const [isMoreOpen, setIsMoreOpen] = useState(false);
 
     const secondaryItems = [
+        {
+            name: "Panta Intelligence",
+            shortName: "Panta",
+            path: "/panta-intelligence",
+            icon: FiActivity,
+        },
         {
             name: "Calendar",
             path: "/calendar",
@@ -52,7 +59,7 @@ function MobileBottomNav() {
         : FiMoreHorizontal;
 
     const moreLabel = activeSecondary
-        ? activeSecondary.name
+        ? activeSecondary.shortName || activeSecondary.name
         : "More";
 
     const handleMoreClick = () => {
