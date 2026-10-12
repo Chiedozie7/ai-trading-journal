@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import TradeForm from "../components/TradeForm";
 import tradeFormData from "../data/TradeFormData";
@@ -9,8 +9,11 @@ function EditTrade() {
     const { id } = useParams();
     const axiosPrivate = useAxiosPrivate();
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+    const isOutcomeMode = searchParams.get("mode") === "outcome";
 
     const [formData, setFormData] = useState(tradeFormData);
+    const [error, setError] = useState("");
     const [previewImage, setPreviewImage] = useState(null);
     const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
@@ -109,6 +112,20 @@ function EditTrade() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        if (
+            isOutcomeMode &&
+            (!formData.result ||
+                !Number.isFinite(Number(formData.exitPrice)) ||
+                formData.exitPrice === "" ||
+                !Number.isFinite(Number(formData.pnl)) ||
+                formData.pnl === "")
+        ) {
+            setError("Exit price, result, and PnL are required to record the outcome.");
+            return;
+        }
+
+        setError("");
+
         try {
             const tradeData = new FormData();
 
@@ -116,6 +133,8 @@ function EditTrade() {
                 ([key, value]) => {
 
                     if (key === "newImages") return;
+
+                    if (isOutcomeMode && key === "pnl") return;
 
                     if (key === "pantaAnalysis") return;
 
@@ -158,6 +177,18 @@ function EditTrade() {
                 }
             );
 
+            if (isOutcomeMode) {
+                const pnl = Number(formData.pnl);
+                const normalizedPnl =
+                    formData.result === "loss"
+                        ? -Math.abs(pnl)
+                        : formData.result === "win"
+                            ? Math.abs(pnl)
+                            : 0;
+
+                tradeData.append("pnl", normalizedPnl);
+            }
+
             formData.newImages.forEach(image => {
                 tradeData.append("images", image);
             });
@@ -171,7 +202,9 @@ function EditTrade() {
 
             navigate(`/trades/${id}`, {
                 state: {
-                    message: "Trade updated successfully."
+                    message: isOutcomeMode
+                        ? "Trade outcome recorded successfully."
+                        : "Trade updated successfully."
                 }
             });
 
@@ -182,8 +215,16 @@ function EditTrade() {
 
 
     return (
-        <>
-            <h1>Edit Trade</h1>
+        <div className={isOutcomeMode ? "record-outcome-page" : ""}>
+            <h1>{isOutcomeMode ? "Record Outcome" : "Edit Trade"}</h1>
+
+            {isOutcomeMode && (
+                <p className="record-outcome-intro">
+                    Record how this trade closed externally. TradeLedger does not execute or close the position.
+                </p>
+            )}
+
+            {error && <p className="form-error">{error}</p>}
 
             <TradeForm
                 formData={formData}
@@ -198,10 +239,11 @@ function EditTrade() {
                 previewImage={previewImage}
                 isPreviewOpen={isPreviewOpen}
                 handleSubmit={handleSubmit}
-                submitText="Update Trade"
-                allowOpenTrade={!formData.result}
+                submitText={isOutcomeMode ? "Save Outcome" : "Update Trade"}
+                allowOpenTrade={!isOutcomeMode && !formData.result}
+                outcomeOnly={isOutcomeMode}
             />
-        </>
+        </div>
     );
 }
 

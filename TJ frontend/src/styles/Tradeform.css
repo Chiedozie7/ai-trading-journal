@@ -5,6 +5,31 @@
     max-width: 700px;
 }
 
+.record-outcome-page {
+    max-width: 700px;
+}
+
+.record-outcome-intro {
+    max-width: 620px;
+    margin: -.25rem 0 1.25rem;
+    color: var(--text-secondary);
+    line-height: 1.55;
+}
+
+.record-outcome-page .form-error {
+    max-width: 700px;
+    margin-bottom: 1rem;
+    padding: .75rem 1rem;
+    border: 1px solid rgba(239, 68, 68, .3);
+    border-radius: 8px;
+    background: rgba(239, 68, 68, .08);
+    color: var(--danger);
+}
+
+.trade-form-outcome .outcome-hide {
+    display: none;
+}
+
 .trade-form-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -20,6 +45,11 @@
 @media (max-width: 767px) {
     .trade-form-grid {
         grid-template-columns: 1fr;
+    }
+
+    .trade-form-outcome button[type="submit"] {
+        width: 100%;
+        min-height: 46px;
     }
 }
 

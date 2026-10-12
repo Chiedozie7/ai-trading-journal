@@ -214,6 +214,20 @@ function TradeDetails() {
                             : "PnL pending"}
                     </span>
 
+                    {!trade.result && (
+                        <button
+                            type="button"
+                            className="record-outcome-btn"
+                            onClick={() =>
+                                navigate(
+                                    `/edit-trade/${trade._id}?mode=outcome`
+                                )
+                            }
+                        >
+                            Record Outcome
+                        </button>
+                    )}
+
                 </div>
 
             </div>

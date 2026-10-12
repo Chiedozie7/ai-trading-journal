@@ -21,16 +21,17 @@ function TradeForm({
     submitText,
     intelligencePanel,
     allowOpenTrade = false,
+    outcomeOnly = false,
 }) {
 
     return (
         <form
-            className="trade-form"
+            className={`trade-form ${outcomeOnly ? "trade-form-outcome" : ""}`}
             onSubmit={handleSubmit}
         >
             <div className="trade-form-grid">
 
-                <div className="form-field">
+                <div className="form-field outcome-hide">
                     <label htmlFor="pair">Pair</label>
                     <input
                         id="pair"
@@ -41,7 +42,7 @@ function TradeForm({
                     />
                 </div>
 
-                <div className="form-field">
+                <div className="form-field outcome-hide">
                     <label htmlFor="direction">Direction</label>
                     <CustomSelect
                         options={directionOptions}
@@ -57,7 +58,7 @@ function TradeForm({
                     />
                 </div>
 
-                <div className="form-field">
+                <div className="form-field outcome-hide">
                     <label htmlFor="strategy">Strategy</label>
                     <input
                         id="strategy"
@@ -68,7 +69,7 @@ function TradeForm({
                     />
                 </div>
 
-                <div className="form-field">
+                <div className="form-field outcome-hide">
                     <label htmlFor="timeframe">Timeframe</label>
                     <input
                         id="timeframe"
@@ -79,7 +80,7 @@ function TradeForm({
                     />
                 </div>
 
-                <div className="form-field">
+                <div className="form-field outcome-hide">
                     <label htmlFor="entryPrice">Entry Price</label>
                     <input
                         id="entryPrice"
@@ -103,7 +104,7 @@ function TradeForm({
                     />
                 </div>
 
-                <div className="form-field">
+                <div className="form-field outcome-hide">
                     <label htmlFor="stopLoss">Stop Loss</label>
                     <input
                         id="stopLoss"
@@ -115,7 +116,7 @@ function TradeForm({
                     />
                 </div>
 
-                <div className="form-field">
+                <div className="form-field outcome-hide">
                     <label htmlFor="takeProfit">Take Profit</label>
                     <input
                         id="takeProfit"
@@ -127,7 +128,7 @@ function TradeForm({
                     />
                 </div>
 
-                <div className="form-field">
+                <div className="form-field outcome-hide">
                     <label htmlFor="riskPercent">Risk %</label>
                     <input
                         id="riskPercent"
@@ -138,7 +139,7 @@ function TradeForm({
                     />
                 </div>
 
-                <div className="form-field">
+                <div className="form-field outcome-hide">
                     <label htmlFor="lotSize">Position Size</label>
                     <input
                         id="lotSize"
@@ -180,7 +181,7 @@ function TradeForm({
                     />
                 </div>
 
-                <div className="form-field">
+                <div className="form-field outcome-hide">
                     <label htmlFor="tradeDate">Trade Date</label>
                     <input
                         id="tradeDate"
@@ -193,9 +194,9 @@ function TradeForm({
 
             </div>
 
-            {intelligencePanel}
+            {!outcomeOnly && intelligencePanel}
 
-            <div className="form-field">
+            <div className="form-field outcome-hide">
                 <label htmlFor="tags">Tags</label>
                 <input
                     id="tags"
@@ -217,7 +218,7 @@ function TradeForm({
                 />
             </div>
 
-            <div className="form-group">
+            <div className="form-group outcome-hide">
                 <label htmlFor="images">Trade Screenshots</label>
 
                 <input

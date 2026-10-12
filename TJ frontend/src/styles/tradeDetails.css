@@ -43,7 +43,29 @@
 .trade-result{
     display:flex;
     align-items:center;
+    flex-wrap:wrap;
     gap:1rem;
+}
+
+.record-outcome-btn {
+    min-height: 42px;
+    padding: .7rem 1rem;
+    border: none;
+    border-radius: 8px;
+    background: var(--primary-btn-bg);
+    color: var(--primary-btn-text);
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background .2s ease, transform .2s ease;
+}
+
+.record-outcome-btn:hover {
+    background: var(--primary-btn-hover);
+}
+
+.record-outcome-btn:active {
+    transform: translateY(1px);
 }
 
 .result-badge{
@@ -325,7 +347,11 @@
 
     .trade-result{
         flex-direction:column;
-        align-items:flex-start;
+        align-items:stretch;
+    }
+
+    .record-outcome-btn {
+        width:100%;
     }
 
     .trade-images-grid{
